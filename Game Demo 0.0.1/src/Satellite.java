@@ -3,14 +3,37 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Satellite extends JComponent implements MouseListener{
-
-	public Satellite() {
-
+	private Integer x;
+	private Integer y;
+	private Color fillCol;
+	private Color borderCol;
+	
+	public Satellite(locX, locY) {
+		x = locX;
+		y = locY;
+		fillCol = Color.DARK_GRAY;
+		borderCol = Color.BLACK;
+		
 		addMouseListener(this);
 	}
+	
+	public Integer getLocX() {
+		return x;
+	}
+	
+	public Integer getLocY() {
+		return y;
+	}
+	
 	@Override
 	public void paintComponent(Graphics g) {
-
+		super.paintComponent(g);
+		
+		g.setColor(fillCol);
+		g.fillOval(0, 0, 99, 99);	
+		g.setColor(borderCol);
+		g.drawOval(0, 0, 99, 99);
+		g.drawOval(0, 0, 98, 98);
 	}
 	
 	@Override
@@ -37,10 +60,6 @@ public class Satellite extends JComponent implements MouseListener{
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 
-	}
-	
-	public Dimension getPreferredSize() {
-		return new Dimension(100, 100);
 	}
 
 }
