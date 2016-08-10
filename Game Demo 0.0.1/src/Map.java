@@ -13,9 +13,9 @@ public class Map extends JPanel {
 		this.add(s02);
 		this.add(s03);
 		
-		s01.setBounds(s01.getX(), s01.getY(), 100, 100);
-		s02.setBounds(s02.getX(), s02.getY(),100,100);
-		s03.setBounds(s03.getX(), s03.getY(), 100, 100);
+		s01.setBounds(0, 0, 100, 100);
+		s02.setBounds(30, 30, 100,100);
+		s03.setBounds(800, 450, 100, 100);
 	}
 	
 	@Override

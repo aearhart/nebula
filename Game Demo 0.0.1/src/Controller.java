@@ -5,9 +5,9 @@ public class Controller {
 		// TODO Auto-generated method stub
 		
 		Window win1 = new Window();
-		Map map = new Map();
-		
+		/*Map map = new Map();
 		win1.add(map);
+		*/
 		
 	}
 

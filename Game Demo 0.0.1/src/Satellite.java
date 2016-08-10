@@ -8,10 +8,10 @@ public class Satellite extends JComponent implements MouseListener{
 	private Color fillCol;
 	private Color borderCol;
 	
-	public Satellite(locX, locY) {
+	public Satellite(Integer locX, Integer locY) {
 		x = locX;
 		y = locY;
-		fillCol = Color.DARK_GRAY;
+		fillCol = Color.MAGENTA;
 		borderCol = Color.BLACK;
 		
 		addMouseListener(this);
