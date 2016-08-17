@@ -15,7 +15,7 @@ public class Controller {
 		Satellite s03 = new GasPlanet(645, 40, 26, 5, "2"); 
 		Satellite s04 = new WaterPlanet(766, 388, 58, 2, "3"); 
 		
-		Satellite[] all = {s01, s02, s03, s04};
+		Satellite[] all = {s00, s01, s02, s03, s04};
 		
 		for (int i = 0; i < all.length; i++) {
 			Satellite s = all[i];
