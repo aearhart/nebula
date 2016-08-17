@@ -8,9 +8,9 @@ public class Satellite extends JComponent {
 	
 	private Integer x;
 	private Integer y;
-	private Integer s = 100; // size of sphere
-	private Color fillCol;
-	private Color borderCol;
+	protected Integer s = 100; // size of sphere
+	protected Color fillCol;
+	protected Color borderCol;
 	private Color selectCol;
 	
 	public Satellite(Integer locX, Integer locY, Integer sz) {
@@ -27,6 +27,14 @@ public class Satellite extends JComponent {
 		selectCol = select;
 	}
 	
+	public Color getFillCol() {
+		return fillCol;
+	}
+	
+	public Color getBorderCol() {
+		return borderCol;
+	}
+	
 	public Integer getLocX() {
 		return x;
 	}
@@ -36,7 +44,7 @@ public class Satellite extends JComponent {
 	}
 	
 	public Integer getSz() {
-		return s;
+		return s+1;
 	}
 
 }
