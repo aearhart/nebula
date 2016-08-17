@@ -9,6 +9,7 @@ public class Controller {
 		window.update();
 
 		// ??Planet(x, y, s, numResources, name)
+		Satellite s00 = new Sun();
 		Satellite s01 = new WaterPlanet(450, 400, 30, 3, "0");  
 		Satellite s02 = new MetalPlanet(800, 104, 40, 5, "1"); 
 		Satellite s03 = new GasPlanet(645, 40, 26, 5, "2"); 
