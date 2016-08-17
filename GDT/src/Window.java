@@ -8,10 +8,10 @@ public class Window extends JFrame {
 	
 	public Window() {
 		super("Game Demo 0.0.1");
-		this.setSize(1000);
+		this.setSize(1000,1000);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 	
-		m = new Map();
+		Map m = new Map();
 		this.add(m);
 		this.setVisible(true);
 	}
