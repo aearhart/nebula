@@ -7,7 +7,7 @@ public class Base extends Satellite {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Planet[] planetsInAOI;
-	private int AOI;
+	private int AreaOfInfluence;
 	private Player controller;
 	
 	public Base(Integer locX, Integer locY, Integer sz) {

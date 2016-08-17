@@ -1,7 +1,7 @@
 
 public class Controller {
 
-	public static void setUp() {
+	public static void startUp() {
 
 		Window window = new Window();
 		Map map = new Map();
@@ -25,7 +25,7 @@ public class Controller {
 	}
 	
 	public static void main(String[] args) {
-		setUp();
+		startUp();
 
 	}
 
