@@ -38,8 +38,5 @@ public class Satellite extends JComponent {
 	public Integer getSz() {
 		return s;
 	}
-	
-
-
 
 }
