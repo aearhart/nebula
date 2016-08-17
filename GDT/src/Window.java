@@ -11,8 +11,8 @@ public class Window extends JFrame {
 		this.setSize(1000,1000);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 	
-		Map m = new Map();
-		this.add(m);
+		//Map m = new Map();
+		//this.add(m);
 		this.setVisible(true);
 	}
 	/*

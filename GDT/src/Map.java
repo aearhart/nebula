@@ -6,6 +6,7 @@ public class Map extends JPanel {
 
 	public Map(){
 		this.setLayout(null);
+		/*
 		Satellite s01 = new Satellite(450, 400); // sun 
 		Satellite s02 = new Satellite(1, 10, 40, 30); // water
 		Satellite s03 = new Satellite(2, 40, 600, 70); // gas
@@ -20,6 +21,7 @@ public class Map extends JPanel {
 		s02.setBounds(s02.getLocX(), s02.getLocY(), s02.getSz(), s02.getSz());
 		s03.setBounds(s03.getLocX(), s03.getLocY(), s03.getSz(), s03.getSz());
 		s04.setBounds(s04.getLocX(), s04.getLocY(), s04.getSz(), s04.getSz());
+		*/
 	}
 	
 	@Override
