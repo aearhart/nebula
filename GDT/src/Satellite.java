@@ -15,7 +15,6 @@ public class Satellite extends JComponent {
 	protected String name = "";
 	
 	public Satellite(Integer locX, Integer locY, Integer sz) {
-		// default: sun
 		x = locX;
 		y = locY;
 		s = sz;

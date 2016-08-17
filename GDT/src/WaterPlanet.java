@@ -22,6 +22,7 @@ public class WaterPlanet extends Planet {
 	public WaterPlanet(Integer locX, Integer locY, Integer sz, Integer numResources, String n) {
 		super(locX, locY, sz, numResources);
 		this.setName("Water Planet " + n);
+		this.setColors(Color.CYAN, Color.BLACK, Color.BLUE);
 		this.repaint();
 	}
 	
