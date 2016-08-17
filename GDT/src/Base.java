@@ -7,6 +7,7 @@ public class Base extends Satellite {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Planet[] planetsInAOI;
+	private int AOI;
 	private Player controller;
 	
 	public Base(Integer locX, Integer locY, Integer sz) {
@@ -21,6 +22,7 @@ public class Base extends Satellite {
 	public void setPInAOI(Planet[] planets) {
 		planetsInAOI = planets;
 	}
+	
 	
 	@Override
 	public void paintComponent(Graphics g) {

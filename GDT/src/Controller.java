@@ -1,9 +1,8 @@
 
 public class Controller {
 
-	public static void main(String[] args) {
-		
-		
+	public static void setUp() {
+
 		Window window = new Window();
 		Map map = new Map();
 		window.add(map);
@@ -22,6 +21,10 @@ public class Controller {
 			map.add(s);
 			s.setBounds(s.getLocX(), s.getLocY(), s.getSz(), s.getSz());
 		}
+	}
+	
+	public static void main(String[] args) {
+		setUp();
 
 	}
 
