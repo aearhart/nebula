@@ -9,11 +9,11 @@ public class Controller {
 		window.add(map);
 		window.update();
 
-		
-		Satellite s01 = new Satellite(450, 400); // sun 
-		Satellite s02 = new Satellite(1, 10, 40, 30); // water
-		Satellite s03 = new Satellite(2, 40, 600, 70); // gas
-		Satellite s04 = new Satellite(3, 700, 58, 47); // metal
+		// ??Planet(x, y, s, numResources, name)
+		Satellite s01 = new WaterPlanet(450, 400, 30, 3, "0");  
+		Satellite s02 = new WaterPlanet(800, 104, 40, 5, "1"); 
+		Satellite s03 = new WaterPlanet(645, 40, 26, 5, "2"); 
+		Satellite s04 = new WaterPlanet(766, 388, 58, 2, "3"); // metal
 		
 		Satellite[] all = {s01, s02, s03, s04};
 		
@@ -22,9 +22,7 @@ public class Controller {
 			map.add(s);
 			s.setBounds(s.getLocX(), s.getLocY(), s.getSz(), s.getSz());
 		}
-		
-		
-		// whatevs
+
 	}
 
 }

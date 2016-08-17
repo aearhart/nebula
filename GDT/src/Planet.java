@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -19,6 +20,12 @@ public class Planet extends Satellite implements MouseListener {
 		addMouseListener(this);
 	}
 	
+	private void switchColors() {
+		Color temp = borderCol;
+		borderCol = selectCol;
+		selectCol = temp;
+	}
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -32,7 +39,7 @@ public class Planet extends Satellite implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		System.out.println(name + " gives out " + numOfResources);
 	}
 
 	@Override
@@ -50,13 +57,15 @@ public class Planet extends Satellite implements MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		switchColors();
+		repaint();
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+		switchColors();
+		repaint();
 	}
 
 }

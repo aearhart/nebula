@@ -11,7 +11,8 @@ public class Satellite extends JComponent {
 	protected Integer s = 100; // size of sphere
 	protected Color fillCol;
 	protected Color borderCol;
-	private Color selectCol;
+	protected Color selectCol;
+	protected String name = "";
 	
 	public Satellite(Integer locX, Integer locY, Integer sz) {
 		// default: sun
@@ -20,7 +21,13 @@ public class Satellite extends JComponent {
 		s = sz;
 	}
 	
-
+	public void setName(String n) {
+		name = n;
+	}
+	
+	public String getName() {
+		return name;
+	}
 	public void setColors (Color fill, Color border, Color select) {
 		fillCol = fill;
 		borderCol = border;
