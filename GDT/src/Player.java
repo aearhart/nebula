@@ -1,21 +1,21 @@
 
 public class Player {
 	private String name;
-	private Base[] bases;
-	private int gas;
-	private int water;
-	private int mineral;
+	private Station[] stations;
+	private int gas = 0;
+	private int water = 0;
+	private int mineral = 0;
 	
 	public Player(String n){
 		this.name = n;
 	}
 	
-	public void setBases(Base[] bs) {
-		this.bases = bs;
+	public void setStations(Base[] st) {
+		this.stations = st;
 	}
 	
-	public Base[] getBases() {
-		return bases;
+	public Station[] getStations() {
+		return stations;
 	}
 	
 	public String getName() {
@@ -30,25 +30,36 @@ public class Player {
 		return water;
 	}
 
-	public void setWater(int water) {
-		this.water = water;
+	public void addWater(int water) {
+		this.water += water;
+	}
+	
+	public void subWater(int water) { // do we want this to return -1 if water <= 0?
+		this.water -= water;
 	}
 
 	public int getMineral() {
 		return mineral;
 	}
 
-	public void setMineral(int mineral) {
-		this.mineral = mineral;
+	public void addMineral(int mineral) {
+		this.mineral += mineral;
+	}
+	
+	public void subMineral(int mineral) {
+		this.mineral -= mineral;
 	}
 	
 	public int getGas(){
 		return gas;
 	}
 
-	public void setGas(int gas) {
-		this.gas = gas;
+	public void addGas(int gas) {
+		this.gas += gas;
 	}
 	
+	public void subGas(int gas) {
+		this.gas -= gas;
+	}
 	
 }
