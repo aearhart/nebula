@@ -26,7 +26,8 @@ public class Controller {
 		
 		window = new Window(this);
 		map = new Map(this);
-		window.add(map);
+		window.getContentPane().add(map);
+		window.pack();
 		window.update();
 
 		// ??Planet(x, y, s, numResources, name)
