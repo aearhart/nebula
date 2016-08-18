@@ -19,6 +19,8 @@ public class Station extends Satellite implements MouseListener {
 		super(ctrl, locX, locY, sz);
 		// TODO Auto-generated constructor stub
 		
+		
+		
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);
 	}

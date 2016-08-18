@@ -4,7 +4,7 @@ import java.awt.Graphics;
 public class Sun extends Satellite {
 
 	public Sun(Controller ctrl) {
-		super(ctrl, 350, 400, 100);
+		super(ctrl, 450, 450, 100);
 		// TODO Auto-generated constructor stub
 	}
 	

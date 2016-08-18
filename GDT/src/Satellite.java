@@ -57,6 +57,14 @@ public class Satellite extends JComponent {
 		return y;
 	}
 	
+	public Integer getMidX() {
+		return x + s/2;
+	}
+	
+	public Integer getMidY() {
+		return y + s/2;
+	}
+	
 	public Integer getSz() {
 		return s+1;
 	}

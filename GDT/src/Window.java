@@ -10,7 +10,6 @@ public class Window extends JFrame {
 	public Window(Controller ctrl) {
 		super("Game Demo 0.0.1");
 		control = ctrl;
-		this.setSize(1000,1000);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 	
 		//Map m = new Map();

@@ -8,6 +8,7 @@ public class Map extends JPanel {
 	public Map(Controller ctrl){
 		control = ctrl;
 		this.setLayout(null);
+		this.setPreferredSize(new Dimension (1000,1000));
 		
 		/*
 		Satellite s01 = new Satellite(450, 400); // sun 
@@ -30,6 +31,10 @@ public class Map extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
+		for(int i = 0; i < 11; i++)
+			for(int j = 0; j < 11; j++)
+				g.drawRect(i*100, j*100, 100, 100);
 		//g.drawOval(800, 10, 10, 10);
 		//g.drawOval(700, 50, 200, 3);
 	}
