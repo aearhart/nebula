@@ -28,6 +28,8 @@ public class Station extends Satellite {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
+		//TODO ADD Image?
+		
 		g.setColor(fillCol);
 		g.fillOval(0, 0, s, s);	
 		g.setColor(borderCol);
