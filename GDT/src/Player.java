@@ -5,11 +5,13 @@ public class Player {
 	private int gas = 0;
 	private int water = 0;
 	private int mineral = 0;
+	private Controller control;
 	
-	public Player(String n){
+	public Player(Controller ctrl, String n){
 		this.name = n;
+		this.control = c;
 	}
-	
+
 	public void setStations(Station[] st) {
 		this.stations = st;
 	}
