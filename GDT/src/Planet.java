@@ -6,6 +6,7 @@ import java.awt.event.MouseListener;
 public class Planet extends Satellite implements MouseListener {
 
 	private Integer numOfResources;
+	private Player owner = null;
 	
 	public Planet(Integer locX, Integer locY, Integer sz) {
 		super(locX, locY, sz);
@@ -24,6 +25,14 @@ public class Planet extends Satellite implements MouseListener {
 		Color temp = borderCol;
 		borderCol = selectCol;
 		selectCol = temp;
+	}
+	
+	private void setOwner(Player p) {
+		owner = p;
+	}
+	
+	private Player getOwner() {
+		return owner;	
 	}
 	
 	@Override
