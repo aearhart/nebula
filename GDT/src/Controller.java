@@ -1,10 +1,14 @@
 
 public class Controller {
 
-	public static void startUp() {
+	private Window window;
+	private Map map;
+	private Satellite[] all;
+	
+	public void startUp() {
 
-		Window window = new Window();
-		Map map = new Map();
+		window = new Window();
+		map = new Map();
 		window.add(map);
 		window.update();
 
@@ -15,7 +19,8 @@ public class Controller {
 		Satellite s03 = new GasPlanet(645, 40, 26, 5, "2"); 
 		Satellite s04 = new WaterPlanet(766, 388, 58, 2, "3"); 
 		
-		Satellite[] all = {s00, s01, s02, s03, s04};
+		Satellite[] al = {s00, s01, s02, s03, s04};
+		all = al;
 		
 		for (int i = 0; i < all.length; i++) {
 			Satellite s = all[i];
@@ -26,6 +31,7 @@ public class Controller {
 	
 	public static void main(String[] args) {
 		startUp();
+		
 
 	}
 
