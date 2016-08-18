@@ -10,7 +10,7 @@ public class Player {
 		this.name = n;
 	}
 	
-	public void setStations(Base[] st) {
+	public void setStations(Station[] st) {
 		this.stations = st;
 	}
 	
