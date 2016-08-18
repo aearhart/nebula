@@ -24,11 +24,15 @@ public class Planet extends Satellite implements MouseListener {
 		addMouseListener(this);
 	}
 
-	private void setOwner(Player p) {
+	public Integer getResources(){
+		return numOfResources;
+	}
+	
+	public void setOwner(Player p) {
 		owner = p;
 	}
 	
-	private Player getOwner() {
+	public Player getOwner() {
 		return owner;	
 	}
 	

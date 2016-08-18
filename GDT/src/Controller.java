@@ -68,6 +68,43 @@ public class Controller {
 
 	}
 	
+	public Boolean withinDistance(Station s, Planet p) {
+		
+		
+	}
+	
+	public void collectResources() {
+		/* current player collects resources in AoI */
+		
+		Station[] stations = currPlayer.getStations();
+		// for each station
+		for (int s = 0; s < currPlayer.getNumStations(); s++) {
+			// see which planets are within it
+			for (int p = 0; p < all.length; p++) {
+				// is it a station? --> ignore
+				if (all[p] instanceof Station) {
+					continue;
+				}
+				// are they within?
+				else if ( !(all[p] instanceof Station) && (withinDistance(stations[s], all[p]))) {
+					if (all[p] instanceof WaterPlanet) {
+						currPlayer.addWater(((Planet) all[p]).getResources());
+					}
+					else if (all[p] instanceof MetalPlanet){
+						currPlayer.addMineral(((Planet) all[p]).getResources());
+					}
+					else
+						currPlayer.addGas(((Planet) all[p]).getResources());
+				}
+				// else not within, do nothing
+				
+			}
+		}
+		
+		//done
+		
+	}
+	
 	public void gamePlay() {
 		
 	}

@@ -13,6 +13,10 @@ public class Player {
 		this.control = ctrl;
 	}
 	
+	public int getNumStations(){
+		return numStations;
+	}
+	
 	public void addStation(Station st) {
 		stations[numStations++] = st;
 	}
