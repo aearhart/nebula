@@ -5,9 +5,11 @@ import java.awt.*;
 public class Window extends JFrame {
 	
 	private Map map;
+	private Controller control;
 	
-	public Window() {
+	public Window(Controller ctrl) {
 		super("Game Demo 0.0.1");
+		control = ctrl;
 		this.setSize(1000,1000);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 	

@@ -3,9 +3,12 @@ import java.awt.*;
 
 public class Map extends JPanel {
 	private static final long serialVersionUID = 1L;
-
-	public Map(){
+	private Controller control;
+	
+	public Map(Controller ctrl){
+		control = ctrl;
 		this.setLayout(null);
+		
 		/*
 		Satellite s01 = new Satellite(450, 400); // sun 
 		Satellite s02 = new Satellite(1, 10, 40, 30); // water

@@ -3,8 +3,8 @@ import java.awt.Graphics;
 
 public class Sun extends Satellite {
 
-	public Sun() {
-		super(350, 400, 100);
+	public Sun(Controller ctrl) {
+		super(ctrl, 350, 400, 100);
 		// TODO Auto-generated constructor stub
 	}
 	

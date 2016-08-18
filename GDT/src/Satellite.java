@@ -13,8 +13,10 @@ public class Satellite extends JComponent {
 	protected Color borderCol;
 	protected Color selectCol;
 	protected String name = "";
+	protected Controller control;
 	
-	public Satellite(Integer locX, Integer locY, Integer sz) {
+	public Satellite(Controller ctrl, Integer locX, Integer locY, Integer sz) {
+		control = ctrl;
 		x = locX;
 		y = locY;
 		s = sz;
