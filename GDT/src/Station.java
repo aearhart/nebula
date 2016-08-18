@@ -1,6 +1,6 @@
 import java.awt.Graphics;
 
-public class Base extends Satellite {
+public class Station extends Satellite {
 
 	/**
 	 * 
@@ -10,7 +10,7 @@ public class Base extends Satellite {
 	private int AreaOfInfluence;
 	private Player controller;
 	
-	public Base(Integer locX, Integer locY, Integer sz) {
+	public Station(Integer locX, Integer locY, Integer sz) {
 		super(locX, locY, sz);
 		// TODO Auto-generated constructor stub
 	}
@@ -27,6 +27,8 @@ public class Base extends Satellite {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
+		//TODO ADD Image?
 		
 		g.setColor(fillCol);
 		g.fillOval(0, 0, s, s);	
