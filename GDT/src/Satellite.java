@@ -35,6 +35,12 @@ public class Satellite extends JComponent {
 		selectCol = select;
 	}
 	
+	public void switchColors() {
+		Color temp = borderCol;
+		borderCol = selectCol;
+		selectCol = temp;
+	}
+	
 	public Color getFillCol() {
 		return fillCol;
 	}

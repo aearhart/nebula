@@ -23,13 +23,7 @@ public class Planet extends Satellite implements MouseListener {
 		numOfResources = numResources;
 		addMouseListener(this);
 	}
-	
-	private void switchColors() {
-		Color temp = borderCol;
-		borderCol = selectCol;
-		selectCol = temp;
-	}
-	
+
 	private void setOwner(Player p) {
 		owner = p;
 	}
@@ -69,14 +63,14 @@ public class Planet extends Satellite implements MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		switchColors();
+		this.switchColors();
 		repaint();
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		switchColors();
+		this.switchColors();
 		repaint();
 	}
 
