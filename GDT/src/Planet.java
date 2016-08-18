@@ -7,16 +7,19 @@ public class Planet extends Satellite implements MouseListener {
 
 	private Integer numOfResources;
 	private Player owner = null;
+	private Controller control;
 	
-	public Planet(Integer locX, Integer locY, Integer sz) {
+	public Planet(Controller ctrl, Integer locX, Integer locY, Integer sz) {
 		super(locX, locY, sz);
 		// TODO Auto-generated constructor stub
 		numOfResources = 1;
+		control = ctrl;
 		addMouseListener(this);
 	}
 
-	public Planet(Integer locX, Integer locY, Integer sz, Integer numResources) {
+	public Planet(Controller ctrl, Integer locX, Integer locY, Integer sz, Integer numResources) {
 		super(locX, locY, sz);
+		control = ctrl;
 		numOfResources = numResources;
 		addMouseListener(this);
 	}
