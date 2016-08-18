@@ -9,7 +9,7 @@ public class Player {
 	
 	public Player(Controller ctrl, String n){
 		this.name = n;
-		this.control = c;
+		this.control = ctrl;
 	}
 
 	public void setStations(Station[] st) {
