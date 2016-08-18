@@ -13,13 +13,14 @@ public class Station extends Satellite implements MouseListener {
 	private static final long serialVersionUID = 1L;
 	private Planet[] planetsInAOI;
 	private int AreaOfInfluence;
-	private Player controller;
+	private Player owner;
 	
 	public Station(Controller ctrl, Integer locX, Integer locY, Integer sz) {
 		super(ctrl, locX, locY, sz);
 		// TODO Auto-generated constructor stub
 		
-		this.setColors(Color.GREEN, Color.BLACK, Color.BLACK);
+		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
+		addMouseListener(this);
 	}
 	
 	public Planet[] getPInAOI(){
@@ -30,6 +31,16 @@ public class Station extends Satellite implements MouseListener {
 		planetsInAOI = planets;
 	}
 	
+	
+	private void setOwner(Player p) {
+		owner = p;
+		owner.addStation(this);
+		switchColors();
+		repaint();
+		control.setStatus("Done Claiming");
+		System.out.println(control.getStatus());
+		
+	}
 	
 	@Override
 	public void paintComponent(Graphics g) {
@@ -47,8 +58,17 @@ public class Station extends Satellite implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-		 
+		System.out.println("CLICKED");
+		switch (control.getStatus()) {
+		case "Claiming": {
+				if(this.owner == null) 
+					setOwner(control.getCurrPlayer()); 
+				else 
+					System.out.println("This station is already owned by " + owner.getName());
+				return;
+			}
+		}
+		
 	}
 
 	@Override

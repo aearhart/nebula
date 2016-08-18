@@ -1,7 +1,8 @@
 
 public class Player {
 	private String name;
-	private Station[] stations;
+	private Station[] stations = new Station[10];
+	private int numStations = 0;
 	private int gas = 0;
 	private int water = 0;
 	private int mineral = 0;
@@ -11,9 +12,9 @@ public class Player {
 		this.name = n;
 		this.control = ctrl;
 	}
-
-	public void setStations(Station[] st) {
-		this.stations = st;
+	
+	public void addStation(Station st) {
+		stations[numStations++] = st;
 	}
 	
 	public Station[] getStations() {

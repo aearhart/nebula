@@ -5,12 +5,20 @@ public class Controller {
 	private Map map;
 	private Satellite[] all;
 	private Player p1;
+	private Player currPlayer;
 	private String status;
 	
 	public String getStatus() {
 		return status;
 	}
 	
+	public void setStatus(String s) {
+		status = s;
+	}
+	
+	public Player getCurrPlayer() {
+		return currPlayer;
+	}
 	
 	public void startUp() {
 
@@ -43,11 +51,32 @@ public class Controller {
 		status = "";
 	}
 	
+	public void setUp() {
+		status = "SetUp";
+		
+		currPlayer = p1;
+		
+		System.out.println(currPlayer.getName() + ": Click on a space station to claim it");
+		status = "Claiming";
+		while (status.equals("Claiming")) {
+			System.out.print("");
+		}
+		
+		
+		
+		status = "";
+
+	}
+	
+	public void gamePlay() {
+		
+	}
+	
 	public static void main(String[] args) {
 		Controller control = new Controller();
 		control.startUp();
-		
-		
+		control.setUp();
+		control.gamePlay();
 
 	}
 
