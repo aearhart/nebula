@@ -4,6 +4,8 @@ public class Controller {
 	private Window window;
 	private Map map;
 	private Satellite[] all;
+	private Player p1;
+	
 	
 	public void startUp() {
 
@@ -27,11 +29,14 @@ public class Controller {
 			map.add(s);
 			s.setBounds(s.getLocX(), s.getLocY(), s.getSz(), s.getSz());
 		}
+		
+		p1 = new Player("Player 1");
 	}
 	
 	public static void main(String[] args) {
 		Controller control = new Controller();
 		control.startUp();
+		
 		
 
 	}
