@@ -33,7 +33,7 @@ public class Player {
 		this.name = name;
 	}
 
-	public int getWater() {
+	public int getWater() { 
 		return water;
 	}
 

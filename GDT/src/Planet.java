@@ -21,7 +21,7 @@ public class Planet extends Satellite implements MouseListener {
 		super(ctrl, locX, locY, sz);
 		control = ctrl;
 		numOfResources = numResources;
-		addMouseListener(this);
+		addMouseListener(this); 
 	}
 
 	public Integer getResources(){
