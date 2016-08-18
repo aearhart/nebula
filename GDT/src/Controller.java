@@ -30,7 +30,8 @@ public class Controller {
 	}
 	
 	public static void main(String[] args) {
-		startUp();
+		Controller ctrl = new Controller();
+		ctrl.startUp();
 		
 
 	}
