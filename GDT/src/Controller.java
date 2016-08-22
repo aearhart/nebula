@@ -69,9 +69,16 @@ public class Controller {
 
 	}
 	
-	public Boolean withinDistance(Station s, Planet p) {
-		
-		
+	public Boolean withinDistance(Station s, Satellite p) {
+		// calculate distance
+		Integer distance = (int) Math.sqrt(Math.abs(s.getMidX() - p.getMidX()) + 
+				Math.abs(s.getMidY() - p.getMidY()));
+		System.out.println(p.getMidX() + " " + p.getMidY());
+		System.out.println("distance: " + distance);
+		if (distance < (s.getAoI() + p.getSz())) {
+			return true;
+		}
+		return false;
 	}
 	
 	public void collectResources() {
@@ -81,13 +88,13 @@ public class Controller {
 		// for each station
 		for (int s = 0; s < currPlayer.getNumStations(); s++) {
 			// see which planets are within it
+			System.out.println("Station: " + stations[s].getMidX() + " " + stations[s].getMidY());
 			for (int p = 0; p < all.length; p++) {
-				// is it a station? --> ignore
-				if (all[p] instanceof Station) {
-					continue;
-				}
+				// is it a station or sun? --> ignore
+
 				// are they within?
-				else if ( !(all[p] instanceof Station) && (withinDistance(stations[s], all[p]))) {
+				if ( !(all[p] instanceof Station) && (!(all[p] instanceof Sun)) && (withinDistance(stations[s], all[p]))) {
+					System.out.println("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
 					if (all[p] instanceof WaterPlanet) {
 						currPlayer.addWater(((Planet) all[p]).getResources());
 					}
@@ -107,6 +114,11 @@ public class Controller {
 	}
 	
 	public void gamePlay() {
+		System.out.println("Before collecting: w---g---m");
+		System.out.println("                   " + currPlayer.getWater() + " " + currPlayer.getGas() + " " + currPlayer.getMineral());
+		collectResources();
+		System.out.println("After  collecting: w---g---m");
+		System.out.println("                   " + currPlayer.getWater() + " " + currPlayer.getGas() + " " + currPlayer.getMineral());
 		
 	} 
 	 

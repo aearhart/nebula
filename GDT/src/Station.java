@@ -12,7 +12,7 @@ public class Station extends Satellite implements MouseListener {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Planet[] planetsInAOI;
-	private int AreaOfInfluence;
+	private int AreaOfInfluence = 100;
 	private Player owner;
 	
 	public Station(Controller ctrl, Integer locX, Integer locY, Integer sz) {
@@ -23,6 +23,10 @@ public class Station extends Satellite implements MouseListener {
 		
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);
+	}
+	
+	public int getAoI() {
+		return AreaOfInfluence;
 	}
 	
 	public Planet[] getPInAOI(){
