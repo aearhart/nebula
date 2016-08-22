@@ -71,8 +71,8 @@ public class Controller {
 	
 	public Boolean withinDistance(Station s, Satellite p) {
 		// calculate distance
-		Integer distance = (int) Math.sqrt(Math.abs(s.getMidX() - p.getMidX()) + 
-				Math.abs(s.getMidY() - p.getMidY()));
+		Integer distance = (int) Math.sqrt(Math.pow(Math.abs(s.getMidX() - p.getMidX()), 2) + 
+				Math.pow(Math.abs(s.getMidY() - p.getMidY()), 2));
 		System.out.println(p.getMidX() + " " + p.getMidY());
 		System.out.println("distance: " + distance);
 		if (distance < (s.getAoI() + p.getSz())) {
@@ -80,7 +80,7 @@ public class Controller {
 		}
 		return false;
 	}
-	
+	// s + wp 0: 250 + 300 = 550, 
 	public void collectResources() {
 		/* current player collects resources in AoI */
 		
