@@ -49,7 +49,7 @@ public class Planet extends Satellite implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println(name + " gives out " + numOfResources);
+		control.print(name + " gives out " + numOfResources);
 	}
 
 	@Override

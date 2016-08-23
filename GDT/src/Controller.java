@@ -20,6 +20,10 @@ public class Controller {
 		return currPlayer;
 	}
 	
+	public void print(String s) {
+		System.out.println(s);
+	}
+	
 	public void startUp() {
 
 		status = "StartUp";
@@ -36,9 +40,11 @@ public class Controller {
 		Satellite s02 = new MetalPlanet(this, 800, 104, 40, 5, "1"); 
 		Satellite s03 = new GasPlanet(this, 645, 40, 26, 5, "2"); 
 		Satellite s04 = new WaterPlanet(this, 766, 388, 58, 2, "3"); 
-		Satellite station = new Station(this, 700, 100, 30);
-		
-		Satellite[] al = {s00, s01, s02, s03, s04, station};
+		Satellite station00 = new Station(this, 700, 100, 30);
+		Satellite station01 = new Station(this, 313, 545, 30);
+		Satellite station02 = new Station(this, 168, 232, 30);
+		Satellite station03 = new Station(this, 826, 630, 30);
+		Satellite[] al = {s00, s01, s02, s03, s04, station00, station01, station02, station03};
 		all = al;
 		
 		for (int i = 0; i < all.length; i++) {
@@ -57,7 +63,7 @@ public class Controller {
 		
 		currPlayer = p1;
 		
-		System.out.println(currPlayer.getName() + ": Click on a space station to claim it");
+		print(currPlayer.getName() + ": Click on a space station to claim it");
 		status = "Claiming";
 		while (status.equals("Claiming")) {
 			System.out.print("");
@@ -90,7 +96,7 @@ public class Controller {
 				// is it a station or sun? --> ignore
 				// are they within?
 				if ( !(all[p] instanceof Station) && (!(all[p] instanceof Sun)) && (withinDistance(stations[s], all[p]))) {
-					System.out.println("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
+					print("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
 					if (all[p] instanceof WaterPlanet) {
 						currPlayer.addWater(((Planet) all[p]).getResources());
 					}
@@ -110,11 +116,11 @@ public class Controller {
 	}
 	
 	public void gamePlay() {
-		System.out.println("Before collecting: w---g---m");
-		System.out.println("                   " + currPlayer.getWater() + "   " + currPlayer.getGas() + "   " + currPlayer.getMineral());
+		print("Before collecting: w---g---m");
+		print("                   " + currPlayer.getWater() + "   " + currPlayer.getGas() + "   " + currPlayer.getMineral());
 		collectResources();
-		System.out.println("After  collecting: w---g---m");
-		System.out.println("                   " + currPlayer.getWater() + "   " + currPlayer.getGas() + "   " + currPlayer.getMineral());
+		print("After  collecting: w---g---m");
+		print("                   " + currPlayer.getWater() + "   " + currPlayer.getGas() + "   " + currPlayer.getMineral());
 		
 	} 
 	 

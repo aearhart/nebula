@@ -44,7 +44,7 @@ public class Station extends Satellite implements MouseListener {
 		switchColors();
 		repaint();
 		control.setStatus("Done Claiming");
-		System.out.println(control.getStatus());
+		control.print(control.getStatus());
 		
 	}
 	
@@ -64,13 +64,13 @@ public class Station extends Satellite implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		System.out.println("CLICKED");
+		control.print("CLICKED");
 		switch (control.getStatus()) {
 		case "Claiming": {
 				if(this.owner == null) 
 					setOwner(control.getCurrPlayer()); 
 				else 
-					System.out.println("This station is already owned by " + owner.getName());
+					control.print("This station is already owned by " + owner.getName());
 				return;
 			}
 		}
