@@ -73,6 +73,19 @@ public class Station extends Satellite implements MouseListener {
 					control.print("This station is already owned by " + owner.getName());
 				return;
 			}
+		case "Test": {
+			if(this.owner == null) 
+				setOwner(control.getCurrPlayer()); 
+			else 
+				control.print("This station is already owned by " + owner.getName());
+			control.setStatus("Test");
+			control.print("Before collecting: w---g---m");
+			control.print("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
+			control.collectResources();
+			control.print("After  collecting: w---g---m");
+			control.print("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
+			return;
+			}
 		}
 		
 	}

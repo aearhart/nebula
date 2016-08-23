@@ -38,20 +38,30 @@ public class Controller {
 
 		// ??Planet(x, y, s, numResources, name)
 		Satellite s00 = new Sun(this);
-		Satellite s01 = new WaterPlanet(this, 450, 400, 30, 3, "0");  
-		Satellite s02 = new MetalPlanet(this, 800, 104, 40, 5, "1"); 
-		Satellite s03 = new GasPlanet(this, 645, 40, 26, 5, "2"); 
-		Satellite s04 = new WaterPlanet(this, 766, 388, 58, 2, "3"); 
+		Satellite s01 = new WaterPlanet(this, 450, 350, 30, 3, "0"); 
+		Satellite s02 = new WaterPlanet(this, 766, 388, 58, 2, "1");
+		Satellite s03 = new WaterPlanet(this, 140, 142, 70, 7, "2");
+		Satellite s04 = new	WaterPlanet(this, 217, 530, 35, 5, "3");
+		Satellite s05 = new MetalPlanet(this, 800, 104, 40, 5, "0"); 
+		Satellite s06 = new MetalPlanet(this, 657, 720, 62, 7, "1");
+		Satellite s07 = new MetalPlanet(this, 340, 460, 27, 2, "2");
+		Satellite s08 = new MetalPlanet(this, 500, 680, 36, 2, "3");
+		Satellite s09 = new GasPlanet(this, 645, 40, 26, 5, "0"); 
+		Satellite s10 = new GasPlanet(this, 300, 200, 83, 3, "1");
+		Satellite s11 = new GasPlanet(this, 240, 730, 47, 2, "2");
+		Satellite s12 = new GasPlanet(this, 700, 600, 50, 3, "3");
+
 		Satellite station00 = new Station(this, 700, 100, 30);
 		Satellite station01 = new Station(this, 313, 545, 30);
 		Satellite station02 = new Station(this, 168, 232, 30);
 		Satellite station03 = new Station(this, 826, 630, 30);
-		Satellite[] al = {s00, s01, s02, s03, s04, station00, station01, station02, station03};
+		Satellite[] al = {s00, s01, s02, s03, s04, s05, s06, s07, s08, 
+				s09, s10, s11, s12, station00, station01, station02, station03};
 		all = al;
 		
 		for (int i = 0; i < all.length; i++) {
 			Satellite s = all[i];
-			map.add(s);
+			map.add(s); 
 			s.setBounds(s.getLocX(), s.getLocY(), s.getSz(), s.getSz());
 		}
 		
@@ -75,6 +85,10 @@ public class Controller {
 		
 		status = "";
 
+	}
+	
+	public void drawAoIs(Station s) {
+		
 	}
 	
 	public Boolean withinDistance(Station s, Satellite p) {
@@ -118,12 +132,9 @@ public class Controller {
 	}
 	
 	public void gamePlay() {
-		print("Before collecting: w---g---m");
-		print("                   " + currPlayer.getWater() + "   " + currPlayer.getGas() + "   " + currPlayer.getMineral());
-		collectResources();
-		print("After  collecting: w---g---m");
-		print("                   " + currPlayer.getWater() + "   " + currPlayer.getGas() + "   " + currPlayer.getMineral());
-		
+		status = "Test";
+		while (status.equals("Test")) {
+		}
 	} 
 	 
 	public static void main(String[] args) {
