@@ -27,6 +27,8 @@ public class Controller {
 		window = new Window(this);
 		map = new Map(this);
 		window.getContentPane().add(map);
+		//Map map2 = new Map(this);
+		//window.getContentPane().add(map2);
 		window.pack();
 		window.update();
 
