@@ -45,10 +45,13 @@ public class Satellite extends JComponent {
 		return fillCol;
 	}
 	
-	public Color getBorderCol() {
+	protected Color getBorderCol() {
 		return borderCol;
 	}
 	
+	public Color getSelectCol() {
+		return selectCol;
+	}
 	public Integer getLocX() {
 		return x;
 	}

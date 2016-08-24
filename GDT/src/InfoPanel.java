@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 
 public class InfoPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private Controller control;
+	private Controller control; 
 	private Player player;
 	
 	private String string1;
