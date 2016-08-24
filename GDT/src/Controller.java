@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.Graphics;
+
 import javax.swing.JButton;
 
 public class Controller {
@@ -10,7 +13,10 @@ public class Controller {
 	private Player p1;
 	private Player currPlayer;
 	private String status;
-	
+	int AoIx = 0;
+	int AoIy = 0;
+	int AoIs = 0;
+	Color AoIc = Color.RED;
 	
 	public String getStatus() {
 		return status;
@@ -93,7 +99,7 @@ public class Controller {
 		for (int i = 0; i < all.length; i++) {
 			Satellite s = all[i];
 			map.add(s); 
-			s.setBounds(s.getLocX(), s.getLocY(), s.getSz(), s.getSz());
+			s.setBounds(s.getLocX(), s.getLocY(), s.getBoundSize(), s.getBoundSize());
 		}
 		
 		p1 = new Player(this, "Player 1");
@@ -117,20 +123,34 @@ public class Controller {
 
 	}
 	
-	public void drawAoIs(Station s) {
-		
+	public void drawAoI(Station s) {
+		//print("drawing AoI");
+		AoIx = s.getMidX() - s.getAoI();
+		AoIy = s.getMidY() - s.getAoI();
+		AoIs = s.getAoI()*2;
+		AoIc = new Color(100, 100, 100, 255);
+		map.repaint();
+		window.update();
+	}
+	
+	public void removeAoI() {
+		//print("removing AoI");
+		AoIc = new Color(100, 100, 100, 0);
+		map.repaint();
+		window.update();
 	}
 	
 	public Boolean withinDistance(Station s, Satellite p) {
 		// calculate distance
 		Integer distance = (int) Math.sqrt(Math.pow(Math.abs(s.getMidX() - p.getMidX()), 2) + 
 				Math.pow(Math.abs(s.getMidY() - p.getMidY()), 2));
+		//System.out.println("distance: " + distance);
 		if (distance < (s.getAoI() + p.getSz())) {
 			return true;
 		}
 		return false;
 	}
-	// s + wp 0: 250 + 300 = 550, 
+
 	public void collectResources() {
 		/* current player collects resources in AoI */
 		
@@ -138,11 +158,17 @@ public class Controller {
 		// for each station
 		for (int s = 0; s < currPlayer.getNumStations(); s++) {
 			// see which planets are within it
+			//System.out.println("Satellite: " + stations[s].getMidX() + " " + stations[s].getMidY());
 			for (int p = 0; p < all.length; p++) {
 				// is it a station or sun? --> ignore
 				// are they within?
 				if ( !(all[p] instanceof Station) && (!(all[p] instanceof Sun)) && (withinDistance(stations[s], all[p]))) {
+
 					printToPlayerArea("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
+
+					//System.out.println("planet: " + all[p].getMidX() + " " + all[p].getMidY());
+					//System.out.println("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
+
 					if (all[p] instanceof WaterPlanet) {
 						currPlayer.addWater(((Planet) all[p]).getResources());
 					}
