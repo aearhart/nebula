@@ -1,12 +1,15 @@
+import javax.swing.JButton;
 
 public class Controller {
 
 	private Window window;
 	private Map map;
+	private InfoPanel infoPanel;
 	private Satellite[] all;
 	private Player p1;
 	private Player currPlayer;
 	private String status;
+	
 	
 	public String getStatus() {
 		return status;
@@ -21,18 +24,34 @@ public class Controller {
 	}
 	
 	public void print(String s) {
-		System.out.println(s);
+		infoPanel.printToInfoPanel(s);
 	}
 	
 	public void startUp() {
 
 		status = "StartUp";
 		
+		
+		
 		window = new Window(this);
+		
+		
+		infoPanel = new InfoPanel(this);
+		window.add(infoPanel);
+		
+		
 		map = new Map(this);
-		window.getContentPane().add(map);
+		window.add(map);
+//		window.getContentPane().add(map);
+		
+		JButton button = new JButton("Click Me");
+		window.add(button);
+		
 		//Map map2 = new Map(this);
-		//window.getContentPane().add(map2);
+		//window.add(map2);
+		//		window.getContentPane().add(map2);
+		
+		
 		window.pack();
 		window.update();
 
@@ -132,6 +151,7 @@ public class Controller {
 	
 	public void gamePlay() {
 		
+
 		// collect resources for each satellite under the current player
 		// collectResources(); 
 		 
