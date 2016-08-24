@@ -87,15 +87,7 @@ public class Station extends Satellite implements MouseListener {
 			control.printToInstructionArea("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
 			return;
 			}
-		case "UpgradeStations": {
-			if(this.owner == control.getCurrPlayer()) {
-				control.setStatus("SelectStation");
-				control.printToInstructionArea("Click again to upgrade the station's AoI by 100.");
-				control.printToHoverArea("This level " + level + " " + "station costs : " + costWater + " water, " + costMetal + " metal, and " + costGas + " gas.");
-			}
-			return;
-		}
-		case "SelectStation": {
+		case "Upgrade": {
 			if (this.owner == control.getCurrPlayer() && control.getCurrPlayer().getGas() >= costGas && control.getCurrPlayer().getMineral() >= costMetal && control.getCurrPlayer().getWater() >= costWater) {
 				control.getCurrPlayer().subGas(costGas);
 				control.getCurrPlayer().subMineral(costMetal);
@@ -105,9 +97,9 @@ public class Station extends Satellite implements MouseListener {
 				costGas += costGas;
 				costMetal += costMetal;
 				costWater += costWater;
-				AreaOfInfluence = AreaOfInfluence * 2;
-				control.setStatus("Test");
-				control.printToInstructionArea("none");
+				AreaOfInfluence = (int)((float)(AreaOfInfluence) * 1.5);
+				//control.setStatus("Test");
+				control.printToInstructionArea("Upgraded station to level " + level + ".");
 			}
 			else {control.printToInstructionArea("Insufficient funds or priviledges.");}
 			return;
@@ -134,12 +126,14 @@ public class Station extends Satellite implements MouseListener {
 			repaint();
 			return;
 			}
-		case "UpgradeStations": {
+		case "Upgrade": {
 			if(this.owner == control.getCurrPlayer()) {
 				switchColors();
 				control.drawAoI(this);
 				repaint(); 
+				control.printToHoverArea("This level " + level + " " + "station costs : " + costWater + " water, " + costMetal + " metal, and " + costGas + " gas.");
 				}
+			else {control.printToHoverArea("You do not own this space station."); }
 			return;
 			}
 		}
@@ -162,12 +156,13 @@ public class Station extends Satellite implements MouseListener {
 			repaint(); 
 			return;
 			}
-		case "UpgradeStations": {
+		case "Upgrade": {
 			if(this.owner == control.getCurrPlayer()) {
 				switchColors();
 				control.removeAoI();
 				repaint();
 			}
+			control.printToHoverArea("Hover over a satellite for more information.");
 			return;
 		}
 		case "SelectStations": {

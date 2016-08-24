@@ -192,7 +192,7 @@ public class Controller {
 		 * then: increase aoi, upgrade prices, level, etc.
 		 */
 		// highlight all stations currplayer owns:
-		status = "UpgradeStations";
+		status = "Upgrade";
 	}
 	
 	public void gamePlay() {
@@ -204,7 +204,7 @@ public class Controller {
 		/*status = "Test";
 		while (status.equals("Test")) {
 		}*/
-		printToInstructionArea("Click on a satellite to upgrade.");
+		printToInstructionArea("Click on a planet or space station to upgrade.");
 		upgradeTime();
 	} 
 	 
