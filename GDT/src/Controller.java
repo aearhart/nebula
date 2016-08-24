@@ -46,17 +46,13 @@ public class Controller {
 
 		status = "StartUp";
 		
-		
-		
 		window = new Window(this);
-		
 		
 		infoPanel = new InfoPanel(this);
 		window.add(infoPanel);
 		
 		//newPanel = new InfoPanel(this);
 		//window.add(newPanel);
-		
 		
 		map = new Map(this);
 		window.add(map);
@@ -118,9 +114,7 @@ public class Controller {
 			System.out.print("");
 		}
 		
-		
 		status = "";
-
 	}
 	
 	public void drawAoI(Station s) {
@@ -187,15 +181,31 @@ public class Controller {
 		
 	}
 	
+	public void upgradeTime() {
+		/*
+		 * Highlight all stations currplayer owns, and aOi
+		 * tell player to choose which satellite to upgrade
+		 * highlight that one only
+		 * click again to upgrade for price
+		 * check to see if currplayer has enough resources
+		 * if so, bought
+		 * then: increase aoi, upgrade prices, level, etc.
+		 */
+		// highlight all stations currplayer owns:
+		status = "UpgradeStations";
+	}
+	
 	public void gamePlay() {
 		
 
 		// collect resources for each satellite under the current player
-		// collectResources(); 
+		 collectResources(); 
 		 
-		status = "Test";
+		/*status = "Test";
 		while (status.equals("Test")) {
-		}
+		}*/
+		printToInstructionArea("Click on a satellite to upgrade.");
+		upgradeTime();
 	} 
 	 
 	public static void main(String[] args) {

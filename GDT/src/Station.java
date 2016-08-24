@@ -14,6 +14,10 @@ public class Station extends Satellite implements MouseListener {
 	private Planet[] planetsInAOI;
 	private int AreaOfInfluence = 100;
 	private Player owner;
+	private int costWater = 0;
+	private int costMetal = 0;
+	private int costGas = 0;
+	private int level = 0;
 	
 	public Station(Controller ctrl, Integer locX, Integer locY, Integer sz) {
 		super(ctrl, locX, locY, sz);
@@ -64,7 +68,8 @@ public class Station extends Satellite implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		control.printToInstructionArea("CLICKED");
+		//control.printToInstructionArea("CLICKED");
+		System.out.println(control.getStatus());
 		switch (control.getStatus()) {
 		case "Claiming": {
 				if(this.owner == null) 
@@ -82,6 +87,31 @@ public class Station extends Satellite implements MouseListener {
 			control.printToInstructionArea("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
 			return;
 			}
+		case "UpgradeStations": {
+			if(this.owner == control.getCurrPlayer()) {
+				control.setStatus("SelectStation");
+				control.printToInstructionArea("Click again to upgrade the station's AoI by 100.");
+				control.printToHoverArea("This level " + level + " " + "station costs : " + costWater + " water, " + costMetal + " metal, and " + costGas + " gas.");
+			}
+			return;
+		}
+		case "SelectStation": {
+			if (this.owner == control.getCurrPlayer() && control.getCurrPlayer().getGas() >= costGas && control.getCurrPlayer().getMineral() >= costMetal && control.getCurrPlayer().getWater() >= costWater) {
+				control.getCurrPlayer().subGas(costGas);
+				control.getCurrPlayer().subMineral(costMetal);
+				control.getCurrPlayer().subWater(costWater);
+				level++;
+				// double cost
+				costGas += costGas;
+				costMetal += costMetal;
+				costWater += costWater;
+				AreaOfInfluence = AreaOfInfluence * 2;
+				control.setStatus("Test");
+				control.printToInstructionArea("none");
+			}
+			else {control.printToInstructionArea("Insufficient funds or priviledges.");}
+			return;
+		}
 		}
 		
 	}
@@ -91,18 +121,26 @@ public class Station extends Satellite implements MouseListener {
 		// TODO Auto-generated method stub
 		switch (control.getStatus()) {
 		case "Claiming": {
-				if(this.owner == null) {
-					switchColors();
-					control.drawAoI(this);
-					repaint(); }
-				return;
+			if(this.owner == null) {
+				switchColors();
+				control.drawAoI(this);
+				repaint(); }
+			return;
 				
 			}
 		case "Test": {
-				if (this.owner == null) {
-					switchColors();
-					repaint(); }
-				return;
+			switchColors();
+			control.drawAoI(this);
+			repaint();
+			return;
+			}
+		case "UpgradeStations": {
+			if(this.owner == control.getCurrPlayer()) {
+				switchColors();
+				control.drawAoI(this);
+				repaint(); 
+				}
+			return;
 			}
 		}
 	}
@@ -119,12 +157,27 @@ public class Station extends Satellite implements MouseListener {
 				return;
 			}
 		case "Test": {
-				if (this.owner == null) {
-					switchColors();
-					repaint(); }
-				return;
+			switchColors();
+			control.removeAoI();
+			repaint(); 
+			return;
 			}
+		case "UpgradeStations": {
+			if(this.owner == control.getCurrPlayer()) {
+				switchColors();
+				control.removeAoI();
+				repaint();
+			}
+			return;
 		}
+		case "SelectStations": {
+			if(this.owner == control.getCurrPlayer()) {
+				switchColors();
+				control.removeAoI();
+				repaint();
+			}
+			return;
+		}}
 	}
 
 	@Override
