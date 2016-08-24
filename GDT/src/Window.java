@@ -29,6 +29,5 @@ public class Window extends JFrame {
 	public void update() {
 		this.setVisible(true);
 	}
-	
-	
+
 }

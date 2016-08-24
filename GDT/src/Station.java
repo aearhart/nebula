@@ -93,6 +93,7 @@ public class Station extends Satellite implements MouseListener {
 		case "Claiming": {
 				if(this.owner == null) {
 					switchColors();
+					control.drawAoI(this);
 					repaint(); }
 				return;
 				
@@ -113,6 +114,7 @@ public class Station extends Satellite implements MouseListener {
 		case "Claiming": {
 				if(this.owner == null) {
 					switchColors();
+					control.removeAoI();
 					repaint(); }
 				return;
 			}

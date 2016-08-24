@@ -69,7 +69,10 @@ public class Satellite extends JComponent {
 	}
 	
 	public Integer getSz() {
-		return s+1;
+		return s/2;
 	}
 
+	public int getBoundSize() {
+		return s+1;
+	}
 }
