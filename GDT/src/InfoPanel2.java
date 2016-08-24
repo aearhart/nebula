@@ -8,11 +8,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 // Contains:
-//   Instruction Text Area
-//   Player Text Area
+//   Hover Text Area
 
 
-public class InfoPanel extends JPanel {
+public class InfoPanel2 extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Controller control; 
 	private Player player;
@@ -21,10 +20,9 @@ public class InfoPanel extends JPanel {
 	private String string2;
 	private char [] chars;
 	
-	private JTextArea instructionArea;
-	private JTextArea playerArea;
+	private JTextArea hoverArea;
 	
-	public InfoPanel(Controller ctrl) {
+	public InfoPanel2(Controller ctrl) {
 		control = ctrl;
 
 		this.setPreferredSize(new Dimension (300,1000));
@@ -33,42 +31,27 @@ public class InfoPanel extends JPanel {
 
 		string1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut ";
 		
-		instructionArea = new JTextArea();
-		playerArea = new JTextArea();
+		hoverArea = new JTextArea();
 
 		Font f1 = new Font("Arial", Font.PLAIN, 35);
 		
-		instructionArea.setFont(f1);
+		hoverArea.setFont(f1);
 		
-		instructionArea.setColumns(10);
-		instructionArea.setLineWrap(true);
-		instructionArea.setRows(1);
-		instructionArea.setWrapStyleWord(true);
-		instructionArea.setText(string1);
+		hoverArea.setColumns(10);
+		hoverArea.setLineWrap(true);
+		hoverArea.setRows(1);
+		hoverArea.setWrapStyleWord(true);
+		hoverArea.setText(string1);
 		
-		this.add(instructionArea);
-		
-		playerArea.setFont(f1);
-		
-		playerArea.setColumns(10);
-		playerArea.setLineWrap(true);
-		playerArea.setRows(1);
-		playerArea.setWrapStyleWord(true);
-		playerArea.setText(string1);
-		
-		this.add(playerArea);
+		this.add(hoverArea);
 		
 		
 		
 		
 	}
 	
-	public void printToInstructionArea(String s) {
-		instructionArea.setText(s);
-	}
-	
-	public void printToPlayerArea(String s){
-		playerArea.setText(s);
+	public void printToHoverArea(String s) {
+		hoverArea.setText(s);
 	}
 	
 	/*

@@ -5,6 +5,7 @@ public class Controller {
 	private Window window;
 	private Map map;
 	private InfoPanel infoPanel;
+	private InfoPanel2 infoPanel2;
 	private Satellite[] all;
 	private Player p1;
 	private Player currPlayer;
@@ -23,8 +24,16 @@ public class Controller {
 		return currPlayer;
 	}
 	
-	public void print(String s) {
-		infoPanel.printToInfoPanel(s);
+	public void printToInstructionArea(String s) {
+		infoPanel.printToInstructionArea(s);
+	}
+	
+	public void printToPlayerArea(String s) {
+		infoPanel.printToPlayerArea(s);
+	}
+	
+	public void printToHoverArea(String s) {
+		infoPanel2.printToHoverArea(s);
 	}
 	
 	public void startUp() {
@@ -39,13 +48,16 @@ public class Controller {
 		infoPanel = new InfoPanel(this);
 		window.add(infoPanel);
 		
+		//newPanel = new InfoPanel(this);
+		//window.add(newPanel);
+		
 		
 		map = new Map(this);
 		window.add(map);
 //		window.getContentPane().add(map);
 		
-		JButton button = new JButton("Click Me");
-		window.add(button);
+		infoPanel2 = new InfoPanel2(this);
+		window.add(infoPanel2);
 		
 		//Map map2 = new Map(this);
 		//window.add(map2);
@@ -94,7 +106,7 @@ public class Controller {
 		
 		currPlayer = p1;
 		
-		print(currPlayer.getName() + ": Click on a space station to claim it");
+		printToInstructionArea(currPlayer.getName() + ": Click on a space station to claim it");
 		status = "Claiming";
 		while (status.equals("Claiming")) {
 			System.out.print("");
@@ -130,7 +142,7 @@ public class Controller {
 				// is it a station or sun? --> ignore
 				// are they within?
 				if ( !(all[p] instanceof Station) && (!(all[p] instanceof Sun)) && (withinDistance(stations[s], all[p]))) {
-					print("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
+					printToPlayerArea("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
 					if (all[p] instanceof WaterPlanet) {
 						currPlayer.addWater(((Planet) all[p]).getResources());
 					}

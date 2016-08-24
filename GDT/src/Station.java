@@ -44,7 +44,7 @@ public class Station extends Satellite implements MouseListener {
 		this.setColors(p.getColor(), this.getBorderCol(), this.getSelectCol());;
 		repaint();
 		control.setStatus("Done Claiming");
-		control.print(control.getStatus());
+		control.printToInstructionArea(control.getStatus());
 		
 	}
 	
@@ -64,22 +64,22 @@ public class Station extends Satellite implements MouseListener {
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		control.print("CLICKED");
+		control.printToInstructionArea("CLICKED");
 		switch (control.getStatus()) {
 		case "Claiming": {
 				if(this.owner == null) 
 					setOwner(control.getCurrPlayer()); 
 				else 
-					control.print("This station is already owned by " + owner.getName());
+					control.printToInstructionArea("This station is already owned by " + owner.getName());
 				return;
 			}
 		case "Test": {
 			if(this.owner == null) 
-			control.print("Before collecting: w---g---m");
-			control.print("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
+			control.printToInstructionArea("Before collecting: w---g---m");
+			control.printToInstructionArea("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
 			control.collectResources();
-			control.print("After  collecting: w---g---m");
-			control.print("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
+			control.printToInstructionArea("After  collecting: w---g---m");
+			control.printToInstructionArea("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
 			return;
 			}
 		}
