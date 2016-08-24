@@ -68,6 +68,7 @@ public class Planet extends Satellite implements MouseListener {
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
 		this.switchColors();
+		control.printToHoverArea(this.getName());
 		repaint();
 	}
 
@@ -75,6 +76,7 @@ public class Planet extends Satellite implements MouseListener {
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		this.switchColors();
+		control.printToHoverArea("Hover over a satellite for more information");
 		repaint();
 	}
 
