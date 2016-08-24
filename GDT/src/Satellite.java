@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
 
 public class Satellite extends JComponent {
 
@@ -14,6 +15,7 @@ public class Satellite extends JComponent {
 	protected Color selectCol;
 	protected String name = "";
 	protected Controller control;
+	protected BufferedImage image = null;
 	
 	public Satellite(Controller ctrl, Integer locX, Integer locY, Integer sz) {
 		control = ctrl;
