@@ -9,7 +9,9 @@ public class Window extends JFrame {
 	
 	public Window(Controller ctrl) {
 		super("Game Demo 0.0.1");
+		this.setLayout(new FlowLayout());
 		control = ctrl;
+		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 	
 		//Map m = new Map();

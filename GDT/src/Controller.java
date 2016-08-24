@@ -1,12 +1,15 @@
+import javax.swing.JButton;
 
 public class Controller {
 
 	private Window window;
 	private Map map;
+	private InfoPanel infoPanel;
 	private Satellite[] all;
 	private Player p1;
 	private Player currPlayer;
 	private String status;
+	
 	
 	public String getStatus() {
 		return status;
@@ -24,11 +27,27 @@ public class Controller {
 
 		status = "StartUp";
 		
+		
+		
 		window = new Window(this);
+		
+		
+		infoPanel = new InfoPanel(this);
+		window.add(infoPanel);
+		
+		
 		map = new Map(this);
-		window.getContentPane().add(map);
+		window.add(map);
+//		window.getContentPane().add(map);
+		
+		JButton button = new JButton("Click Me");
+		window.add(button);
+		
 		//Map map2 = new Map(this);
-		//window.getContentPane().add(map2);
+		//window.add(map2);
+		//		window.getContentPane().add(map2);
+		
+		
 		window.pack();
 		window.update();
 
@@ -118,6 +137,7 @@ public class Controller {
 		System.out.println("After  collecting: w---g---m");
 		System.out.println("                   " + currPlayer.getWater() + "   " + currPlayer.getGas() + "   " + currPlayer.getMineral());
 		
+		infoPanel.printToInfoPanel("YOU'RE TOO LATE ADRIENNE!");
 	} 
 	 
 	public static void main(String[] args) {
