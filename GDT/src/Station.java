@@ -41,7 +41,7 @@ public class Station extends Satellite implements MouseListener {
 	private void setOwner(Player p) {
 		owner = p;
 		owner.addStation(this);
-		switchColors();
+		this.setColors(p.getColor(), this.getBorderCol(), this.getSelectCol());;
 		repaint();
 		control.setStatus("Done Claiming");
 		control.print(control.getStatus());
@@ -75,10 +75,6 @@ public class Station extends Satellite implements MouseListener {
 			}
 		case "Test": {
 			if(this.owner == null) 
-				setOwner(control.getCurrPlayer()); 
-			else 
-				control.print("This station is already owned by " + owner.getName());
-			control.setStatus("Test");
 			control.print("Before collecting: w---g---m");
 			control.print("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
 			control.collectResources();
@@ -93,13 +89,40 @@ public class Station extends Satellite implements MouseListener {
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		switch (control.getStatus()) {
+		case "Claiming": {
+				if(this.owner == null) {
+					switchColors();
+					repaint(); }
+				return;
+				
+			}
+		case "Test": {
+				if (this.owner == null) {
+					switchColors();
+					repaint(); }
+				return;
+			}
+		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-		
+		switch (control.getStatus()) {
+		case "Claiming": {
+				if(this.owner == null) {
+					switchColors();
+					repaint(); }
+				return;
+			}
+		case "Test": {
+				if (this.owner == null) {
+					switchColors();
+					repaint(); }
+				return;
+			}
+		}
 	}
 
 	@Override

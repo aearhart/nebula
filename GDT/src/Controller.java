@@ -82,7 +82,6 @@ public class Controller {
 		}
 		
 		
-		
 		status = "";
 
 	}
@@ -132,6 +131,10 @@ public class Controller {
 	}
 	
 	public void gamePlay() {
+		
+		// collect resources for each satellite under the current player
+		// collectResources(); 
+		 
 		status = "Test";
 		while (status.equals("Test")) {
 		}

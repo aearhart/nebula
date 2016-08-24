@@ -1,3 +1,4 @@
+import java.awt.Color;
 
 public class Player {
 	private String name;
@@ -7,12 +8,20 @@ public class Player {
 	private int water = 0;
 	private int mineral = 0;
 	private Controller control;
+	private Color col = Color.BLUE;
 	
 	public Player(Controller ctrl, String n){
 		this.name = n;
 		this.control = ctrl;
 	}
 	
+	public void setColor(Color c) {
+		col = c;
+	}
+	
+	public Color getColor() {
+		return col;
+	}
 	public int getNumStations(){
 		return numStations;
 	}
