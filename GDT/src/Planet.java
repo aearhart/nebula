@@ -117,8 +117,9 @@ public class Planet extends Satellite implements MouseListener {
 					costMetal += costMetal;
 					costWater += costWater;
 					numOfResources += 3;
-					//control.setStatus("Test");
+					control.setStatus("collectResources");
 					control.printToInstructionArea(this.getName() + " is now level " + level + ", gives out " + numOfResources + ".");
+					control.update();
 				}
 				/*else if (this.owner != control.getCurrPlayer()) {
 					control.printToHoverArea("This planet is already owned by + " owner.getName());
@@ -135,11 +136,12 @@ public class Planet extends Satellite implements MouseListener {
 					costMetal += costMetal;
 					costWater += costWater;
 					numOfResources += 3;
-					//control.setStatus("Test");
+					control.setStatus("collectResources");
 					control.printToInstructionArea(this.getName() + " is now level " + level + ", gives out " + numOfResources + ".");
+					control.update();
 				}
 				else {control.printToInstructionArea("Insufficient funds or priviledges.");}
-				control.update();
+
 				return;
 			}
 		}

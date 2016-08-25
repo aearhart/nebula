@@ -186,25 +186,32 @@ public class Controller {
 				
 			}
 		}
-		update(str);
-		System.out.println(str);
+		update(currPlayer.info() + str);
+		status = "Upgrade";
+		System.out.println("resources collected");
 		//done
 		
 	}
 	
 	public void upgradeTime() {
-		status = "Upgrade";
+		printToInstructionArea("Click on a planet or space station to upgrade.");
+		//status = "Upgrade";
 	}
 	
 	public void gamePlay() {
-		
+		status = "collectResources";
+		while (true) {
 		// collect resources for each satellite under the current player
-		collectResources(); 
+			//System.out.println(status);
+			if (status.equals("collectResources")) {
+				System.out.println("here");
+				collectResources(); 
+			}
 		/*status = "Test";
 		while (status.equals("Test")) {
 		}*/
-		printToInstructionArea("Click on a planet or space station to upgrade.");
-		upgradeTime();
+			upgradeTime();
+		}
 	} 
 	 
 	public static void main(String[] args) {

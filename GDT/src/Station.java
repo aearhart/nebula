@@ -69,7 +69,7 @@ public class Station extends Satellite implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		//control.printToInstructionArea("CLICKED");
-		System.out.println(control.getStatus());
+		//System.out.println(control.getStatus());
 		switch (control.getStatus()) {
 		case "Claiming": {
 				if(this.owner == null) 
@@ -98,11 +98,12 @@ public class Station extends Satellite implements MouseListener {
 				costMetal += costMetal;
 				costWater += costWater;
 				AreaOfInfluence = (int)((float)(AreaOfInfluence) * 1.5);
-				//control.setStatus("Test");
+				control.setStatus("collectResources");
 				control.printToInstructionArea("Upgraded station to level " + level + ".");
+				control.update();
 			}
 			else {control.printToInstructionArea("Insufficient funds or priviledges.");}
-			control.update();
+
 			return;
 		}
 		}
