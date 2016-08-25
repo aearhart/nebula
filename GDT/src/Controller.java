@@ -107,14 +107,22 @@ public class Controller {
 		status = "SetUp";
 		
 		currPlayer = p1;
-		
+		update();
 		printToInstructionArea(currPlayer.getName() + ": Click on a space station to claim it");
 		status = "Claiming";
 		while (status.equals("Claiming")) {
 			System.out.print("");
 		}
-		
+
 		status = "";
+	}
+	
+	public void update() {
+		printToPlayerArea(currPlayer.info());
+	}
+	
+	public void update(String str) {
+		printToPlayerArea(str);
 	}
 	
 	public void drawAoI(Station s) {
@@ -147,18 +155,20 @@ public class Controller {
 
 	public void collectResources() {
 		/* current player collects resources in AoI */
-		
+		String str = "";
 		Station[] stations = currPlayer.getStations();
 		// for each station
+		str += "\nResources collected:";
 		for (int s = 0; s < currPlayer.getNumStations(); s++) {
 			// see which planets are within it
 			//System.out.println("Satellite: " + stations[s].getMidX() + " " + stations[s].getMidY());
 			for (int p = 0; p < all.length; p++) {
 				// is it a station or sun? --> ignore
 				// are they within?
+				
 				if ( !(all[p] instanceof Station) && (!(all[p] instanceof Sun)) && (withinDistance(stations[s], all[p]))) {
-
-					printToPlayerArea("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
+					str += "\n+" + ((Planet) all[p]).getResources() + " " + 
+							((Planet) all[p]).getType() + " from " + all[p].getName() + ".";
 
 					//System.out.println("planet: " + all[p].getMidX() + " " + all[p].getMidY());
 					//System.out.println("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
@@ -176,31 +186,20 @@ public class Controller {
 				
 			}
 		}
-		
+		update(str);
+		System.out.println(str);
 		//done
 		
 	}
 	
 	public void upgradeTime() {
-		/*
-		 * Highlight all stations currplayer owns, and aOi
-		 * tell player to choose which satellite to upgrade
-		 * highlight that one only
-		 * click again to upgrade for price
-		 * check to see if currplayer has enough resources
-		 * if so, bought
-		 * then: increase aoi, upgrade prices, level, etc.
-		 */
-		// highlight all stations currplayer owns:
 		status = "Upgrade";
 	}
 	
 	public void gamePlay() {
 		
-
 		// collect resources for each satellite under the current player
-		 collectResources(); 
-		 
+		collectResources(); 
 		/*status = "Test";
 		while (status.equals("Test")) {
 		}*/

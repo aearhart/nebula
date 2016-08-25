@@ -4,6 +4,7 @@ public class Player {
 	private String name;
 	private Station[] stations = new Station[10];
 	private int numStations = 0;
+	private int planets = 0;
 	private int gas = 0;
 	private int water = 0;
 	private int mineral = 0;
@@ -13,6 +14,16 @@ public class Player {
 	public Player(Controller ctrl, String n){
 		this.name = n;
 		this.control = ctrl;
+		
+	}
+	
+	public String info() {
+		String str = name;
+		str += ":\nResources: w  g  m\n";
+		str += "                    " + water + "  " + gas + "  " + mineral;
+		str += "\nStations owned: " + numStations;
+		str += "\nPlanets owned: " + planets;
+		return str;
 	}
 	
 	public void setColor(Color c) {
@@ -22,6 +33,11 @@ public class Player {
 	public Color getColor() {
 		return col;
 	}
+	
+	public void addPlanet() {
+		planets++;
+	}
+	
 	public int getNumStations(){
 		return numStations;
 	}

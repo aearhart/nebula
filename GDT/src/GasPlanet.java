@@ -6,6 +6,7 @@ public class GasPlanet extends Planet {
 		super(ctrl, 400, 400, 100);
 		// TODO Auto-generated constructor stub
 		this.setColors(Color.PINK, Color.BLACK, Color.RED);
+		this.defineType("gas");
 
 	}
 
@@ -13,6 +14,7 @@ public class GasPlanet extends Planet {
 		super(ctrl, locX, locY, sz, numResources);
 		// TODO Auto-generated constructor stub
 		this.setColors(Color.PINK, Color.BLACK, Color.RED);
+		this.defineType("gas");
 
 	}
 
@@ -20,6 +22,6 @@ public class GasPlanet extends Planet {
 		super(ctrl, locX, locY, sz, numResources);
 		this.setName("Gas Planet " + n);
 		this.setColors(Color.PINK, Color.BLACK, Color.RED);
-	
+		this.defineType("gas");
 	}
 }

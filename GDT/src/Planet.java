@@ -12,6 +12,8 @@ public class Planet extends Satellite implements MouseListener {
 	private int costMetal = 0;
 	private int costGas = 0;
 	private int level = 0;
+	private String t = "";
+	private Color ownerColor;
 	
 	public Planet(Controller ctrl, Integer locX, Integer locY, Integer sz) {
 		super(ctrl, locX, locY, sz);
@@ -28,6 +30,18 @@ public class Planet extends Satellite implements MouseListener {
 		addMouseListener(this); 
 	}
 
+	public void setOwnerColor(Color col) {
+		ownerColor = col;
+	}
+	
+	public void defineType(String str) {
+		t = str;
+	}
+	
+	public String getType() {
+		return t;
+	}
+	
 	public Integer getResources(){
 		return numOfResources;
 	}
@@ -58,18 +72,20 @@ public class Planet extends Satellite implements MouseListener {
 		g.fillOval(0, 0, s, s);	
 		g.setColor(borderCol);
 		g.drawOval(0, 0, s, s);
+		if (owner != null) {
+			g.setColor(ownerColor);
+			g.fillOval((s/2)-5, (s/2)-5, 10, 10);
+		}
 	}
 	
 	public Boolean planetWithinAoI() {
-		System.out.println("planet within aoi?");
+		/* check to see if planet is within the current player's AoI */
 		Station[] stations = control.getCurrPlayer().getStations();
 		for (int i = 0; i < control.getCurrPlayer().getNumStations(); i++) {
 			if (control.withinDistance(stations[i], (Satellite)(this))) {
-				System.out.println("yes");
 				return true;
 			}
 		}
-		System.out.println("no");
 		return false;
 	}
 	
@@ -93,6 +109,9 @@ public class Planet extends Satellite implements MouseListener {
 					control.getCurrPlayer().subWater(costWater);
 					level++;
 					owner = control.getCurrPlayer();
+					control.getCurrPlayer().addPlanet();
+					ownerColor = control.getCurrPlayer().getColor();
+					repaint();
 					// double cost
 					costGas += costGas;
 					costMetal += costMetal;
@@ -120,6 +139,7 @@ public class Planet extends Satellite implements MouseListener {
 					control.printToInstructionArea(this.getName() + " is now level " + level + ", gives out " + numOfResources + ".");
 				}
 				else {control.printToInstructionArea("Insufficient funds or priviledges.");}
+				control.update();
 				return;
 			}
 		}
@@ -143,7 +163,6 @@ public class Planet extends Satellite implements MouseListener {
 		// TODO Auto-generated method stub
 		switchColors();
 		repaint();
-		System.out.println("mouseEntered");
 		switch (control.getStatus()) {
 		case "Claiming": {
 			control.printToHoverArea(info());
@@ -156,14 +175,11 @@ public class Planet extends Satellite implements MouseListener {
 		case "Upgrade": {
 			if(planetWithinAoI() == false) {
 				control.printToHoverArea("This planet is too far away to build on.");
-				System.out.println("too far");
 			}
 			else if (owner != null && owner != control.getCurrPlayer()) {
-				System.out.println("already owned");
 				control.printToHoverArea("This planet is already owned by " + owner.getName());
 			}
 			else {
-				System.out.println("over here");
 				control.printToHoverArea(info());
 			}
 			return;
@@ -176,7 +192,6 @@ public class Planet extends Satellite implements MouseListener {
 		// TODO Auto-generated method stub
 		switchColors();
 		repaint();
-		System.out.println("mouseExited");
 		switch (control.getStatus()) {
 		case "Claiming": {
 			control.printToHoverArea("Hover over a satellite for more info.");

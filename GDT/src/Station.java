@@ -47,7 +47,7 @@ public class Station extends Satellite implements MouseListener {
 		owner.addStation(this);
 		this.setColors(p.getColor(), this.getBorderCol(), this.getSelectCol());;
 		repaint();
-		control.setStatus("Done Claiming");
+		control.setStatus("");
 		control.printToInstructionArea(control.getStatus());
 		
 	}
@@ -102,6 +102,7 @@ public class Station extends Satellite implements MouseListener {
 				control.printToInstructionArea("Upgraded station to level " + level + ".");
 			}
 			else {control.printToInstructionArea("Insufficient funds or priviledges.");}
+			control.update();
 			return;
 		}
 		}
@@ -161,18 +162,11 @@ public class Station extends Satellite implements MouseListener {
 				switchColors();
 				control.removeAoI();
 				repaint();
-			}
+				}
 			control.printToHoverArea("Hover over a satellite for more information.");
 			return;
-		}
-		case "SelectStations": {
-			if(this.owner == control.getCurrPlayer()) {
-				switchColors();
-				control.removeAoI();
-				repaint();
 			}
-			return;
-		}}
+		}
 	}
 
 	@Override
