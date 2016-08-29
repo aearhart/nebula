@@ -11,7 +11,9 @@ public class Controller {
 	private InfoPanel2 infoPanel2;
 	private Satellite[] all;
 	private Player p1;
+	private Player p2;
 	private Player currPlayer;
+	private Player winner;
 	private String status;
 	int AoIx = 0;
 	int AoIy = 0;
@@ -99,7 +101,8 @@ public class Controller {
 		}
 		
 		p1 = new Player(this, "Player 1");
-		
+		p2 = new Player(this, "Player 2");
+		p2.setColor(Color.MAGENTA);
 		status = "";
 	}
 	
@@ -113,8 +116,22 @@ public class Controller {
 		while (status.equals("Claiming")) {
 			System.out.print("");
 		}
-
+		switchPlayers();
+		printToInstructionArea(currPlayer.getName() + ": Click on a space station to claim it");
+		status = "Claiming";
+		while (status.equals("Claiming")) {
+			System.out.print("");
+		}
+		switchPlayers();
 		status = "";
+	}
+	
+	public void switchPlayers() { // how else can we determine the next player?
+		if (currPlayer == p1)
+			currPlayer = p2;
+		else
+			currPlayer = p1;
+		update();
 	}
 	
 	public void update() {
@@ -198,20 +215,42 @@ public class Controller {
 		//status = "Upgrade";
 	}
 	
+	
+	public Boolean endGame() {
+		Boolean win = true;
+		if (p1.getGas() > 50 && p1.getMineral() > 50 && p1.getWater() > 50) {
+			win = false;
+			winner = p1;
+		}
+		else if (p2.getGas() > 50 && p2.getMineral() > 50 && p2.getWater() > 50) {
+			win = false;
+			winner = p2;
+		}
+		return win;
+	}
+	
+	public void gameWon() {
+		System.out.println(winner.getName() + " just won.");
+		printToInstructionArea(winner.getName() + " just won. Please exit the window.");
+	}
+	
 	public void gamePlay() {
 		status = "collectResources";
-		while (true) {
+		while (endGame()) { // returns true if game not end.
 		// collect resources for each satellite under the current player
 			//System.out.println(status);
+
 			if (status.equals("collectResources")) {
-				System.out.println("here");
 				collectResources(); 
 			}
 		/*status = "Test";
 		while (status.equals("Test")) {
 		}*/
 			upgradeTime();
+			if (status == "collectResources") 
+			switchPlayers();
 		}
+		gameWon();
 	} 
 	 
 	public static void main(String[] args) {

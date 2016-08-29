@@ -102,7 +102,7 @@ public class Station extends Satellite implements MouseListener {
 				control.printToInstructionArea("Upgraded station to level " + level + ".");
 				control.update();
 			}
-			else {control.printToInstructionArea("Insufficient funds or priviledges.");}
+			else {control.printToInstructionArea("Insufficient funds or privileges.");}
 
 			return;
 		}
