@@ -8,7 +8,7 @@ public class Window extends JFrame {
 	private Controller control;
 	
 	public Window(Controller ctrl) {
-		super("Game Demo 0.0.2");
+		super("Game Demo 0.0.1");
 		this.setLayout(new FlowLayout());
 		control = ctrl;
 		this.setResizable(false);
