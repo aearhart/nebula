@@ -28,6 +28,7 @@ public class Map extends JPanel {
 		super.paintComponent(g);
 		
 		g.drawImage(bg, 0, 0, winsize, winsize, null);
+		//other
 		
 		g.setColor(control.AoIc);
 		g.drawOval(control.AoIx, control.AoIy, control.AoIs, control.AoIs);
