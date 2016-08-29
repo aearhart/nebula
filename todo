@@ -1,1 +1,19 @@
-Blah
+8/29/16
+
+Next steps:
+  1. Create gd 0.0.2
+  2. Git stuff that will totally be an issue
+  3. Research multiplayer aspects
+
+Larger game play additions:
+  1. Random allocation 
+  2. Space ship implementation
+  3. Rethink win conditions
+  4. Add more conflict
+  
+Small edits/tweaks:
+  1. Limit the number of times you can upgrade
+  2. Add cost to increase AoI
+  3. Make sure all text fits in the panels
+  4. Calculate costs/production better
+  5. Make hover information available always
