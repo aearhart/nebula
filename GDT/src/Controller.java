@@ -179,6 +179,9 @@ public class Controller {
 		for (int s = 0; s < currPlayer.getNumStations(); s++) {
 			// see which planets are within it
 			//System.out.println("Satellite: " + stations[s].getMidX() + " " + stations[s].getMidY());
+			currPlayer.addWater(1);
+			currPlayer.addGas(1);
+			currPlayer.addMineral(1);
 			for (int p = 0; p < all.length; p++) {
 				// is it a station or sun? --> ignore
 				// are they within?

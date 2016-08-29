@@ -8,9 +8,9 @@ public class Planet extends Satellite implements MouseListener {
 	private Integer numOfResources;
 	private Player owner = null;
 	private Controller control;
-	private int costWater = 0;
-	private int costMetal = 0;
-	private int costGas = 0;
+	private int costWater = 3;
+	private int costMetal = 3;
+	private int costGas = 3;
 	private int level = 0;
 	private String t = "";
 	private Color ownerColor;
