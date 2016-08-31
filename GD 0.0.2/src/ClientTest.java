@@ -8,7 +8,7 @@ public class ClientTest {
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println("Connecting...");
-		socket = new Socket("172.16.42.2", 7778);
+		socket = new Socket("70.95.122.247", 7778);
 		System.out.println("Connection established.");
 		in = new DataInputStream(socket.getInputStream());
 		System.out.println("Receiving information...");
