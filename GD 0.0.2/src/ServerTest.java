@@ -9,7 +9,7 @@ public class ServerTest {
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println("Starting server...");
-		serverSocket = new ServerSocket(7778);
+		serverSocket = new ServerSocket(7777);
 		System.out.println("Server started.");
 		socket = serverSocket.accept();
 		System.out.println("Connection from: " + socket.getInetAddress());
