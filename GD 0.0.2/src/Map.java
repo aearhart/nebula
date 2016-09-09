@@ -6,12 +6,12 @@ import java.io.IOException;
 
 public class Map extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private Controller control;
+	private ClientController control;
 	private BufferedImage bg = null;
 	private int winsize = 1000;
 	
-	public Map(Controller ctrl){
-		control = ctrl;
+	public Map(ClientController clientController){
+		control = clientController;
 		this.setLayout(null);
 		this.setPreferredSize(new Dimension (winsize, winsize));
 		

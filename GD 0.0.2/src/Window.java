@@ -5,12 +5,12 @@ import java.awt.*;
 public class Window extends JFrame {
 	
 	private Map map;
-	private Controller control;
+	private ClientController control;
 	
-	public Window(Controller ctrl) {
+	public Window(ClientController clientController) {
 		super("Game Demo 0.0.2");
 		this.setLayout(new FlowLayout());
-		control = ctrl;
+		control = clientController;
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 	

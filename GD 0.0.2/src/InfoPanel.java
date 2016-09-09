@@ -14,7 +14,7 @@ import javax.swing.JTextArea;
 
 public class InfoPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private Controller control; 
+	private ClientController control; 
 	private Player player;
 	
 	private String string1;
@@ -24,8 +24,8 @@ public class InfoPanel extends JPanel {
 	private JTextArea instructionArea;
 	private JTextArea playerArea;
 	
-	public InfoPanel(Controller ctrl) {
-		control = ctrl;
+	public InfoPanel(ClientController clientController) {
+		control = clientController;
 
 		this.setPreferredSize(new Dimension (300,1000));
 		

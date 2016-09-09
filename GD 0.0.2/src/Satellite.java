@@ -14,16 +14,16 @@ public class Satellite extends JComponent {
 	protected Color borderCol;
 	protected Color selectCol;
 	protected String name = "";
-	protected Controller control;
+	protected ClientController control;
 	protected BufferedImage image = null;
 	
-	public Satellite(Controller ctrl, Integer locX, Integer locY, Integer sz) {
-		control = ctrl;
+	public Satellite(ClientController clientController, Integer locX, Integer locY, Integer sz) {
+		control = clientController;
 		x = locX;
 		y = locY;
 		s = sz;
 	}
-	
+
 	public void setName(String n) {
 		name = n;
 	}

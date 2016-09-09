@@ -19,8 +19,8 @@ public class Station extends Satellite implements MouseListener {
 	private int costGas = 0;
 	private int level = 0;
 	
-	public Station(Controller ctrl, Integer locX, Integer locY, Integer sz) {
-		super(ctrl, locX, locY, sz);
+	public Station(ClientController clientController, Integer locX, Integer locY, Integer sz) {
+		super(clientController, locX, locY, sz);
 		// TODO Auto-generated constructor stub
 		
 		

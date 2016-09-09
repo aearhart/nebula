@@ -9,8 +9,8 @@ import javax.imageio.ImageIO;
 public class Sun extends Satellite {
 
 
-	public Sun(Controller ctrl) {
-		super(ctrl, 450, 450, 100);
+	public Sun(ClientController clientController) {
+		super(clientController, 450, 450, 100);
 		
 		try {                
 			image = ImageIO.read(getClass().getResource("Sun.png"));

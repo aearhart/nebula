@@ -13,7 +13,7 @@ import javax.swing.JTextArea;
 
 public class InfoPanel2 extends JPanel {
 	private static final long serialVersionUID = 1L;
-	private Controller control; 
+	private ClientController control; 
 	private Player player;
 	
 	private String string1;
@@ -22,8 +22,8 @@ public class InfoPanel2 extends JPanel {
 	
 	private JTextArea hoverArea;
 	
-	public InfoPanel2(Controller ctrl) {
-		control = ctrl;
+	public InfoPanel2(ClientController clientController) {
+		control = clientController;
 
 		this.setPreferredSize(new Dimension (300,1000));
 		

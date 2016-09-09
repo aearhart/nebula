@@ -7,7 +7,7 @@ public class Planet extends Satellite implements MouseListener {
 
 	private Integer numOfResources;
 	private Player owner = null;
-	private Controller control;
+	private ClientController control;
 	private int costWater = 3;
 	private int costMetal = 3;
 	private int costGas = 3;
@@ -15,7 +15,7 @@ public class Planet extends Satellite implements MouseListener {
 	private String t = "";
 	private Color ownerColor;
 	
-	public Planet(Controller ctrl, Integer locX, Integer locY, Integer sz) {
+	public Planet(ClientController ctrl, Integer locX, Integer locY, Integer sz) {
 		super(ctrl, locX, locY, sz);
 		// TODO Auto-generated constructor stub
 		numOfResources = 1;
@@ -23,9 +23,9 @@ public class Planet extends Satellite implements MouseListener {
 		addMouseListener(this);
 	}
 
-	public Planet(Controller ctrl, Integer locX, Integer locY, Integer sz, Integer numResources) {
-		super(ctrl, locX, locY, sz);
-		control = ctrl;
+	public Planet(ClientController clientController, Integer locX, Integer locY, Integer sz, Integer numResources) {
+		super(clientController, locX, locY, sz);
+		control = clientController;
 		numOfResources = numResources;
 		addMouseListener(this); 
 	}
