@@ -9,21 +9,22 @@ public class WaterPlanet extends Planet {
 		super(ctrl, 400, 400, 100);
 		// TODO Auto-generated constructor stub
 		this.setColors(Color.CYAN, Color.BLACK, Color.BLUE);
-		this.defineType("water");
+		this.defineType("W");
 	}
 
 	public WaterPlanet(ClientController ctrl, Integer locX, Integer locY, Integer sz, Integer numResources) {
 		super(ctrl, locX, locY, sz, numResources);
 		// TODO Auto-generated constructor stub
 		this.setColors(Color.CYAN, Color.BLACK, Color.BLUE);
-		this.defineType("water");
+		this.defineType("W");
 	}
 
 	public WaterPlanet(ClientController clientController, Integer locX, Integer locY, Integer sz, Integer numResources, String n) {
 		super(clientController, locX, locY, sz, numResources);
-		this.setName("Water Planet " + n);
+		//this.setName("Water Planet " + n);
+		this.setName(n);
 		this.setColors(Color.CYAN, Color.BLACK, Color.BLUE);
-		this.defineType("water");
+		this.defineType("W");
 	}
 	
 }

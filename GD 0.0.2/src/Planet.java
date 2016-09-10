@@ -5,20 +5,18 @@ import java.awt.event.MouseListener;
 
 public class Planet extends Satellite implements MouseListener {
 
-	private Integer numOfResources;
 	private Player owner = null;
 	private ClientController control;
 	private int costWater = 3;
 	private int costMetal = 3;
 	private int costGas = 3;
 	private int level = 0;
-	private String t = "";
 	private Color ownerColor;
 	
 	public Planet(ClientController ctrl, Integer locX, Integer locY, Integer sz) {
 		super(ctrl, locX, locY, sz);
 		// TODO Auto-generated constructor stub
-		numOfResources = 1;
+		this.setResource(1);
 		control = ctrl;
 		addMouseListener(this);
 	}
@@ -26,7 +24,7 @@ public class Planet extends Satellite implements MouseListener {
 	public Planet(ClientController clientController, Integer locX, Integer locY, Integer sz, Integer numResources) {
 		super(clientController, locX, locY, sz);
 		control = clientController;
-		numOfResources = numResources;
+		this.setResource(numResources);
 		addMouseListener(this); 
 	}
 
@@ -34,16 +32,8 @@ public class Planet extends Satellite implements MouseListener {
 		ownerColor = col;
 	}
 	
-	public void defineType(String str) {
-		t = str;
-	}
-	
 	public String getType() {
 		return t;
-	}
-	
-	public Integer getResources(){
-		return numOfResources;
 	}
 	
 	public void setOwner(Player p) {
@@ -60,7 +50,7 @@ public class Planet extends Satellite implements MouseListener {
 			str = getName() + " not currently owned.";
 		else
 			str = getName() + " currently owned by " + owner.getName();
-		str += "Level " + level + "\n" + "Resources: " + numOfResources + "\n costs: " + costWater + " water, " + costMetal + " metal, " + costGas + " gas.";
+		str += "Level " + level + "\n" + "Resources: " + this.getResources() + "\n costs: " + costWater + " water, " + costMetal + " metal, " + costGas + " gas.";
 		return str;
 	}
 	
@@ -116,9 +106,9 @@ public class Planet extends Satellite implements MouseListener {
 					costGas += costGas;
 					costMetal += costMetal;
 					costWater += costWater;
-					numOfResources += 3;
+					this.addResources(3);;
 					control.setStatus("collectResources");
-					control.printToInstructionArea(this.getName() + " is now level " + level + ", gives out " + numOfResources + ".");
+					control.printToInstructionArea(this.getName() + " is now level " + level + ", gives out " + this.getResources() + ".");
 					control.update();
 				}
 				/*else if (this.owner != control.getCurrPlayer()) {
@@ -135,9 +125,9 @@ public class Planet extends Satellite implements MouseListener {
 					costGas += costGas;
 					costMetal += costMetal;
 					costWater += costWater;
-					numOfResources += 3;
+					this.addResources(3);
 					control.setStatus("collectResources");
-					control.printToInstructionArea(this.getName() + " is now level " + level + ", gives out " + numOfResources + ".");
+					control.printToInstructionArea(this.getName() + " is now level " + level + ", gives out " + this.getResources() + ".");
 					control.update();
 				}
 				else {control.printToInstructionArea("Insufficient funds or priviledges.");}

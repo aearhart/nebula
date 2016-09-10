@@ -19,12 +19,13 @@ public class Station extends Satellite implements MouseListener {
 	private int costGas = 0;
 	private int level = 0;
 	
-	public Station(ClientController clientController, Integer locX, Integer locY, Integer sz) {
+	public Station(ClientController clientController, Integer locX, Integer locY, Integer sz, String n) {
 		super(clientController, locX, locY, sz);
 		// TODO Auto-generated constructor stub
 		
-		
-		
+		this.defineType("S");
+		this.setResource(0);
+		this.setName(n);
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);
 	}
@@ -49,7 +50,7 @@ public class Station extends Satellite implements MouseListener {
 		repaint();
 		control.setStatus("");
 		control.printToInstructionArea(control.getStatus());
-		
+		this.setOwnership(p.getNum());
 	}
 	
 	@Override
@@ -57,8 +58,6 @@ public class Station extends Satellite implements MouseListener {
 		super.paintComponent(g);
 		
 		//TODO ADD Image?
-		
-		
 		
 		g.setColor(fillCol);
 		g.fillRect(0, 0, s, s);	
@@ -82,7 +81,7 @@ public class Station extends Satellite implements MouseListener {
 			if(this.owner == null) 
 			control.printToInstructionArea("Before collecting: w---g---m");
 			control.printToInstructionArea("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
-			control.collectResources();
+			//control.collectResources();
 			control.printToInstructionArea("After  collecting: w---g---m");
 			control.printToInstructionArea("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
 			return;
