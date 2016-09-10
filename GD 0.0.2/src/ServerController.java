@@ -16,7 +16,7 @@ public class ServerController {
 	private Boolean valid = true;
 	private String currentPlayer = "P1";
 	private Socket currentSocket = player1;
-	
+	private String winner = "P0";
 	/*
 	private Window window;
 	private Map map;
@@ -72,15 +72,16 @@ public class ServerController {
 	
 	public void sendMessage(Socket socket)  {
 		// sends out currentState to socket
+
 		try {
 			out = new DataOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
-			error();
+			error("Unable to contact client");
 		}
 		try {
 			out.writeUTF(currentState);
 		} catch (IOException e) {
-			error();
+			error("Unable to send message");
 		}
 		System.out.println("Sent message to Socket " + socket.getInetAddress() + ": \n" + currentState);
 	}
@@ -190,6 +191,7 @@ public class ServerController {
 			invalid(player2);
 		}
 		System.out.println("Start up successful.");
+		currentSocket = player1;
 	}
 	
 	public void validate() {
@@ -215,10 +217,66 @@ public class ServerController {
 		}
 	}*/
 	
+	public void turnStatus() {
+		String[] cs = currentState.split(" ");
+		cs[0] = "turn";
+		cs[1] = currentPlayer;
+		currentState = String.join(" ", cs);
+	}
+	
+	public Boolean playerWon(String p) {
+		// return true if player has won
+		
+		// P_=cR___G___B___s__p__gas___w___mineral___>s__,s__,n______...
+		// 0   4   8  12   16  19  22   26   30      34 ....,
+		int gas = Integer.parseInt(p.substring(23, 26));
+		int water = Integer.parseInt(p.substring(27, 30));
+		int mineral = Integer.parseInt(p.substring(31, 34));
+		if (gas > 20 && water > 20 && mineral > 20) {
+			winner = p.substring(0, 2);
+			return true;
+		}
+		return false;
+	}
+	
+	public Boolean gameEnd() {
+		// return true if game won
+		String[] cs = currentState.split(" ");
+		String p1 = cs[2];
+		String p2 = cs[3];
+		if (playerWon(p1)) return true;
+		return playerWon(p2);
+	}
+	
+	public void win() {
+		currentState = "WIN " + winner + " END";
+		sendMessage(currentSocket);
+		switchCurrPlayer();
+		sendMessage(currentSocket);
+		System.out.println(currentState);
+	}
+	
+	public void gameplay() {
+		System.out.println("Starting turn : " + currentPlayer);
+		if (gameEnd()) {
+			win();
+			System.exit(0);
+		}
+		turnStatus();
+		sendMessage(currentSocket);
+		getMessage(currentSocket);
+		validate();
+		if (!valid)
+			invalid(currentSocket);
+		switchCurrPlayer();
+		gameplay();
+	}
+	
 	public static void main(String[] args) {
 		ServerController start = new ServerController();
 		start.connectToClients();
 		start.startUp();
+		start.gameplay();
 		//start.getStatus();
 	}
 

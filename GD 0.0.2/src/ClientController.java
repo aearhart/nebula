@@ -183,8 +183,79 @@ public class ClientController {
 					
 				}
 			}
+			return;
+		}
+		case "turn": {
+			status = "collectResources";
+			turn();
+			return;
+		}
+		case "WIN": {
+			String winner = s[1];
+			System.out.println(winner + " just won.");
+			printToInstructionArea(winner + " just won. Thank you for playing. Click anywhere to close");
+			this.setStatus("WIN");
+			return;
 		}
 		}
+	}
+
+	public void collectResources() {
+		/* current player collects resources in AoI */
+		String str = "";
+		// for each station
+		str += "\nResources collected:";
+		for (Station stat: player.getStations()) {
+			player.addWater(1);
+			player.addGas(1);
+			player.addMineral(1);
+			for (Satellite sat: satellites) {
+				if ( !(sat instanceof Station) && (!(sat instanceof Sun)) && (withinDistance(stat, sat))) {
+					str += "\n+" + ((Planet) sat).getResources() + " " + 
+							((Planet) sat).getType() + " from " + sat.getName() + ".";
+
+					//System.out.println("planet: " + all[p].getMidX() + " " + all[p].getMidY());
+					//System.out.println("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
+
+					if (sat instanceof WaterPlanet) {
+						player.addWater(((Planet) sat).getResources());
+					}
+					else if (sat instanceof MineralPlanet){
+						player.addMineral(((Planet) sat).getResources());
+					}
+					else
+						player.addGas(((Planet) sat).getResources());
+				}
+				}
+		}
+		update(player.info() + str);
+		status = "Upgrade";
+		System.out.println("resources collected");
+		//done
+		
+	}
+	
+	public void upgradeTime() {
+		printToInstructionArea("Click on a planet or space station to upgrade.");
+		//status = "Upgrade";
+	}
+	
+	public void turn() {
+		collectResources();
+		System.out.println("hey");
+		upgradeTime();
+		while (status.equals("Upgrade")) {
+			System.out.println(status);
+		}
+		getCurrentState("turn");
+		sendMessage();
+		printToInstructionArea("Please wait. Opponent's turn.");
+		getMessage();
+		readMessage();
+	}
+	
+	public static void close() {
+		System.exit(0);
 	}
 	
 	public void getCurrentState(String state) {
@@ -253,7 +324,6 @@ public class ClientController {
 		status = "";
 	}
 	
-	
 	public void drawAoI(Station s) {
 		//print("drawing AoI");
 		AoIx = s.getMidX() - s.getAoI();
@@ -292,7 +362,9 @@ public class ClientController {
 		control.setUp();
 		control.getCurrentState(state);
 		control.sendMessage();
-		System.exit(0);
+		control.getMessage();
+		control.readMessage();
+		close();
 	}
 
 }

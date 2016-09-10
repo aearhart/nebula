@@ -1,10 +1,12 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-public class Map extends JPanel {
+public class Map extends JPanel implements MouseListener{
 	private static final long serialVersionUID = 1L;
 	private ClientController control;
 	private BufferedImage bg = null;
@@ -21,6 +23,7 @@ public class Map extends JPanel {
 			// handle exception...
 			System.out.println("IO EXCEPTION: "+ ex);
 		}
+		addMouseListener(this);
 	}
 	
 	@Override
@@ -40,6 +43,37 @@ public class Map extends JPanel {
 				g.drawRect(i*100, j*100, 100, 100);
 		//g.drawOval(800, 10, 10, 10);
 		//g.drawOval(700, 50, 200, 3);
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if (control.getStatus().equals("WIN"))
+			control.close();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
 	}
 
