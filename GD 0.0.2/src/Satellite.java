@@ -16,9 +16,10 @@ public class Satellite extends JComponent {
 	private String name = "0";
 	protected ClientController control;
 	protected BufferedImage image = null;
-	public String t = "";
+	public String t = "O"; // O for sun
 	public Integer resource = 0;
-	public String owner = "0";
+	public String owned = "0";
+	public Player owner = null;
 	
 	public Satellite(ClientController clientController, Integer locX, Integer locY, Integer sz) {
 		control = clientController;
@@ -26,7 +27,31 @@ public class Satellite extends JComponent {
 		y = locY;
 		s = sz;;
 	}
-
+	
+	public void setOwner(String own) {
+		if (("P" + own).equals(control.getCurrPlayer())) {
+			owner = control.getPlayer();
+			owned = owner.getNum();
+			setOwnerInfo();
+		}
+		else if (! own.equals("0")) {
+			owned = own;
+			owner = control.getOpponent();
+			setOwnerInfo();
+		}
+	}
+	
+	public void setOwner(Player p) {
+		owner = p;
+		owned = p.getNum();
+		setOwnerInfo();
+	}
+	
+	private void setOwnerInfo() { // ONLY FOR SATELLITES NOT PLANETS YET
+		owner.addStation(this);
+		this.setColors(owner.getColor(), this.getBorderCol(), this.getSelectCol());;
+	}
+	
 	public void setResource(int n) {
 		resource = n;
 	}
@@ -55,7 +80,6 @@ public class Satellite extends JComponent {
 
 	public String printState() {
 		// "s__=t_x___y___s___r___n__"
-		System.out.println("name: " + name);
 		String str = "s";
 		str += padLeft(name, 2);
 		str += "=t" + t;
@@ -63,23 +87,17 @@ public class Satellite extends JComponent {
 		str += "y" + padLeft(y, 3);
 		str += "s" + padLeft(s, 3);
 		str += "r" + padLeft(resource, 3);
-		str += "o" + owner;
+		str += "o" + owned;
 		str += "n" + padLeft(name, 2);
 		str += " ";
 		return str;
 	}
 	
-	public void setOwnership(String str) {
-		owner = str;
-	}
-	
 	public void setName(String n) {
-		System.out.println("set name to: " + n);
 		name = n;
 	}
 	
 	public String getName() {
-		System.out.println("get name as: " + name);
 		return name;
 	}
 	public void setColors (Color fill, Color border, Color select) {

@@ -13,7 +13,6 @@ public class Station extends Satellite implements MouseListener {
 	private static final long serialVersionUID = 1L;
 	private Planet[] planetsInAOI;
 	private int AreaOfInfluence = 100;
-	private Player owner;
 	private int costWater = 0;
 	private int costMetal = 0;
 	private int costGas = 0;
@@ -43,16 +42,6 @@ public class Station extends Satellite implements MouseListener {
 	}
 	
 	
-	private void setOwner(Player p) {
-		owner = p;
-		owner.addStation(this);
-		this.setColors(p.getColor(), this.getBorderCol(), this.getSelectCol());;
-		repaint();
-		control.setStatus("");
-		control.printToInstructionArea(control.getStatus());
-		this.setOwnership(p.getNum());
-	}
-	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -71,26 +60,33 @@ public class Station extends Satellite implements MouseListener {
 		//System.out.println(control.getStatus());
 		switch (control.getStatus()) {
 		case "Claiming": {
-				if(this.owner == null) 
-					setOwner(control.getCurrPlayer()); 
-				else 
+				if(this.owner == null) {
+					System.out.println(owned);
+					setOwner(control.getPlayer()); 
+					repaint();
+					control.setStatus("");
+					control.printToInstructionArea(control.getStatus());
+				}
+				else {
+					System.out.println("already owned!");
 					control.printToInstructionArea("This station is already owned by " + owner.getName());
+				}
 				return;
 			}
 		case "Test": {
 			if(this.owner == null) 
 			control.printToInstructionArea("Before collecting: w---g---m");
-			control.printToInstructionArea("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
+			control.printToInstructionArea("                   " + control.getPlayer().getWater() + "   " + control.getPlayer().getGas() + "   " + control.getPlayer().getMineral());
 			//control.collectResources();
 			control.printToInstructionArea("After  collecting: w---g---m");
-			control.printToInstructionArea("                   " + control.getCurrPlayer().getWater() + "   " + control.getCurrPlayer().getGas() + "   " + control.getCurrPlayer().getMineral());
+			control.printToInstructionArea("                   " + control.getPlayer().getWater() + "   " + control.getPlayer().getGas() + "   " + control.getPlayer().getMineral());
 			return;
 			}
 		case "Upgrade": {
-			if (this.owner == control.getCurrPlayer() && control.getCurrPlayer().getGas() >= costGas && control.getCurrPlayer().getMineral() >= costMetal && control.getCurrPlayer().getWater() >= costWater) {
-				control.getCurrPlayer().subGas(costGas);
-				control.getCurrPlayer().subMineral(costMetal);
-				control.getCurrPlayer().subWater(costWater);
+			if (this.owner == control.getPlayer() && control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMetal && control.getPlayer().getWater() >= costWater) {
+				control.getPlayer().subGas(costGas);
+				control.getPlayer().subMineral(costMetal);
+				control.getPlayer().subWater(costWater);
 				level++;
 				// double cost
 				costGas += costGas;
@@ -128,7 +124,7 @@ public class Station extends Satellite implements MouseListener {
 			return;
 			}
 		case "Upgrade": {
-			if(this.owner == control.getCurrPlayer()) {
+			if(this.owner == control.getPlayer()) {
 				switchColors();
 				control.drawAoI(this);
 				repaint(); 
@@ -158,7 +154,7 @@ public class Station extends Satellite implements MouseListener {
 			return;
 			}
 		case "Upgrade": {
-			if(this.owner == control.getCurrPlayer()) {
+			if(this.owner == control.getPlayer()) {
 				switchColors();
 				control.removeAoI();
 				repaint();

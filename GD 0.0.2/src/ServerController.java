@@ -84,12 +84,12 @@ public class ServerController {
 		}
 		System.out.println("Sent message to Socket " + socket.getInetAddress() + ": \n" + currentState);
 	}
-	
+	/* this may not be right for what we're doing 
 	public void sendStatus() {
 		sendMessage(player1);
 		sendMessage(player2);
 	}
-	
+	*/
 	public void connectToClients() {
 		// Create server and connect to two clients.
 		
@@ -122,9 +122,12 @@ public class ServerController {
 		
 	}
 	
-	public void startUp() {
+	public void startingStatus() {
 		currentState = "startUp ";
-		
+		currentState += currentPlayer + " ";
+		// P_=cR___G___B___s__p__gas___w___mineral___>s__,s__,n______...
+		currentState += "P1=cR000G000B000s00p00g000w000m000>n ";
+		currentState += "P2=cR000G000B000s00p00g000w000m000>n ";
 		//window = new Window(this);
 		//infoPanel = new InfoPanel(this);
 		//map = new Map(this);
@@ -169,20 +172,37 @@ public class ServerController {
 		currentState += "s16=tSx826y630s030r000o0n16 ";
 		//Satellite station03 = new Station(this, 826, 630, 30);
 
-		currentState += currentPlayer + " ";
-		switchCurrPlayer();
 		currentState += "END";
+	}
+	
+	public void startUp() {
+		startingStatus();
+		sendMessage(player1);
+		getMessage(player1);
+		validate();
+		if (!valid) {
+			invalid(player1);
+		}
+		sendMessage(player2);
+		getMessage(player2);
+		validate();
+		if (!valid) {
+			invalid(player2);
+		}
+		System.out.println("Start up successful.");
 	}
 	
 	public void validate() {
 		// validate input
 		valid = true;
+		currentState = input;
 	}
 	
 	public void invalid(Socket player) {
 		System.out.println(player.getInetAddress() + " sent invalid status.");
 	}
 	
+	/* may not need to get status from both
 	public void getStatus() {
 		getMessage(player1);
 		validate();
@@ -193,14 +213,13 @@ public class ServerController {
 		if (!valid) {
 			invalid(player2);
 		}
-	}
+	}*/
 	
 	public static void main(String[] args) {
 		ServerController start = new ServerController();
 		start.connectToClients();
 		start.startUp();
-		start.sendStatus();
-		start.getStatus();
+		//start.getStatus();
 	}
 
 	

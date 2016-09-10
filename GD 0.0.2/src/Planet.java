@@ -2,11 +2,10 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 
 public class Planet extends Satellite implements MouseListener {
 
-	private Player owner = null;
-	private ClientController control;
 	private int costWater = 3;
 	private int costMetal = 3;
 	private int costGas = 3;
@@ -34,10 +33,6 @@ public class Planet extends Satellite implements MouseListener {
 	
 	public String getType() {
 		return t;
-	}
-	
-	public void setOwner(Player p) {
-		owner = p;
 	}
 	
 	public Player getOwner() {
@@ -70,9 +65,8 @@ public class Planet extends Satellite implements MouseListener {
 	
 	public Boolean planetWithinAoI() {
 		/* check to see if planet is within the current player's AoI */
-		Station[] stations = control.getCurrPlayer().getStations();
-		for (int i = 0; i < control.getCurrPlayer().getNumStations(); i++) {
-			if (control.withinDistance(stations[i], (Satellite)(this))) {
+		for (Station sat: control.getPlayer().getStations()) {
+			if (control.withinDistance(sat, (Satellite)(this))) {
 				return true;
 			}
 		}
@@ -93,14 +87,14 @@ public class Planet extends Satellite implements MouseListener {
 			// within AoI
 			if (planetWithinAoI()) {
 				// not owned
-				if (this.owner == null && control.getCurrPlayer().getGas() >= costGas && control.getCurrPlayer().getMineral() >= costMetal && control.getCurrPlayer().getWater() >= costWater) {
-					control.getCurrPlayer().subGas(costGas);
-					control.getCurrPlayer().subMineral(costMetal);
-					control.getCurrPlayer().subWater(costWater);
+				if (this.owner == null && control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMetal && control.getPlayer().getWater() >= costWater) {
+					control.getPlayer().subGas(costGas);
+					control.getPlayer().subMineral(costMetal);
+					control.getPlayer().subWater(costWater);
 					level++;
-					owner = control.getCurrPlayer();
-					control.getCurrPlayer().addPlanet();
-					ownerColor = control.getCurrPlayer().getColor();
+					owner = control.getPlayer();
+					control.getPlayer().addPlanet();
+					ownerColor = control.getPlayer().getColor();
 					repaint();
 					// double cost
 					costGas += costGas;
@@ -111,16 +105,16 @@ public class Planet extends Satellite implements MouseListener {
 					control.printToInstructionArea(this.getName() + " is now level " + level + ", gives out " + this.getResources() + ".");
 					control.update();
 				}
-				/*else if (this.owner != control.getCurrPlayer()) {
+				/*else if (this.owner != control.getPlayer()) {
 					control.printToHoverArea("This planet is already owned by + " owner.getName());
 				}*/
-				else if (this.owner == control.getCurrPlayer() && control.getCurrPlayer().getGas() >= costGas && control.getCurrPlayer().getMineral() >= costMetal && control.getCurrPlayer().getWater() >= costWater) {
+				else if (this.owner == control.getPlayer() && control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMetal && control.getPlayer().getWater() >= costWater) {
 					// owned, upgrading.
-					control.getCurrPlayer().subGas(costGas);
-					control.getCurrPlayer().subMineral(costMetal);
-					control.getCurrPlayer().subWater(costWater);
+					control.getPlayer().subGas(costGas);
+					control.getPlayer().subMineral(costMetal);
+					control.getPlayer().subWater(costWater);
 					level++;
-					owner = control.getCurrPlayer();
+					owner = control.getPlayer();
 					// double cost
 					costGas += costGas;
 					costMetal += costMetal;
@@ -168,7 +162,7 @@ public class Planet extends Satellite implements MouseListener {
 			if(planetWithinAoI() == false) {
 				control.printToHoverArea("This planet is too far away to build on.");
 			}
-			else if (owner != null && owner != control.getCurrPlayer()) {
+			else if (owner != null && owner != control.getPlayer()) {
 				control.printToHoverArea("This planet is already owned by " + owner.getName());
 			}
 			else {

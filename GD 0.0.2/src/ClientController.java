@@ -20,10 +20,13 @@ public class ClientController {
 	private InfoPanel2 infoPanel2;
 	private List<Satellite> satellites = new ArrayList<Satellite>();
 	private Player player;
+	private Player opponent;
+	private String currentPlayer = "P0";
+	private static String state = "";
 	//private Player p2;
 	//private Player currPlayer;
 
-	private String status;
+	private String status = "";
 	int AoIx = 0;
 	int AoIy = 0;
 	int AoIs = 0;
@@ -72,6 +75,7 @@ public class ClientController {
 		Satellite sat;
 		// "s__=T_X___Y___size___resource___owner_name__"
 		// "0   4 6   10   14    18         22    24
+		
 		if (s.charAt(5) == 'W') {
 			sat = new WaterPlanet(this, Integer.parseInt(s.substring(7, 10)), Integer.parseInt(s.substring(11, 14)), Integer.parseInt(s.substring(15, 18)), Integer.parseInt(s.substring(19, 22)), s.substring(25));
 		}
@@ -81,9 +85,13 @@ public class ClientController {
 		else if (s.charAt(5) == 'M'){
 			sat = new MineralPlanet(this, Integer.parseInt(s.substring(7, 10)), Integer.parseInt(s.substring(11, 14)), Integer.parseInt(s.substring(15, 18)), Integer.parseInt(s.substring(19, 22)), s.substring(25));
 		}
+		else if (s.charAt(5) == 'O'){
+			sat = new Sun(this);
+		}
 		else {
 			sat = new Station(this, Integer.parseInt(s.substring(7, 10)), Integer.parseInt(s.substring(11, 14)), Integer.parseInt(s.substring(15, 18)), s.substring(25));		
 		}
+		sat.setOwner(s.substring(23, 24));
 		satellites.add(sat);
 	}
 	
@@ -102,8 +110,14 @@ public class ClientController {
 	
 	public void createPlayer(String p) {
 		// eventually, ask for a name for the player
-		player = new Player(this, p, p.substring(1));
-		update();
+		if (p.charAt(1) == currentPlayer.charAt(1)) { // this is the current player
+			player = new Player(this, "Player", p.substring(1, 2));
+			update();
+		}
+		else {
+			opponent = new Player(this, p);
+		}
+			
 	}
 	
 	public void getMessage()  {
@@ -154,15 +168,19 @@ public class ClientController {
 		System.out.println("State: " + s[0] + "");
 		switch(s[0]) {
 		case "startUp": {
+			state = "startUp";
 			startUp();
 			for (int i = 1; i < s.length; i++) {
-				if (s[i].charAt(0) == 's')
-					addSatellite(s[i]);
-				else if (s[i].charAt(0) == 'P') {
-					createPlayer(s[i]);
-				}
-				else if (s[i].charAt(0) == 'E') {
-					addToMap();
+				if (s[i].length() > 0) {
+					if (s[i].charAt(0) == 's')
+						addSatellite(s[i]);
+					else if (s[i].charAt(0) == 'P' && s[i].length() < 3) 
+						currentPlayer = s[i];
+					else if (s[i].charAt(0) == 'P')
+						createPlayer(s[i]);	
+					else if (s[i].charAt(0) == 'E') 
+						addToMap();
+					
 				}
 			}
 		}
@@ -171,10 +189,14 @@ public class ClientController {
 	
 	public void getCurrentState(String state) {
 		currentState = state += " ";
+		currentState += "P" + opponent.getNum() + " ";
+		currentState += player.playerState();
+		currentState += opponent.playerState();
 		for (Satellite s: satellites) {
 			currentState += s.printState();
 		}
-		currentState += player.playerState();
+		currentState += " END";
+
 	}
 	
 	
@@ -187,8 +209,16 @@ public class ClientController {
 		status = s;
 	}
 	
-	public Player getCurrPlayer() {
+	public String getCurrPlayer() {
+		return currentPlayer;
+	}
+	
+	public Player getPlayer() {
 		return player;
+	}
+	
+	public Player getOpponent() {
+		return opponent;
 	}
 	
 	public void printToInstructionArea(String s) {
@@ -236,7 +266,7 @@ public class ClientController {
 	
 	public void removeAoI() {
 		//print("removing AoI");
-		AoIc = new Color(100, 100, 100, 0);
+		AoIc = new Color(88, 232, 232, 0);
 		map.repaint();
 		window.update();
 	}
@@ -253,13 +283,14 @@ public class ClientController {
 	}
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+
+		
 		ClientController control = new ClientController();
 		control.connectToServer();	
 		control.getMessage();
 		control.readMessage();
 		control.setUp();
-		control.getCurrentState("StationChosen");
+		control.getCurrentState(state);
 		control.sendMessage();
 		System.exit(0);
 	}
