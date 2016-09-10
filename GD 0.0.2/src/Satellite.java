@@ -25,20 +25,39 @@ public class Satellite extends JComponent {
 		control = clientController;
 		x = locX;
 		y = locY;
-		s = sz;;
+		s = sz;
+	}
+	
+	public void update(String str) {
+		// "s__=T_X___Y___size___resource___owner_name__"
+		// "0   4 6   10   14    18         22    24
+		System.out.println("Updating satellite: \n before: " + printState());
+		x = Integer.parseInt(str.substring(7, 10));
+		y = Integer.parseInt(str.substring(11, 14));
+		s = Integer.parseInt(str.substring(15, 18));
+		resource = Integer.parseInt(str.substring(19, 22));
+		if (owned.equals("0"))
+			setOwner(str.substring(23, 24));
+		System.out.println(" after: " + printState());
 	}
 	
 	public void setOwner(String own) {
-		if (("P" + own).equals(control.getCurrPlayer())) {
+		if ((own).equals(control.getPlayer().getNum())) {
+			System.out.println("player");
 			owner = control.getPlayer();
 			owned = owner.getNum();
 			setOwnerInfo();
 		}
 		else if (! own.equals("0")) {
-			owned = own;
+			System.out.println("opponent");
 			owner = control.getOpponent();
+			owned = owner.getNum();
 			setOwnerInfo();
 		}
+		else
+			return;
+		System.out.println("Curr player: " + control.getCurrPlayer() + " player name: " + control.getPlayer().getName() + " num: " + control.getPlayer().getNum());
+		System.out.println((" but for " + own + ": " + owned + ": " + owner.getNum()));
 	}
 	
 	public void setOwner(Player p) {

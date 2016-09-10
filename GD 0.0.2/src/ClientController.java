@@ -70,6 +70,14 @@ public class ClientController {
 		satellites.add(satellite);
 	}
 	
+	public Station getStation(String str) {
+		for (Satellite sat: satellites) {
+			if (("s" + sat.getName()).equals(str))
+				return (Station) sat;
+		}
+		return null;
+	}
+	
 	public void addSatellite(String s) {
 		System.out.println("Adding satellite: " + s);
 		Satellite sat;
@@ -112,6 +120,7 @@ public class ClientController {
 		// eventually, ask for a name for the player
 		if (p.charAt(1) == currentPlayer.charAt(1)) { // this is the current player
 			player = new Player(this, "Player", p.substring(1, 2));
+			System.out.println("CURR:::: " + p.charAt(1));
 			update();
 		}
 		else {
@@ -186,6 +195,29 @@ public class ClientController {
 			return;
 		}
 		case "turn": {
+			for (int i = 1; i < s.length; i++) { // update info
+				//System.out.println("+" + s[i] + "+");
+				if (s[i].length() == 0) {
+					System.out.println("bad string");
+				}
+				else if (s[i].charAt(0) == 'P' && s[i].length() < 3)
+ 					currentPlayer = s[i];
+ 				else if (s[i].charAt(0) == 'P' && s[i].length() > 4) {
+ 					System.out.println("UPDATE PLAYER: " + s[i].substring(0,  2));
+ 					System.out.println("currentPlayer: " + currentPlayer);
+ 					if (s[i].substring(0, 2).equals(currentPlayer)) {
+ 						player.update(s[i]);
+ 						System.out.println("currentPlayer updated");
+ 					}
+ 					else {
+ 						opponent.update(s[i]);
+ 						System.out.println("opponent updated");
+ 					}
+ 				}
+ 				else if (s[i].charAt(0) == 's') {
+ 					satellites.get(Integer.parseInt(s[i].substring(1, 3))).update(s[i]);
+ 				}
+			}
 			status = "collectResources";
 			turn();
 			return;
@@ -242,11 +274,12 @@ public class ClientController {
 	
 	public void turn() {
 		collectResources();
-		System.out.println("hey");
 		upgradeTime();
+
 		while (status.equals("Upgrade")) {
-			System.out.println(status);
+			System.out.println("!");
 		}
+		System.out.println("here");
 		getCurrentState("turn");
 		sendMessage();
 		printToInstructionArea("Please wait. Opponent's turn.");

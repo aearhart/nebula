@@ -114,6 +114,10 @@ public class Station extends Satellite implements MouseListener {
 				switchColors();
 				control.drawAoI(this);
 				repaint(); }
+			if (this.owner == control.getOpponent()) {
+				control.printToHoverArea("This station is owned by " + control.getOpponent().getName());
+			}
+			else {control.printToHoverArea("You do not own this space station."); }
 			return;
 				
 			}
@@ -130,6 +134,9 @@ public class Station extends Satellite implements MouseListener {
 				repaint(); 
 				control.printToHoverArea("This level " + level + " " + "station costs : " + costWater + " water, " + costMetal + " metal, and " + costGas + " gas.");
 				}
+			else if (this.owner == control.getOpponent()) {
+				control.printToHoverArea("This station is owned by " + control.getOpponent().getName());
+			}
 			else {control.printToHoverArea("You do not own this space station."); }
 			return;
 			}

@@ -60,11 +60,35 @@ public class Player {
 		mineral = Integer.parseInt(str.substring(31, 34));
 		int pos = 35;
 		while (str.charAt(pos) != 'n') {
-			stationList.add(str.substring(pos, pos+3));
+			if (! stationList.contains(str.substring(pos, pos+3))) {
+				stationList.add(str.substring(pos, pos+3));
+				stations.add(control.getStation(str.substring(pos, pos+3)));
+			}
 			pos +=4;
 		}
 		name = str.substring(pos + 1);
 		
+	}
+	
+	public void update(String str) {
+		System.out.println("Player before update: " + playerState());
+		num = str.substring(1, 2);
+		R = Integer.parseInt(str.substring(5, 8));
+		G = Integer.parseInt(str.substring(9, 12));
+		B = Integer.parseInt(str.substring(13, 16));
+		col = new Color(R, G, B);
+		numStations = Integer.parseInt(str.substring(17, 19));
+		planets = Integer.parseInt(str.substring(20, 22));
+		gas = Integer.parseInt(str.substring(23, 26));
+		water = Integer.parseInt(str.substring(27, 30));
+		mineral = Integer.parseInt(str.substring(31, 34));
+		int pos = 35;
+		while (str.charAt(pos) != 'n') {
+			stationList.add(str.substring(pos, pos+3));
+			pos +=4;
+		}
+		name = str.substring(pos + 1);
+		System.out.println("after update       " + playerState());
 	}
 	
 	public String getNum() {
