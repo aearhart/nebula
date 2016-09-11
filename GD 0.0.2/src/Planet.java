@@ -10,7 +10,7 @@ public class Planet extends Satellite implements MouseListener {
 	private int costMetal = 3;
 	private int costGas = 3;
 	private int level = 0;
-	private Color ownerColor;
+
 	
 	public Planet(ClientController ctrl, Integer locX, Integer locY, Integer sz) {
 		super(ctrl, locX, locY, sz);
@@ -92,9 +92,10 @@ public class Planet extends Satellite implements MouseListener {
 					control.getPlayer().subMineral(costMetal);
 					control.getPlayer().subWater(costWater);
 					level++;
-					owner = control.getPlayer();
-					control.getPlayer().addPlanet();
-					ownerColor = control.getPlayer().getColor();
+					setOwner(control.getPlayer());
+					//owner = control.getPlayer();
+					//control.getPlayer().addPlanet();
+					//ownerColor = control.getPlayer().getColor();
 					repaint();
 					// double cost
 					costGas += costGas;
@@ -114,7 +115,7 @@ public class Planet extends Satellite implements MouseListener {
 					control.getPlayer().subMineral(costMetal);
 					control.getPlayer().subWater(costWater);
 					level++;
-					owner = control.getPlayer();
+					//owner = control.getPlayer();
 					// double cost
 					costGas += costGas;
 					costMetal += costMetal;

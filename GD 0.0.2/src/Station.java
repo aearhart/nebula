@@ -148,7 +148,7 @@ public class Station extends Satellite implements MouseListener {
 		// TODO Auto-generated method stub
 		switch (control.getStatus()) {
 		case "Claiming": {
-				if(this.owner == null) {
+				if(this.owner == null || this.owner == control.getPlayer()) {
 					switchColors();
 					control.removeAoI();
 					repaint(); }

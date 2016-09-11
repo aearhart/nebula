@@ -84,7 +84,10 @@ public class Player {
 		mineral = Integer.parseInt(str.substring(31, 34));
 		int pos = 35;
 		while (str.charAt(pos) != 'n') {
-			stationList.add(str.substring(pos, pos+3));
+			if (! stationList.contains(str.substring(pos, pos+3))) {
+				stationList.add(str.substring(pos, pos+3));
+				stations.add(control.getStation(str.substring(pos, pos+3)));
+			}
 			pos +=4;
 		}
 		name = str.substring(pos + 1);
@@ -157,9 +160,11 @@ public class Player {
 	}
 	
 	public void addStation(Satellite satellite) {
-		stations.add((Station) satellite);
-		addStationToList(satellite);
-		numStations++;
+		if (! stationList.contains("s" + satellite.getName())) {
+			stations.add((Station) satellite);
+			addStationToList(satellite);
+			numStations++;
+		}
 	}
 	
 	public List<Station> getStations() {

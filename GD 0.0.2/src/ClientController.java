@@ -65,9 +65,7 @@ public class ClientController {
 		
 		window.pack();
 		window.update();
-		Satellite satellite = new Sun(this);
 		// ??Planet(x, y, s, numResources, name)
-		satellites.add(satellite);
 	}
 	
 	public Station getStation(String str) {
@@ -172,6 +170,23 @@ public class ClientController {
 		System.out.println("Connection established.");
 	}
 	
+	public void updateMap() {
+		for (Satellite sat: satellites) {
+			if (sat instanceof WaterPlanet) {
+				((WaterPlanet)sat).repaint();
+			}
+			else if (sat instanceof MineralPlanet) {
+				((MineralPlanet)sat).repaint();
+			}
+			else if (sat instanceof GasPlanet) {
+				((GasPlanet)sat).repaint();
+			}
+			else if (sat instanceof Station) {
+				((Station)sat).repaint();
+			}
+		}
+	}
+	
 	public void readMessage() {
 		String[] s = input.split(" ");
 		System.out.println("State: " + s[0] + "");
@@ -218,6 +233,7 @@ public class ClientController {
  					satellites.get(Integer.parseInt(s[i].substring(1, 3))).update(s[i]);
  				}
 			}
+			updateMap();
 			status = "collectResources";
 			turn();
 			return;
@@ -279,7 +295,6 @@ public class ClientController {
 		while (status.equals("Upgrade")) {
 			System.out.println("!");
 		}
-		System.out.println("here");
 		getCurrentState("turn");
 		sendMessage();
 		printToInstructionArea("Please wait. Opponent's turn.");

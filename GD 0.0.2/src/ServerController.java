@@ -136,7 +136,7 @@ public class ServerController {
 		
 		// ??Planet(x, y, s, numResources, name)
 		//Satellite s00 = new Sun(this);
- 
+		currentState += "s00=tOx450y450s100r000o0n00 ";
 		// "satellite__=type_X___Y___size___resource___owner_name__"
 		currentState += "s01=tWx450y350s030r003o0n01 ";
 		//Satellite s01 = new WaterPlanet(this, 450, 350, 30, 3, "1");

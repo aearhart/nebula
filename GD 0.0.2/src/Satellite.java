@@ -20,6 +20,7 @@ public class Satellite extends JComponent {
 	public Integer resource = 0;
 	public String owned = "0";
 	public Player owner = null;
+	protected Color ownerColor;
 	
 	public Satellite(ClientController clientController, Integer locX, Integer locY, Integer sz) {
 		control = clientController;
@@ -43,21 +44,17 @@ public class Satellite extends JComponent {
 	
 	public void setOwner(String own) {
 		if ((own).equals(control.getPlayer().getNum())) {
-			System.out.println("player");
 			owner = control.getPlayer();
 			owned = owner.getNum();
 			setOwnerInfo();
 		}
 		else if (! own.equals("0")) {
-			System.out.println("opponent");
 			owner = control.getOpponent();
 			owned = owner.getNum();
 			setOwnerInfo();
 		}
 		else
 			return;
-		System.out.println("Curr player: " + control.getCurrPlayer() + " player name: " + control.getPlayer().getName() + " num: " + control.getPlayer().getNum());
-		System.out.println((" but for " + own + ": " + owned + ": " + owner.getNum()));
 	}
 	
 	public void setOwner(Player p) {
@@ -67,8 +64,13 @@ public class Satellite extends JComponent {
 	}
 	
 	private void setOwnerInfo() { // ONLY FOR SATELLITES NOT PLANETS YET
-		owner.addStation(this);
-		this.setColors(owner.getColor(), this.getBorderCol(), this.getSelectCol());;
+		if (t.equals("S")) {
+			owner.addStation(this);
+			this.setColors(owner.getColor(), this.getBorderCol(), this.getSelectCol());
+		}
+		else { // it's a planet
+			ownerColor = owner.getColor();
+		}
 	}
 	
 	public void setResource(int n) {
