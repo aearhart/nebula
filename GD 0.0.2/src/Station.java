@@ -9,13 +9,15 @@ public class Station extends Satellite implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 	private int AreaOfInfluence = 100;
-	private int maxLevel = 5;
 	
 	public Station(ClientController clientController, Integer locX, Integer locY, Integer sz, String n) {
 		super(clientController, locX, locY, sz);
 		
 		this.setType("S");
 		this.setResource(0);
+		costWater = 5;
+		costMineral = 5;
+		costGas = 5;
 		this.setName(n);
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);
@@ -59,7 +61,7 @@ public class Station extends Satellite implements MouseListener {
 			else if (this.owner != control.getPlayer()) { // station owned by opponent
 				control.printToHoverArea("Woah woah stop right there! This space station is owned by " + owner.getName() + ". Don't waste your resources on them.");
 			}
-			if (level > maxLevel) { // At max level, can't upgrade
+			else if (level > maxLevel) { // At max level, can't upgrade
 				control.printToHoverArea("This space station is at max level. It's as high tech as you can get in this era!");
 			}
 			else { // station owned by current player
@@ -95,12 +97,22 @@ public class Station extends Satellite implements MouseListener {
 				control.printToHoverArea("You do not own this space station. But you could, for the price of a click of a button!"); }
 			return;	
 			}
+		case "Wait": {
+			switchColors();
+			control.removeAoI();
+			repaint();
+			String str = ".";
+			if (owner != null) {
+				str = " owned by " + owner.getName();
+			}
+			control.printToHoverArea("A level " + level + " space station");
+		}
 		case "Upgrade": { // Upgrading a station
 			if(this.owner == control.getPlayer()) { // draw AoI
 				switchColors();
 				control.drawAoI(this);
 				repaint(); 
-				control.printToHoverArea("Your level " + level + " " + "station costs : " + costWater + " water, " + costMetal + " metal, and " + costGas + " gas.");
+				control.printToHoverArea("Your level " + level + " " + "station costs : " + costWater + " water, " + costMineral + " metal, and " + costGas + " gas.");
 				}
 			else if (this.owner == control.getOpponent()) {
 				control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". ");
@@ -122,6 +134,12 @@ public class Station extends Satellite implements MouseListener {
 					repaint(); }
 				return;
 			}
+		case "Wait": {
+			switchColors();
+			control.removeAoI();
+			repaint();
+			control.printToHoverArea();
+		}
 		case "Upgrade": { // Upgrading a station
 			if(this.owner == control.getPlayer()) { // remove AoI
 				switchColors();

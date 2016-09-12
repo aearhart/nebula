@@ -6,15 +6,13 @@ import java.util.List;
 
 public class Planet extends Satellite implements MouseListener {
 
-
-
 	public Planet(ClientController clientController, Integer locX, Integer locY, Integer sz, Integer numResources) {
 		super(clientController, locX, locY, sz);
 		control = clientController;
 		this.setResource(numResources);
 		
 		costWater = 3;
-		costMetal = 3;
+		costMineral = 3;
 		costGas = 3;
 		
 		addMouseListener(this); 
@@ -36,7 +34,7 @@ public class Planet extends Satellite implements MouseListener {
 	
 	public String info() {
 		/* return info of planet */
-		String str = getName() + ":\nLevel " + level + "\nResources: " + this.getResources() + "\nCost: " + costWater + " water, " + costMetal + " metal, " + costGas + " gas.";
+		String str = getName() + ":\nLevel " + level + "\nResources: " + this.getResources() + "\nCost: " + costWater + " water, " + costMineral + " metal, " + costGas + " gas.";
 		return str;
 	}
 	
@@ -60,7 +58,12 @@ public class Planet extends Satellite implements MouseListener {
 		switch (control.getStatus()) {
 		case "Claiming": { // Claiming a space station
 			control.printToHoverArea(info());
+			return;
 			}
+		case "Wait": { // waiting for next turn
+			// do nothing on click
+			return;
+		}
 		case "Upgrade": { // Upgrading a planet
 			// check if within AoI
 			if (planetWithinAoI()) { // it's within current player's AoI
@@ -72,6 +75,9 @@ public class Planet extends Satellite implements MouseListener {
 					control.setStatus("EndTurn");
 					control.printToHoverArea(this.getName() + " is now level " + level + ", gives out " + this.getResources() + ".");
 					control.printToPlayerArea();
+				}
+				else if (level > maxLevel) {
+					control.printToHoverArea("This planet is at max level.");
 				}
 				else if (this.owner == control.getPlayer() && canPurchase()) { // owned, upgrading planet
 					upgradeSatellite();
@@ -105,6 +111,10 @@ public class Planet extends Satellite implements MouseListener {
 			control.printToHoverArea(info());
 			return;
 			}
+		case "Wait": {
+			control.printToHoverArea(info());
+			return;
+		}
 		case "Upgrade": { // Upgrading a planet
 			if (owner == control.getOpponent()) { // owned by opponent
 				control.printToHoverArea("This planet is already owned by " + owner.getName());
@@ -133,6 +143,10 @@ public class Planet extends Satellite implements MouseListener {
 			control.printToHoverArea();
 			return;
 			}
+		case "Wait": {
+			control.printToHoverArea();
+			return;
+		}
 		case "Upgrade": {
 			control.printToHoverArea();
 			return;

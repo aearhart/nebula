@@ -28,8 +28,9 @@ public class Satellite extends JComponent {
 	
 	protected int costGas = 0;
 	protected int costWater = 0;
-	protected int costMetal = 0;
+	protected int costMineral = 0;
 	protected int level = 0;
+	protected int maxLevel = 5;
 	
 	protected BufferedImage image = null;
 	
@@ -123,20 +124,20 @@ public class Satellite extends JComponent {
 	
 	protected Boolean canPurchase() {
 		/* return true or false if player can purchase this satellite */
-		return (control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMetal && control.getPlayer().getWater() >= costWater);
+		return (control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMineral && control.getPlayer().getWater() >= costWater);
 	}
 	
 	protected void upgradeSatellite() {
 		/* after buying/upgrading update Satellite and Player info*/
 		control.getPlayer().subGas(costGas);
-		control.getPlayer().subMineral(costMetal);
+		control.getPlayer().subMineral(costMineral);
 		control.getPlayer().subWater(costWater);
 		level++;
 		setOwner(control.getPlayer());
 		repaint();
 		// cost doubles
 		costGas += costGas;
-		costMetal += costMetal;
+		costMineral += costMineral;
 		costWater += costWater;
 		this.addResources(3);
 	}

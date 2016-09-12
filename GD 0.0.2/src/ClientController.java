@@ -329,6 +329,7 @@ public class ClientController {
 		sendMessage();
 		printToInstructionArea("Please wait. Opponent's turn.");
 		// wait for next turn
+		status = "Wait";
 		getMessage();
 		readMessage();
 	}
