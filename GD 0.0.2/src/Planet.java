@@ -6,47 +6,18 @@ import java.util.List;
 
 public class Planet extends Satellite implements MouseListener {
 
-	private int costWater = 3;
-	private int costMetal = 3;
-	private int costGas = 3;
-	private int level = 0;
 
-	
-	public Planet(ClientController ctrl, Integer locX, Integer locY, Integer sz) {
-		super(ctrl, locX, locY, sz);
-		// TODO Auto-generated constructor stub
-		this.setResource(1);
-		control = ctrl;
-		addMouseListener(this);
-	}
 
 	public Planet(ClientController clientController, Integer locX, Integer locY, Integer sz, Integer numResources) {
 		super(clientController, locX, locY, sz);
 		control = clientController;
 		this.setResource(numResources);
+		
+		costWater = 3;
+		costMetal = 3;
+		costGas = 3;
+		
 		addMouseListener(this); 
-	}
-
-	public void setOwnerColor(Color col) {
-		ownerColor = col;
-	}
-	
-	public String getType() {
-		return t;
-	}
-	
-	public Player getOwner() {
-		return owner;	
-	}
-	
-	public String info() {
-		String str;
-		if (owner == null) 
-			str = getName() + " not currently owned.";
-		else
-			str = getName() + " currently owned by " + owner.getName();
-		str += "Level " + level + "\n" + "Resources: " + this.getResources() + "\n costs: " + costWater + " water, " + costMetal + " metal, " + costGas + " gas.";
-		return str;
 	}
 	
 	@Override
@@ -63,6 +34,17 @@ public class Planet extends Satellite implements MouseListener {
 		}
 	}
 	
+	public String info() {
+		/* return info of planet */
+		String str = getName() + ":\nLevel " + level + "\nResources: " + this.getResources() + "\nCost: " + costWater + " water, " + costMetal + " metal, " + costGas + " gas.";
+		return str;
+	}
+	
+	public String info(String str) {
+		/* return str + planet info */
+		return str + " " + info();
+	}
+	
 	public Boolean planetWithinAoI() {
 		/* check to see if planet is within the current player's AoI */
 		for (Station sat: control.getPlayer().getStations()) {
@@ -75,64 +57,89 @@ public class Planet extends Satellite implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+		switch (control.getStatus()) {
+		case "Claiming": { // Claiming a space station
+			control.printToHoverArea(info());
+			}
+		case "Upgrade": { // Upgrading a planet
+			// check if within AoI
+			if (planetWithinAoI()) { // it's within current player's AoI
+				if (this.owner == control.getOpponent()) { // owned by opponent
+					control.printToHoverArea("This planet is owned by someone else. Don't throw resources at " + control.getOpponent().getName() + ".");
+				}
+				if (this.owner == null && canPurchase()) { // not owned, buying the planet
+					upgradeSatellite();
+					control.setStatus("EndTurn");
+					control.printToHoverArea(this.getName() + " is now level " + level + ", gives out " + this.getResources() + ".");
+					control.printToPlayerArea();
+				}
+				else if (this.owner == control.getPlayer() && canPurchase()) { // owned, upgrading planet
+					upgradeSatellite();
+					control.setStatus("EndTurn");
+					control.printToHoverArea(this.getName() + " is now level " + level + ", gives out " + this.getResources() + ".");
+					control.printToPlayerArea();
+				}
+				else { // couldn't afford it
+					control.printToHoverArea("You uh don't have enough resources to build on this planet.");
+					}
+			}
+			else { // not within player's AoI
+				if (this.owner == control.getOpponent()) {
+					control.printToHoverArea("This planet is too far away to build on and it's owned by " + owner.getName() + " anyways.");
+				}
+				else { // not owned
+					control.printToHoverArea("This planet is too far away! Upgrade your space stations to expand your reach.");
+				}
+			}
+			return;
+		} // end case
+		} // end switch
+	}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		switchColors();
+		repaint();
 		switch (control.getStatus()) {
 		case "Claiming": {
 			control.printToHoverArea(info());
+			return;
 			}
-		case "Test": {
-			control.printToHoverArea(info());
+		case "Upgrade": { // Upgrading a planet
+			if (owner == control.getOpponent()) { // owned by opponent
+				control.printToHoverArea("This planet is already owned by " + owner.getName());
 			}
-		case "Upgrade": {
-			// within AoI
-			if (planetWithinAoI()) {
-				// not owned
-				if (this.owner == null && control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMetal && control.getPlayer().getWater() >= costWater) {
-					control.getPlayer().subGas(costGas);
-					control.getPlayer().subMineral(costMetal);
-					control.getPlayer().subWater(costWater);
-					level++;
-					setOwner(control.getPlayer());
-					//owner = control.getPlayer();
-					//control.getPlayer().addPlanet();
-					//ownerColor = control.getPlayer().getColor();
-					repaint();
-					// double cost
-					costGas += costGas;
-					costMetal += costMetal;
-					costWater += costWater;
-					this.addResources(3);;
-					control.setStatus("collectResources");
-					control.printToInstructionArea(this.getName() + " is now level " + level + ", gives out " + this.getResources() + ".");
-					control.update();
-				}
-				/*else if (this.owner != control.getPlayer()) {
-					control.printToHoverArea("This planet is already owned by + " owner.getName());
-				}*/
-				else if (this.owner == control.getPlayer() && control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMetal && control.getPlayer().getWater() >= costWater) {
-					// owned, upgrading.
-					control.getPlayer().subGas(costGas);
-					control.getPlayer().subMineral(costMetal);
-					control.getPlayer().subWater(costWater);
-					level++;
-					//owner = control.getPlayer();
-					// double cost
-					costGas += costGas;
-					costMetal += costMetal;
-					costWater += costWater;
-					this.addResources(3);
-					control.setStatus("collectResources");
-					control.printToInstructionArea(this.getName() + " is now level " + level + ", gives out " + this.getResources() + ".");
-					control.update();
-				}
-				else {control.printToInstructionArea("Insufficient funds or priviledges.");}
-
-				return;
+			else if (planetWithinAoI() == false) { // outside AoI
+				control.printToHoverArea(info("This planet is too far away to build on."));
 			}
-		}
+			else if (owner == null) { // not owned
+				control.printToHoverArea(info("Not currently owned! Invest away."));
+			}
+			else { // owned by current player
+				control.printToHoverArea(info("You own this planet!"));
+			}
+			return;
+			}
 		}
 	}
 
+	@Override
+	public void mouseExited(MouseEvent e) {
+		/* switch back to original */
+		switchColors();
+		repaint();
+		switch (control.getStatus()) {
+		case "Claiming": {
+			control.printToHoverArea();
+			return;
+			}
+		case "Upgrade": {
+			control.printToHoverArea();
+			return;
+			}
+		}
+	}
+	
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
@@ -144,55 +151,4 @@ public class Planet extends Satellite implements MouseListener {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		switchColors();
-		repaint();
-		switch (control.getStatus()) {
-		case "Claiming": {
-			control.printToHoverArea(info());
-			return;
-			}
-		case "Test": {
-			control.printToHoverArea(info());
-			return;
-			}
-		case "Upgrade": {
-			if(planetWithinAoI() == false) {
-				control.printToHoverArea("This planet is too far away to build on.");
-			}
-			else if (owner != null && owner != control.getPlayer()) {
-				control.printToHoverArea("This planet is already owned by " + owner.getName());
-			}
-			else {
-				control.printToHoverArea(info());
-			}
-			return;
-			}
-		}
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		switchColors();
-		repaint();
-		switch (control.getStatus()) {
-		case "Claiming": {
-			control.printToHoverArea("Hover over a satellite for more info.");
-			return;
-			}
-		case "Test": {
-			control.printToHoverArea("Hover over a satellite for more info.");
-			return;
-			}
-		case "Upgrade": {
-			control.printToHoverArea("Hover over a satellite for more info.");
-			return;
-			}
-		}
-	}
-
 }

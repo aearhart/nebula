@@ -7,22 +7,14 @@ import javax.sound.sampled.Control;
 
 public class Station extends Satellite implements MouseListener {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	private Planet[] planetsInAOI;
 	private int AreaOfInfluence = 100;
-	private int costWater = 0;
-	private int costMetal = 0;
-	private int costGas = 0;
-	private int level = 0;
+	private int maxLevel = 5;
 	
 	public Station(ClientController clientController, Integer locX, Integer locY, Integer sz, String n) {
 		super(clientController, locX, locY, sz);
-		// TODO Auto-generated constructor stub
 		
-		this.defineType("S");
+		this.setType("S");
 		this.setResource(0);
 		this.setName(n);
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
@@ -33,140 +25,110 @@ public class Station extends Satellite implements MouseListener {
 		return AreaOfInfluence;
 	}
 	
-	public Planet[] getPInAOI(){
-		return planetsInAOI;
-	}
-	
-	public void setPInAOI(Planet[] planets) {
-		planetsInAOI = planets;
-	}
-	
-	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		//TODO ADD Image?
-		
 		g.setColor(fillCol);
 		g.fillRect(0, 0, s, s);	
+		
+		// outline
 		g.setColor(borderCol);
 		g.drawRect(0, 0, s, s);
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		//control.printToInstructionArea("CLICKED");
-		//System.out.println(control.getStatus());
 		switch (control.getStatus()) {
-		case "Claiming": {
-				if(this.owner == null) {
-					System.out.println(owned);
+		case "Claiming": { // Claiming space stations
+				if(this.owner == null) { // make current player owner
 					setOwner(control.getPlayer()); 
 					repaint();
 					control.setStatus("");
 					control.printToInstructionArea(control.getStatus());
 				}
-				else {
-					System.out.println("already owned!");
-					control.printToInstructionArea("This station is already owned by " + owner.getName());
+				else { // already owned: cannot claim
+					control.printToInstructionArea("This is not the space station you're looking for! It has already been claimed by " + owner.getName());
 				}
 				return;
 			}
-		case "Test": {
-			if(this.owner == null) 
-			control.printToInstructionArea("Before collecting: w---g---m");
-			control.printToInstructionArea("                   " + control.getPlayer().getWater() + "   " + control.getPlayer().getGas() + "   " + control.getPlayer().getMineral());
-			//control.collectResources();
-			control.printToInstructionArea("After  collecting: w---g---m");
-			control.printToInstructionArea("                   " + control.getPlayer().getWater() + "   " + control.getPlayer().getGas() + "   " + control.getPlayer().getMineral());
-			return;
+		case "Upgrade": { // Upgrading space stations
+			if (this.owner == null) { // not owned: EVENTUALLY IMPLEMENT BUYING SYSTEM
+				control.printToHoverArea("You don't own this station.");
 			}
-		case "Upgrade": {
-			if (this.owner == control.getPlayer() && control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMetal && control.getPlayer().getWater() >= costWater) {
-				control.getPlayer().subGas(costGas);
-				control.getPlayer().subMineral(costMetal);
-				control.getPlayer().subWater(costWater);
-				level++;
-				// double cost
-				costGas += costGas;
-				costMetal += costMetal;
-				costWater += costWater;
-				AreaOfInfluence = (int)((float)(AreaOfInfluence) * 1.5);
-				control.setStatus("collectResources");
-				control.printToInstructionArea("Upgraded station to level " + level + ".");
-				control.update();
+			else if (this.owner != control.getPlayer()) { // station owned by opponent
+				control.printToHoverArea("Woah woah stop right there! This space station is owned by " + owner.getName() + ". Don't waste your resources on them.");
 			}
-			else {control.printToInstructionArea("Insufficient funds or privileges.");}
-
+			if (level > maxLevel) { // At max level, can't upgrade
+				control.printToHoverArea("This space station is at max level. It's as high tech as you can get in this era!");
+			}
+			else { // station owned by current player
+				// do you have the necessary resources? 
+				if (canPurchase()) {
+					upgradeSatellite();
+					AreaOfInfluence = (int)((float)(AreaOfInfluence) * 1.5);
+					control.setStatus("collectResources");
+					control.printToHoverArea("Upgraded station to level " + level + ".");
+					control.printToPlayerArea();
+				}
+				else { // you don't have the resources
+					control.printToHoverArea("You don't have enough resources to upgrade this station. Patience, " + owner.getName());
+				}
+			}
 			return;
-		}
-		}
-		
+		} // end case
+		} // end switch
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		switch (control.getStatus()) {
-		case "Claiming": {
-			if(this.owner == null) {
+		case "Claiming": { // Claiming a station
+			if(this.owner == null) { // not owned
 				switchColors();
 				control.drawAoI(this);
 				repaint(); }
 			if (this.owner == control.getOpponent()) {
-				control.printToHoverArea("This station is owned by " + control.getOpponent().getName());
+				control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". 100% off limits.");
 			}
-			else {control.printToHoverArea("You do not own this space station."); }
-			return;
-				
+			else { 
+				control.printToHoverArea("You do not own this space station. But you could, for the price of a click of a button!"); }
+			return;	
 			}
-		case "Test": {
-			switchColors();
-			control.drawAoI(this);
-			repaint();
-			return;
-			}
-		case "Upgrade": {
-			if(this.owner == control.getPlayer()) {
+		case "Upgrade": { // Upgrading a station
+			if(this.owner == control.getPlayer()) { // draw AoI
 				switchColors();
 				control.drawAoI(this);
 				repaint(); 
-				control.printToHoverArea("This level " + level + " " + "station costs : " + costWater + " water, " + costMetal + " metal, and " + costGas + " gas.");
+				control.printToHoverArea("Your level " + level + " " + "station costs : " + costWater + " water, " + costMetal + " metal, and " + costGas + " gas.");
 				}
 			else if (this.owner == control.getOpponent()) {
-				control.printToHoverArea("This station is owned by " + control.getOpponent().getName());
+				control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". ");
 			}
-			else {control.printToHoverArea("You do not own this space station."); }
+			else {control.printToHoverArea("This space station is unmanned! Would you like to build here?"); }
 			return;
-			}
-		}
+			} // end case
+		} // end switch
 	}
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		switch (control.getStatus()) {
-		case "Claiming": {
+		case "Claiming": { // Claiming a station
 				if(this.owner == null || this.owner == control.getPlayer()) {
 					switchColors();
 					control.removeAoI();
+					control.printToHoverArea();
 					repaint(); }
 				return;
 			}
-		case "Test": {
-			switchColors();
-			control.removeAoI();
-			repaint(); 
-			return;
-			}
-		case "Upgrade": {
-			if(this.owner == control.getPlayer()) {
+		case "Upgrade": { // Upgrading a station
+			if(this.owner == control.getPlayer()) { // remove AoI
 				switchColors();
 				control.removeAoI();
 				repaint();
 				}
-			control.printToHoverArea("Hover over a satellite for more information.");
+			control.printToHoverArea();
 			return;
 			}
 		}
