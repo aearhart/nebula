@@ -76,7 +76,7 @@ public class ClientController {
 			error();
 		}
 		System.out.println("Message sent: " + currentState);
-		}
+		} 
 	
 	public void connectToServer() {
 		/* connects to server */
