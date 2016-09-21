@@ -1,3 +1,32 @@
+9/20/2016
+
+Adding strategy elements:
+  1. Trade (w/ opponent, and not): one resource for another
+  2. Random events
+     a. list of events
+          i. pirate attacks you -> defense, gain or lose resources
+          ii. pirate attacks enemy
+          iii. malfunction -> downgrade something, spend resources to repair something
+          iv. environment events (could lead to malfunction, or just loss/gain of resources, or nothing)
+          v. rebellion
+          vi. opportunity to upgrade for less cost
+          vii. opportunity for unique upgrade
+               * temp increase one planet or something
+     b. other thoughts (timing, etc.)
+          i. randomly generated (i.e. 5% each turn), skipping: increases event chance? two events --> incentive to skip
+  3. More specific upgrades
+     a. Stations:
+          i. upgrading resource production vs. AoI
+          ii. pirates: upgrading defense or something
+          iii. AoI also determined by number of planets owned, limit AoI upgrades to fewer
+  4. Conflict
+  5. Spaceship
+  6. Other things other than resources
+     a. choosing some kind of race/etc: choosing a strategy before the game begins (bonuses and penalties) (tie it into stations)
+  7. Map stuff
+     a. start with space station, fill in that area's planet types.
+  8. Name: Nebula 9000
+
 8/29/16
 
 Next steps:
