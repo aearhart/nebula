@@ -4,6 +4,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -17,7 +18,6 @@ public class InfoPanel2 extends JPanel {
 	private Player player;
 	
 	private String string1;
-	private String string2;
 	private char [] chars;
 	
 	private JTextArea hoverArea;
@@ -29,11 +29,11 @@ public class InfoPanel2 extends JPanel {
 		
 		this.setLayout(new GridLayout(2, 1, 0, 5));
 
-		string1 = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut ";
+		string1 = "Hover over a satellite for more info.";
 		
 		hoverArea = new JTextArea();
 
-		Font f1 = new Font("Arial", Font.PLAIN, 35);
+		Font f1 = new Font("Century", Font.PLAIN, 22);
 		
 		hoverArea.setFont(f1);
 		
@@ -42,7 +42,7 @@ public class InfoPanel2 extends JPanel {
 		hoverArea.setRows(1);
 		hoverArea.setWrapStyleWord(true);
 		hoverArea.setText(string1);
-		
+		hoverArea.setEditable(false);
 		this.add(hoverArea);
 		
 		
