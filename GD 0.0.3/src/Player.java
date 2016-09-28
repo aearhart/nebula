@@ -6,10 +6,10 @@ public class Player {
 	public String name;
 
 	public int numStations = 0;
-	public List<String> stationList = new ArrayList<String>();
+	public ArrayList<String> stationList = new ArrayList<String>();
 	public List<Station> stations = new ArrayList<Station>();
 	
-	public int planets = 0;
+	public int numPlanets = 0;
 	public int gas = 0;
 	public int water = 0;
 	public int mineral = 0;
@@ -18,15 +18,19 @@ public class Player {
 	public int R = 0;
 	public int G = 0;
 	public int B = 0;
-	public String num = "1";
+	public String num = "P1";
 	
 	
-	public Player(ClientController clientController, String n, String no){
+	public Player() {
+		
+	}
+	
+	public Player(ClientController clientController, String n){
 		// making a new player
-		num = no;
-		this.name = "Player" + no; // name currently can't have spaces
+		num = n;
+		this.name = "Player" + n; // name currently can't have spaces
 		this.control = clientController;
-		if (num.equals("1")) {
+		if (num.equals("P1")) {
 			R = 230;
 			G = 140;
 			B = 255;
@@ -40,45 +44,33 @@ public class Player {
 		}
 		
 	}
-	
-	public Player(ClientController clientController, String str) {
-		// making an already created player
+
+	public String printState() {
+		ArrayList<String> aList = new ArrayList<String>();
+		aList.add("player");
+		aList.add(num);
+		aList.add(name);
+		aList.add(Integer.toString(R));
+		aList.add(Integer.toString(G));
+		aList.add(Integer.toString(B));
+		aList.add(Integer.toString(numStations));
+		aList.add(Globals.addDelims(stationList));
+		aList.add(Integer.toString(numPlanets));
+		aList.add(Integer.toString(gas));
+		aList.add(Integer.toString(water));
+		aList.add(Integer.toString(mineral));
 		
-		// P_=cR___G___B___s__p__gas___w___mineral___>s__,s__,n______...
-		// 0   4   8  12   16  19  22   26   30      34 ....,
-		
-		control = clientController;
-		num = str.substring(1,2);
-		R = Integer.parseInt(str.substring(5, 8));
-		G = Integer.parseInt(str.substring(9, 12));
-		B = Integer.parseInt(str.substring(13, 16));
-		col = new Color(R, G, B);
-		numStations = Integer.parseInt(str.substring(17, 19));
-		planets = Integer.parseInt(str.substring(20, 22));
-		gas = Integer.parseInt(str.substring(23, 26));
-		water = Integer.parseInt(str.substring(27, 30));
-		mineral = Integer.parseInt(str.substring(31, 34));
-		int pos = 35;
-		while (str.charAt(pos) != 'n') {
-			if (! stationList.contains(str.substring(pos, pos+3))) {
-				stationList.add(str.substring(pos, pos+3));
-				stations.add(control.getStation(str.substring(pos, pos+3)));
-			}
-			pos +=4;
-		}
-		name = str.substring(pos + 1);
-		
+		return Globals.addDelims(aList);
 	}
 	
 	public void update(String str) {
-		System.out.println("Player before update: " + playerState());
-		num = str.substring(1, 2);
+		num = str.substring(0, 2);
 		R = Integer.parseInt(str.substring(5, 8));
 		G = Integer.parseInt(str.substring(9, 12));
 		B = Integer.parseInt(str.substring(13, 16));
 		col = new Color(R, G, B);
 		numStations = Integer.parseInt(str.substring(17, 19));
-		planets = Integer.parseInt(str.substring(20, 22));
+		numPlanets = Integer.parseInt(str.substring(20, 22));
 		gas = Integer.parseInt(str.substring(23, 26));
 		water = Integer.parseInt(str.substring(27, 30));
 		mineral = Integer.parseInt(str.substring(31, 34));
@@ -91,7 +83,7 @@ public class Player {
 			pos +=4;
 		}
 		name = str.substring(pos + 1);
-		System.out.println("after update       " + playerState());
+		System.out.println("updated player " + printState());
 	}
 	
 	public String getNum() {
@@ -103,37 +95,11 @@ public class Player {
 		str += ":\nResources: w  g  m\n";
 		str += "                    " + water + "  " + gas + "  " + mineral;
 		str += "\nStations owned: " + numStations;
-		str += "\nPlanets owned: " + planets;
+		str += "\nPlanets owned: " + numPlanets;
 		return str;
 	}
 	
-	public String padLeft(String s, int n) {
-	    return String.format("%1$" + n + "s", s).replace(' ', '0');
-	}
-	
-	public String padLeft(int s, int n) {
-	    return String.format("%1$" + n + "s", Integer.toString(s)).replace(' ', '0');
-	}
-	
-	public String playerState() {
-		// P_=cR___G___B___s__p__g___w___m___>s__,s__,n______...
-		String s = "P" + num;
-		s += "=cR" + padLeft(R, 3);
-		s += "G" + padLeft(G, 3);
-		s += "B" + padLeft(B, 3);
-		
-		s += "s" + padLeft(numStations, 2);
-		s += "p" + padLeft(planets, 2);
-		s += "g" + padLeft(gas, 3);
-		s += "w" + padLeft(water, 3);
-		s += "m" + padLeft(mineral, 3);
-		s += ">";
-		for (String sat: stationList) {
-			s += sat + ",";
-		}
-		s += "n" + name + " ";
-		return s;
-	}
+
 	
 	public void addStationToList(Satellite satellite) {
 		stationList.add("s" + padLeft(satellite.getName(), 2));
@@ -148,11 +114,11 @@ public class Player {
 	}
 	
 	public int getPlanet() {
-		return planets;
+		return numPlanets;
 	}
 	
 	public void addPlanet() {
-		planets++;
+		numPlanets++;
 	}
 
 	public int getNumStations(){

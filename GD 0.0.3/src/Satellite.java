@@ -4,26 +4,28 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Satellite extends JComponent {
 
 	private static final long serialVersionUID = 1L;
 	
 	protected ClientController control;
-	private String name = "0";
-	public String t = "O"; // O for sun
-	public Integer resource = 0;
+	protected String name = "";
+	protected String num = "0";
+	protected String t = "O"; // O for sun
+	protected Integer resource = 0;
 	
-	private Integer x;
-	private Integer y;
+	protected Integer x;
+	protected Integer y;
 	protected Integer s = 100; // size of sphere
 	
 	protected Color fillCol;
 	protected Color borderCol;
 	protected Color selectCol;
 
-	public String owned = "0"; // default not owned
-	public Player owner = null;
+	protected String ownerNum = "0"; // default not owned
+	protected Player owner = null;
 	protected Color ownerColor;
 	
 	protected int costGas = 0;
@@ -33,6 +35,12 @@ public class Satellite extends JComponent {
 	protected int maxLevel = 5;
 	
 	protected BufferedImage image = null;
+	
+	public Satellite(Integer locX, Integer locY, Integer sz) {
+		x = locX;
+		y = locY;
+		s = sz;
+	}
 	
 	public Satellite(ClientController clientController, Integer locX, Integer locY, Integer sz) {
 		control = clientController;
@@ -44,17 +52,13 @@ public class Satellite extends JComponent {
 	public String printState() {
 		/* the current state of the satellite */
 		// "s__=t_x___y___s___r___n__"
-		String str = "s";
-		str += padLeft(name, 2);
-		str += "=t" + t;
-		str += "x" + padLeft(x, 3);
-		str += "y" + padLeft(y, 3);
-		str += "s" + padLeft(s, 3);
-		str += "r" + padLeft(resource, 3);
-		str += "o" + owned;
-		str += "n" + padLeft(name, 2);
-		str += " ";
-		return str;
+		ArrayList<String> aList = new ArrayList<String>();
+		aList.add("satellite");
+		aList.add(t);
+		aList.add(Integer.toString(x));
+		aList.add(Integer.toString(y));
+		aList.add(Integer.toString(s));
+		return Globals.addDelims(aList);
 	}
 	
 	public void update(String str) {
@@ -67,7 +71,7 @@ public class Satellite extends JComponent {
 		y = Integer.parseInt(str.substring(11, 14));
 		s = Integer.parseInt(str.substring(15, 18));
 		resource = Integer.parseInt(str.substring(19, 22));
-		if (owned.equals("0")) // update owner if not currently owned
+		if (ownerNum.equals("0")) // update owner if not currently owned
 			setOwner(str.substring(23, 24));
 		//System.out.println(" after: " + printState());
 	}
@@ -90,12 +94,12 @@ public class Satellite extends JComponent {
 		/* set owner given string determining owner --used for UPDATES */
 		if ((own).equals(control.getPlayer().getNum())) { // equals current player
 			owner = control.getPlayer();
-			owned = owner.getNum();
+			ownerNum = owner.getNum();
 			setOwnerInfo();
 		}
 		else if (! own.equals("0")) { // equals opponent
 			owner = control.getOpponent();
-			owned = owner.getNum();
+			ownerNum = owner.getNum();
 			setOwnerInfo();
 		}
 		else // isn't owned, it's free!
@@ -105,7 +109,7 @@ public class Satellite extends JComponent {
 	public void setOwner(Player p) {
 		/* set owner to given player */
 		owner = p;
-		owned = p.getNum();
+		ownerNum = p.getNum();
 		setOwnerInfo();
 	}
 	
@@ -187,6 +191,14 @@ public class Satellite extends JComponent {
 	
 	public void addResources(int n) {
 		resource += n;
+	}
+	
+	public String getNum() {
+		return num;
+	}
+	
+	public void setNum(String n) {
+		num = n;
 	}
 	
 	public String getName() {

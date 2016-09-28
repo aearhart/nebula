@@ -2,10 +2,22 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Planet extends Satellite implements MouseListener {
 
+	public Planet(Integer locX, Integer locY, Integer sz, Integer numResources) {
+		super(locX, locY, sz);
+		this.setResource(numResources);
+		
+		costWater = 3;
+		costMineral = 3;
+		costGas = 3;
+		
+		addMouseListener(this); 
+	}
+	
 	public Planet(ClientController clientController, Integer locX, Integer locY, Integer sz, Integer numResources) {
 		super(clientController, locX, locY, sz);
 		control = clientController;
@@ -30,6 +42,26 @@ public class Planet extends Satellite implements MouseListener {
 			g.setColor(ownerColor);
 			g.fillOval((s/2)-5, (s/2)-5, 10, 10);
 		}
+	}
+	
+	@Override
+	public String printState() {
+		ArrayList<String> aList = new ArrayList<String>();
+		aList.add("planet");
+		aList.add(t);
+		aList.add(Integer.toString(x));
+		aList.add(Integer.toString(y));
+		aList.add(Integer.toString(s));
+		aList.add(num);
+		aList.add(name);
+		aList.add(Integer.toString(costWater));
+		aList.add(Integer.toString(costMineral));
+		aList.add(Integer.toString(costGas));
+		aList.add(Integer.toString(resource));
+		aList.add(ownerNum);
+		aList.add(Integer.toString(level));
+		
+		return Globals.addDelims(aList);
 	}
 	
 	public String info() {

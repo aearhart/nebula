@@ -10,6 +10,20 @@ public class Station extends Satellite implements MouseListener {
 	private static final long serialVersionUID = 1L;
 	private int AreaOfInfluence = 100;
 	
+	
+	public Station(Integer locX, Integer locY, Integer sz, String n) {
+		super(locX, locY, sz);
+		
+		this.setType("S");
+		this.setResource(0);
+		costWater = 5;
+		costMineral = 5;
+		costGas = 5;
+		this.setNum(n);
+		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
+		addMouseListener(this);
+	}
+	
 	public Station(ClientController clientController, Integer locX, Integer locY, Integer sz, String n) {
 		super(clientController, locX, locY, sz);
 		
@@ -18,7 +32,7 @@ public class Station extends Satellite implements MouseListener {
 		costWater = 5;
 		costMineral = 5;
 		costGas = 5;
-		this.setName(n);
+		this.setNum(n);
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);
 	}

@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientController {
+public class ClientController2 {
 
 	// socket info
 	static Socket socket;
@@ -32,7 +32,7 @@ public class ClientController {
 	int AoIs = 0;
 	Color AoIc;
 	
-	public ClientController() {
+	public ClientController2() {
 
 	}
 
@@ -102,8 +102,8 @@ public class ClientController {
 		 */
 		currentState = state += " ";
 		currentState += "P" + opponent.getNum() + " ";
-		currentState += player.state();
-		currentState += opponent.state();
+		currentState += player.playerState();
+		currentState += opponent.playerState();
 		for (Satellite s: satellites) {
 			currentState += s.printState();
 		}
@@ -112,7 +112,7 @@ public class ClientController {
 	
 	public void readMessage() {
 		/* interprets input from server */
-		String[] s = input.split("@@");
+		String[] s = input.split(" ");
 		System.out.println("State: " + s[0] + "");
 		
 		switch(s[0]) {
@@ -125,7 +125,7 @@ public class ClientController {
 					else if (s[i].charAt(0) == 'P' && s[i].length() < 3) // current player info
 						currentPlayer = s[i];
 					else if (s[i].charAt(0) == 'P') // player info
-						i = 0;//createPlayer(s[i]);	
+						createPlayer(s[i]);	
 					else if (s[i].charAt(0) == 'E') // end of input
 						addToMap();
 				}
@@ -228,6 +228,20 @@ public class ClientController {
 			map.add(s); 
 			s.setBounds(s.getLocX(), s.getLocY(), s.getBoundSize(), s.getBoundSize());
 		}
+	}
+	
+	public void createPlayer(String p) {
+		/* given string p information, create a player */
+		
+		// eventually, ask for a name for the player
+		if (p.charAt(1) == currentPlayer.charAt(1)) { // this is the current player
+			player = new Player(this, "Player", p.substring(1, 2));
+			System.out.println("CURR:::: " + p.charAt(1));
+			printToPlayerArea();
+		}
+		else {
+			opponent = new Player(this, p);
+		}		
 	}
 	
 	public void updateMap() {
@@ -400,34 +414,20 @@ public class ClientController {
 	}	
 	
 	
-	public int firstContact() {
-		getMessage();
-		String s[] = input.split(Globals.delim);
-		// validate:
-		if (! s[0].equals("firstContact"))
-			return -1;
-		currentPlayer = s[1];
-		player = new Player(this, s[1]);
-		ArrayList<String> aList = new ArrayList<String>();
-		aList.add("playerSetup"); 
-		aList.add(currentPlayer);
-		aList.add(player.printState());
-		
-		currentState = Globals.addDelims(aList);
-		
-		sendMessage();
-		
-		return 0;
-	}
-	
 	/* MAIN */
 	
 	public static void main(String[] args) {
 
 		
-		ClientController control = new ClientController();
+		ClientController2 control = new ClientController2();
 		control.connectToServer();	
-		control.firstContact();
+		control.getMessage();
+		control.readMessage();
+		control.setUp();
+		control.getCurrentState("startUp");
+		control.sendMessage();
+		control.getMessage();
+		control.readMessage();
 		close();
 	}
 

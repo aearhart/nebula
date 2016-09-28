@@ -12,6 +12,10 @@ public class Sun extends Satellite implements MouseListener{
 
 	private Color blank = new Color(0, 0, 0, 0);
 	
+	public Sun() {
+		super(450, 450, 100);
+	}
+	
 	public Sun(ClientController clientController) {
 		super(clientController, 450, 450, 100);
 		
