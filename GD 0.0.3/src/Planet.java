@@ -7,6 +7,10 @@ import java.util.List;
 
 public class Planet extends Satellite implements MouseListener {
 
+	protected int costGas = 0;
+	protected int costWater = 0;
+	protected int costMineral = 0;
+	
 	public Planet(Integer locX, Integer locY, Integer sz, Integer numResources) {
 		super(locX, locY, sz);
 		this.setResource(numResources);
@@ -62,6 +66,11 @@ public class Planet extends Satellite implements MouseListener {
 		aList.add(Integer.toString(level));
 		
 		return Globals.addDelims(aList);
+	}
+	
+	@Override
+	public void update(String s) {
+		
 	}
 	
 	public String info() {

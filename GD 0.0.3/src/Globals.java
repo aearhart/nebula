@@ -11,8 +11,7 @@ public class Globals {
 		for (int i = 1; i < s.size(); i++) {
 			result += delim + s.get(i);
 		}
-		return result.substring(0, result.length()-2);
+		return result;
 		
 	}
-	
 }

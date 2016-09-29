@@ -11,6 +11,8 @@ public class Satellite extends JComponent {
 	private static final long serialVersionUID = 1L;
 	
 	protected ClientController control;
+	
+	// Attributes
 	protected String name = "";
 	protected String num = "0";
 	protected String t = "O"; // O for sun
@@ -28,9 +30,7 @@ public class Satellite extends JComponent {
 	protected Player owner = null;
 	protected Color ownerColor;
 	
-	protected int costGas = 0;
-	protected int costWater = 0;
-	protected int costMineral = 0;
+
 	protected int level = 0;
 	protected int maxLevel = 5;
 	
@@ -63,17 +63,15 @@ public class Satellite extends JComponent {
 	
 	public void update(String str) {
 		/* UPDATE to satellite from server
-		 * "s__=T_X___Y___size___resource___owner_name__"
-		 * "0   4 6   10   14    18         22    24    */
+		 satellite, type, x, y, size   */
+		String[] s = str.split(Globals.delim);
 		
-		//System.out.println("Updating satellite: \n before: " + printState());
-		x = Integer.parseInt(str.substring(7, 10));
-		y = Integer.parseInt(str.substring(11, 14));
-		s = Integer.parseInt(str.substring(15, 18));
-		resource = Integer.parseInt(str.substring(19, 22));
+		x = Integer.parseInt();
+		y = Integer.parseInt();
+		s = Integer.parseInt();
+		resource = Integer.parseInt();
 		if (ownerNum.equals("0")) // update owner if not currently owned
-			setOwner(str.substring(23, 24));
-		//System.out.println(" after: " + printState());
+			setOwner();
 	}
 	
 	

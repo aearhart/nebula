@@ -10,6 +10,9 @@ public class Station extends Satellite implements MouseListener {
 	private static final long serialVersionUID = 1L;
 	private int AreaOfInfluence = 100;
 	
+	protected int costGas = 0;
+	protected int costWater = 0;
+	protected int costMineral = 0;
 	
 	public Station(Integer locX, Integer locY, Integer sz, String n) {
 		super(locX, locY, sz);

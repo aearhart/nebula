@@ -23,7 +23,7 @@ public class ClientController {
 	private List<Satellite> satellites = new ArrayList<Satellite>();
 	private Player player;
 	private Player opponent;
-	private String currentPlayer = "P0";
+	private String clientPlayerNum = "P0";
 	private String status = "";
 	
 	// AoI information
@@ -102,8 +102,8 @@ public class ClientController {
 		 */
 		currentState = state += " ";
 		currentState += "P" + opponent.getNum() + " ";
-		currentState += player.state();
-		currentState += opponent.state();
+		currentState += player.printState();
+		currentState += opponent.printState();
 		for (Satellite s: satellites) {
 			currentState += s.printState();
 		}
@@ -116,20 +116,46 @@ public class ClientController {
 		System.out.println("State: " + s[0] + "");
 		
 		switch(s[0]) {
-		case "startUp": { // create the components
-			startUp();
-			for (int i = 1; i < s.length; i++) {
-				if (s[i].length() > 0) { // satellite info
-					if (s[i].charAt(0) == 's')
-						addSatellite(s[i]);
-					else if (s[i].charAt(0) == 'P' && s[i].length() < 3) // current player info
-						currentPlayer = s[i];
-					else if (s[i].charAt(0) == 'P') // player info
-						i = 0;//createPlayer(s[i]);	
-					else if (s[i].charAt(0) == 'E') // end of input
-						addToMap();
-				}
+		case "start up": {
+			startUp(); // will want to change this after implementing player name definition
+			
+			clientPlayerNum = s[1]; //currPlayerNum
+			int i = 2; // entering player info
+			if (s[3].equals(clientPlayerNum)) {
+				i = player.update(s, i);
 			}
+			else
+				i = opponent.update(s, i);
+			
+			int numSats = Integer.parseInt(s[i++]) ;
+			for (int j = 0; j < numSats; j++) {
+				//get name of satellite
+				//i = getSat(s[i]).update(s[i], i);
+				
+				/*
+				String obj = s[i++]; // satellite obj
+				if (obj.equals("satellite")) {
+					
+				}
+				else if (obj.equals("planet")) {
+					
+				}
+				else { // obj equals station
+					
+				}
+				*/
+			}
+			/*
+			for (int i = 1; i < s.length; i++) {
+				if (s[i].charAt(0) == 's')
+					addSatellite(s[i]);
+				else if (s[i].charAt(0) == 'P' && s[i].length() < 3) // current player info
+					clientPlayerNum = s[i];
+				else if (s[i].charAt(0) == 'P') // player info
+					i = 0;//createPlayer(s[i]);	
+				else if (s[i].charAt(0) == 'E') // end of input
+						addToMap();
+				}*/
 			return;
 		}
 		case "turn": { // interpret client's turn and update components
@@ -139,13 +165,13 @@ public class ClientController {
 					System.out.println("bad string");
 				}
 				else if (s[i].charAt(0) == 'P' && s[i].length() < 3) // current player info
- 					currentPlayer = s[i];
+ 					clientPlayerNum = s[i];
  				else if (s[i].charAt(0) == 'P' && s[i].length() > 4) { // player info
- 					if (s[i].substring(0, 2).equals(currentPlayer)) { // current player
- 						player.update(s[i]);
+ 					if (s[i].substring(0, 2).equals(clientPlayerNum)) { // current player
+ 						player.update(s, i);
  					}
  					else {
- 						opponent.update(s[i]); // opponent
+ 						opponent.update(s, i); // opponent
  					}
  				}
  				else if (s[i].charAt(0) == 's') { // satellite info
@@ -185,6 +211,15 @@ public class ClientController {
 		
 		window.pack();
 		window.update();
+	}
+	
+	public Satellite getSat(String str) {
+		/* given str name, find the station matching that name */
+		for (Satellite sat: satellites) {
+			if (sat.getName().equals(str))
+				return sat;
+		}
+		return null;
 	}
 	
 	public Station getStation(String str) {
@@ -368,7 +403,7 @@ public class ClientController {
 	}
 	
 	public String getCurrPlayer() { // return string num "P_" of current player
-		return currentPlayer; 
+		return clientPlayerNum; 
 	}
 	
 	public Player getPlayer() {
@@ -406,11 +441,11 @@ public class ClientController {
 		// validate:
 		if (! s[0].equals("firstContact"))
 			return -1;
-		currentPlayer = s[1];
+		clientPlayerNum = s[1];
 		player = new Player(this, s[1]);
 		ArrayList<String> aList = new ArrayList<String>();
 		aList.add("playerSetup"); 
-		aList.add(currentPlayer);
+		aList.add(clientPlayerNum);
 		aList.add(player.printState());
 		
 		currentState = Globals.addDelims(aList);

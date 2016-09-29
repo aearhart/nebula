@@ -13,7 +13,8 @@ public class Player {
 	public int gas = 0;
 	public int water = 0;
 	public int mineral = 0;
-	public ClientController control;
+	public ClientController control = null;
+	public ServerController server = null;
 	public Color col = Color.BLUE;
 	public int R = 0;
 	public int G = 0;
@@ -21,16 +22,16 @@ public class Player {
 	public String num = "P1";
 	
 	
-	public Player() {
-		
+	public Player(ServerController svr) {
+		server = svr;
 	}
 	
 	public Player(ClientController clientController, String n){
 		// making a new player
 		num = n;
-		this.name = "Player" + n; // name currently can't have spaces
-		this.control = clientController;
-		if (num.equals("P1")) {
+		name = "Player" + n; // name currently can't have @@
+		control = clientController;
+		if (num.equals("P1")) { // eventually could potentially choose colors
 			R = 230;
 			G = 140;
 			B = 255;
@@ -42,7 +43,6 @@ public class Player {
 			B = 140;
 			col = new Color(R, G, B);
 		}
-		
 	}
 
 	public String printState() {
@@ -63,27 +63,44 @@ public class Player {
 		return Globals.addDelims(aList);
 	}
 	
-	public void update(String str) {
-		num = str.substring(0, 2);
-		R = Integer.parseInt(str.substring(5, 8));
-		G = Integer.parseInt(str.substring(9, 12));
-		B = Integer.parseInt(str.substring(13, 16));
+	public int update(String[] ary, int i) {
+		// player @@ num @@ name @@ R @@ G @@ B @@ numStations @@ stationList @@ numPlanets @@ gas @@ wate @@ mineral
+		// i         +1     +2     +3   +4    +5     +6             +7             +8          +9     +10     +12
+		if (! ary[i++].equals("player"))
+			return -1;
+		num = ary[i++];
+		name = ary[i++];
+		R = Integer.parseInt(ary[i++]);
+		G = Integer.parseInt(ary[i++]);
+		B = Integer.parseInt(ary[i++]);
 		col = new Color(R, G, B);
-		numStations = Integer.parseInt(str.substring(17, 19));
-		numPlanets = Integer.parseInt(str.substring(20, 22));
-		gas = Integer.parseInt(str.substring(23, 26));
-		water = Integer.parseInt(str.substring(27, 30));
-		mineral = Integer.parseInt(str.substring(31, 34));
-		int pos = 35;
-		while (str.charAt(pos) != 'n') {
-			if (! stationList.contains(str.substring(pos, pos+3))) {
-				stationList.add(str.substring(pos, pos+3));
-				stations.add(control.getStation(str.substring(pos, pos+3)));
-			}
-			pos +=4;
+		numStations = Integer.parseInt(ary[i++]);
+		for (int j = 0; j < numStations; j++) {
+			updateStations(ary[i++]);
 		}
-		name = str.substring(pos + 1);
+		if (numStations == 0) // skip empty section
+			i++;
+		numPlanets = Integer.parseInt(ary[i++]);
+		System.out.println(printState() + "    numPlanets");
+		gas = Integer.parseInt(ary[i++]);
+		System.out.println(printState() + "    gas");
+		water = Integer.parseInt(ary[i++]);
+		System.out.println(printState() + "    water");
+		mineral = Integer.parseInt(ary[i++]);
+		
 		System.out.println("updated player " + printState());
+		return i;
+	}
+	
+	public void updateStations(String sat) {
+		if (! stationList.contains(sat)) {
+			stationList.add(sat);
+			if (control == null) {
+				stations.add(server.getStation(sat));
+				return;
+			}
+			stations.add(control.getStation(sat));
+		}
 	}
 	
 	public String getNum() {
@@ -102,7 +119,7 @@ public class Player {
 
 	
 	public void addStationToList(Satellite satellite) {
-		stationList.add("s" + padLeft(satellite.getName(), 2));
+		stationList.add("s" + satellite.getName());
 	}
 	
 	public void setColor(Color c) {
@@ -133,6 +150,7 @@ public class Player {
 		}
 	}
 	
+
 	public List<Station> getStations() {
 		return stations;
 	}

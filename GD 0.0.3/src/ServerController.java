@@ -17,8 +17,8 @@ public class ServerController {
 	private static String currentState = "";
 	private Boolean valid = true;
 	
-	private Player p1 = new Player();
-	private Player p2 = new Player();
+	private Player p1 = new Player(this);
+	private Player p2 = new Player(this);
 	
 	private String currentPlayer = "P0";
 	private Socket currentSocket;
@@ -120,13 +120,22 @@ public class ServerController {
 		}
 	}
 	
+	public Station getStation(String str) {
+		/* given str name, find the station matching that name */
+		for (Satellite sat: satellites) {
+			if ((sat.getNum()).equals(str))
+				return (Station) sat;
+		}
+		return null;
+	}
+	
 	public void definePlayer() {
 		// parse input into current player
-		String[]s = input.split(Globals.delim);
-		if (s[1].equals("P1")) 
-			p1.update(s[2]);
+		String[] s = input.split(Globals.delim);
+		if (s[1].equals("P1")) // player num
+			p1.update(s, 2);
 		else
-			p2.update(s[2]);
+			p2.update(s, 2);
 	}
 	
 	/* first contact */
@@ -134,7 +143,7 @@ public class ServerController {
 		currentState = "firstContact" + Globals.delim + currentPlayer;
 		sendMessage(currentSocket);
 		getMessage(currentSocket);
-		//definePlayer();
+		definePlayer();
 	}
 	
 
@@ -210,4 +219,5 @@ public class ServerController {
 		server.connectToClients();
 		server.setUp();
 	}
+
 }
