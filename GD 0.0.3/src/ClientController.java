@@ -15,6 +15,8 @@ public class ClientController {
 	private static String input;
 	private static String currentState = "";
 	
+	String winner = "";
+	
 	// components
 	private Window window;
 	private Map map;
@@ -101,32 +103,29 @@ public class ClientController {
 	
 	/* CREATING/UPDATING GAME INFO */
 	
-	public void readMessage() {
+	public void read() {
 		/* interprets input from server */
-		String[] s = input.split("@@");
-		System.out.println("State: " + s[0] + "");
-		
+		String[] s = input.split(Globals.delim);
 		switch(s[0]) {
 		case "turn": { // interpret client's turn and update components
-			for (int i = 1; i < s.length; i++) { // update info
-				//System.out.println("+" + s[i] + "+");
-				if (s[i].length() == 0) {
-					System.out.println("bad string");
-				}
-				else if (s[i].charAt(0) == 'P' && s[i].length() < 3) // current player info
- 					clientPlayerNum = s[i];
- 				else if (s[i].charAt(0) == 'P' && s[i].length() > 4) { // player info
- 					if (s[i].substring(0, 2).equals(clientPlayerNum)) { // current player
- 						player.update(s, i);
- 					}
- 					else {
- 						opponent.update(s, i); // opponent
- 					}
- 				}
- 				else if (s[i].charAt(0) == 's') { // satellite info
- 					satellites.get(Integer.parseInt(s[i].substring(1, 3))).update(s, i);
- 				}
+			System.out.println(player.getNum() + " is playing.");
+			
+			
+			// s[0] = turn
+			// s[1] = currentPlayer
+			// s[2] = player
+			if (s[1].equals(opponent.getNum())) {
+				error("not current player's turn!");
+				// this should be done in validate
 			}
+			
+			int i = updatePlayer(s, 2, 3);
+			i = updatePlayer(s, i, i+1);
+			int numOfSat = Integer.parseInt(s[i++]);
+			for (int j = 0; j < numOfSat; j++) {
+				System.out.println(i + " " + s[i]);
+				i = getSat(s[i+2]).update(s, i);
+			}	
 			updateMap(); // update map
 			
 			// begin turn
@@ -135,10 +134,22 @@ public class ClientController {
 			return;
 		}
 		case "WIN": { // there has been a winner
-			String winner = s[1];
+			// s[0] = win
+			// s[1] = winner
+			// s[2] = player
+			winner = s[1];
 			System.out.println(winner + " just won.");
-			printToInstructionArea(winner + " just won. Thank you for playing. Click anywhere to close");
-			this.setStatus("WIN");
+			
+			int i = updatePlayer(s, 2, 3);
+			i = updatePlayer(s, i, i+1);
+			int numOfSat = Integer.parseInt(s[i++]);
+			for (int j = 0; j < numOfSat; j++) {
+				System.out.println(i + " " + s[i]);
+				i = getSat(s[i+2]).update(s, i);
+			}
+			updateMap();
+			
+			setStatus("WIN");
 			return;
 		}
 		} // end case
@@ -148,7 +159,6 @@ public class ClientController {
 	
 	public Satellite getSat(String str) {
 		/* given str name, find the station matching that name */
-		System.out.println("looking for: " + str);
 		for (Satellite sat: satellites) {
 			if (sat.getNum().equals(str))
 				return sat;
@@ -172,27 +182,27 @@ public class ClientController {
 		
 		// determine type
 		if (s[i+1].equals("W")) { // water planet
-			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
 			sat = new WaterPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
 			i+=13;
 		}
 		else if (s[i+1].equals("G")) { // gas planet
-			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
 			sat = new GasPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
 			i+=13;
 		}
 		else if (s[i+1].equals("M")){ // mineral planet
-			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
 			sat = new MineralPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
 			i+=13;
 		}
 		else if (s[i+1].equals("O")) { // the sun
-			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6]);
+			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6]);
 			sat = new Sun(this);
 			i+=7;
 		}
 		else { // space station
-			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12] + " " + s[i+13] + " " + s[i+14] + " " + s[i+15]);
+			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12] + " " + s[i+13] + " " + s[i+14] + " " + s[i+15]);
 			sat = new Station(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), s[i+2]);	
 			i+=16;
 			sat.setOwner(s[13]);
@@ -273,21 +283,6 @@ public class ClientController {
 			System.out.println("!"); 
 		}
 	}
-	
-	public void turn() {
-		/* one turn for current player */
-		collectResources();
-		upgradeTime();
-		// update server
-		getCurrentState("turn");
-		sendMessage();
-		printToInstructionArea("Please wait. Opponent's turn.");
-		// wait for next turn
-		status = "Wait";
-		getMessage();
-		readMessage();
-	}
-	
 	
 	/* DRAWING AOI */
 	
@@ -435,7 +430,6 @@ public class ClientController {
 			i = addSat(s, i);
 		}
 		addToMap();
-		System.out.println(satellites.size());
 		updateMap();
 		status = "Wait";
 		
@@ -456,7 +450,6 @@ public class ClientController {
 		i = updatePlayer(s, i, i+1);
 		int numOfSat = Integer.parseInt(s[i++]);
 		for (int j = 0; j < numOfSat; j++) {
-			System.out.println(i + " " + s[i]);
 			i = getSat(s[i+2]).update(s, i);
 		}
 		updateMap();
@@ -468,7 +461,7 @@ public class ClientController {
 			System.out.print("");
 		}
 		
-		status = "Wait";
+		waitTurn();
 		
 		getCurrentState("claim end");
 		sendMessage();
@@ -490,6 +483,34 @@ public class ClientController {
 		
 	}
 	
+	public void waitTurn() {
+		status = "Wait";
+		printToInstructionArea("It's " + opponent.getName() + "'s turn now. Please wait.");
+	}
+	
+	public void validate() {
+		// validate input 
+		return;
+	}
+	
+	public void turn() {
+		collectResources();
+		upgradeTime();
+		getCurrentState("turn");
+		sendMessage();
+		waitTurn();
+		gameplay();
+	}
+	public void gameplay() {
+		getMessage();
+		validate(); // could be done in read()
+		read();
+	}
+	
+	public void win() {
+		printToInstructionArea(winner + " just won. Thank you for playing. Click anywhere to close");
+	}
+	
 	/* MAIN */
 	
 	public static void main(String[] args) {
@@ -500,6 +521,8 @@ public class ClientController {
 		control.firstContact();
 		control.startup(); // create the window
 		control.claimStation();
+		control.gameplay();
+		control.win();
 		//close();
 	}
 

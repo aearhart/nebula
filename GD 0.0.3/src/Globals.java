@@ -14,4 +14,17 @@ public class Globals {
 		return result;
 		
 	}
+	
+	public static Boolean playerWin(Player p) {
+		// return whether or not player p has own
+		
+		/* win conditions:
+		 * 
+		 * gas, water, mineral > 10
+		 * numPlanets > 2
+		 * 
+		 */
+		
+		return (p.gas > 10 && p.water > 10 && p.mineral > 10);// && p.numPlanets > 2);
+	}
 }

@@ -22,7 +22,7 @@ public class Player {
 	public String num = "P1";
 	
 	
-	public Player(ServerController svr) {
+	public Player(ServerController svr) { // server
 		server = svr;
 	}
 	
@@ -88,8 +88,6 @@ public class Player {
 		gas = Integer.parseInt(ary[i++]);
 		water = Integer.parseInt(ary[i++]);
 		mineral = Integer.parseInt(ary[i++]);
-		
-		System.out.println("updated player " + printState());
 		return i;
 	}
 	
@@ -111,7 +109,7 @@ public class Player {
 	public String info() {
 		String str = name;
 		str += ":\nResources: w  g  m\n";
-		str += "                    " + water + "  " + gas + "  " + mineral;
+		str += "          " + water + "   " + gas + "   " + mineral;
 		str += "\nStations owned: " + numStations;
 		str += "\nPlanets owned: " + numPlanets;
 		return str;

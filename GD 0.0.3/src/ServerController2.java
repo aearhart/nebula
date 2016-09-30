@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class ServerController {
+public class ServerController2 {
 	
 	static ServerSocket server;
 	static Socket player1;
@@ -30,7 +30,7 @@ public class ServerController {
 	private String status = "";
 	*/
 	
-	public ServerController() {
+	public ServerController2() {
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -273,7 +273,7 @@ public class ServerController {
 	}
 	
 	public static void main(String[] args) {
-		ServerController start = new ServerController();
+		ServerController2 start = new ServerController2();
 		start.connectToClients();
 		start.startUp();
 		start.gameplay();
@@ -281,12 +281,17 @@ public class ServerController {
 	}
 
 	public static void main2(String [] args) {
-		ServerController start = new ServerController();
+		ServerController2 start = new ServerController2();
 		ClientController c1 = new ClientController();
 		
 		start.connectToClients();
 		start.startUp();
 		start.gameplay();
+	}
+
+	public Station getStation(String sat) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

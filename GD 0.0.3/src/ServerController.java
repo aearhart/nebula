@@ -29,8 +29,9 @@ public class ServerController {
 	
 	
 	public ServerController() {
-		// TODO Auto-generated constructor stub
 	}
+	
+	/* SERVER - CLIENT methods */
 	
 	private void error() {
 		System.out.println("FAILED");
@@ -105,7 +106,7 @@ public class ServerController {
 		
 	}
 
-	
+	/* Basic Gameplay methods */
 	
 	private void switchCurrPlayer() {
 		if (currentPlayer.equals("P1")) {
@@ -129,14 +130,68 @@ public class ServerController {
 		return null;
 	}
 	
+	public Satellite getSat(String str) {
+		/* given str name, find the station matching that name */
+		for (Satellite sat: satellites) {
+			if (sat.getNum().equals(str))
+				return sat;
+		}
+		return null;
+	}
+	
+	public int updatePlayer(String s[], int i, int p) {
+		if (s[p].equals("P1")) {
+			i = p1.update(s, i);
+		}
+		else {
+			i = p2.update(s, i);
+		}
+		return i;
+	}
+	
+	public void read() {
+		// input into currentState
+		String s[] = input.split(Globals.delim);
+		
+		// s[0] = claim station
+		// s[1] = currentPlayer
+		// s[2] = player
+		int i = updatePlayer(s, 2, 3);
+		i = updatePlayer(s, i, i+1);
+		int numOfSat = Integer.parseInt(s[i++]);
+		for (int j = 0; j < numOfSat; j++) {
+			i = getSat(s[i+2]).update(s, i);
+		}	
+	}	
+	
 	public void definePlayer() {
 		// parse input into current player
 		String[] s = input.split(Globals.delim);
-		if (s[1].equals("P1")) // player num
-			p1.update(s, 2);
-		else
-			p2.update(s, 2);
+		updatePlayer(s, 2, 1);
 	}
+	
+	public void getCurrentState(String state) {
+		// works for turns
+		ArrayList<String> aList = new ArrayList<String>();
+		aList.add(state);
+		aList.add(currentPlayer);
+		aList.add(p1.printState());
+		aList.add(p2.printState());
+		aList.add(Integer.toString(satellites.size()));
+		for (Satellite s : satellites) {
+			aList.add(s.printState());
+		}
+		
+		currentState = Globals.addDelims(aList);
+	}
+	
+	public void validate() {
+		// validate input, if invalid will need to eventually re-ask current socket
+		valid = true;
+	}
+	
+	
+	/* GAMEPLAY methods */
 	
 	/* first contact */
 	public void firstContact() {
@@ -222,7 +277,7 @@ public class ServerController {
 	}
 	
 	public void setUp() {
-
+		
 		switchCurrPlayer();
 		firstContact();
 
@@ -237,49 +292,66 @@ public class ServerController {
 		claimStation();
 		switchCurrPlayer();
 		claimStation();
+	}
+	
+	public Boolean gameEnd() {
+		// has the game ended?
+		if (Globals.playerWin(p1)) {
+			winner = p1.getNum();
+			return true;
+
+		}
+		else if (Globals.playerWin(p2)) {
+			winner = p2.getNum();
+			return true;
+		}
+		return false;
+	}
+	
+	public void win() {
+		ArrayList<String> aList = new ArrayList<String>();
+		aList.add("WIN");
+		aList.add(winner);
 		
-	}
-	
-	public int updatePlayer(String s[], int i, int p) {
-		if (s[p].equals("P1")) {
-			i = p1.update(s, i);
+		aList.add(p1.printState());
+		aList.add(p2.printState());
+		aList.add(Integer.toString(satellites.size()));
+		for (Satellite s : satellites) {
+			aList.add(s.printState());
 		}
-		else {
-			i = p2.update(s, i);
-		}
-		return i;
-	}
-	
-	public Satellite getSat(String str) {
-		/* given str name, find the station matching that name */
-		for (Satellite sat: satellites) {
-			if (sat.getNum().equals(str))
-				return sat;
-		}
-		return null;
-	}
-	
-	public void read() {
-		// input into currentState
-		String s[] = input.split(Globals.delim);
 		
-		// s[0] = claim station
-		// s[1] = currentPlayer
-		// s[2] = player
-		int i = updatePlayer(s, 2, 3);
-		i = updatePlayer(s, i, i+1);
-		int numOfSat = Integer.parseInt(s[i++]);
-		for (int j = 0; j < numOfSat; j++) {
-			i = getSat(s[i+2]).update(s, i);
-		}	
+		currentState = Globals.addDelims(aList);
+		
+		sendMessage(player1);
+		sendMessage(player2);
+		System.out.println("Winning state: \n" + currentState);
 	}
 	
+	public void turn() {
+		// server sends state to current player
+		if (gameEnd()) {
+			win();
+			System.exit(0);
+		}
+		
+		getCurrentState("turn");
+		sendMessage(currentSocket);
+		getMessage(currentSocket);
+		validate();
+		read(); // parse input into current state and update
+		switchCurrPlayer();
+		turn();
+	}
 	
 	public static void main(String[] args) {
 		ServerController server = new ServerController();
 		server.connectToClients();
 		server.setUp();
+		server.turn();
+		
 		System.out.println("END");
 	}
+
+
 
 }
