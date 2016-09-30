@@ -116,48 +116,6 @@ public class ClientController {
 		System.out.println("State: " + s[0] + "");
 		
 		switch(s[0]) {
-		case "start up": {
-			startUp(); // will want to change this after implementing player name definition
-			
-			clientPlayerNum = s[1]; //currPlayerNum
-			int i = 2; // entering player info
-			if (s[3].equals(clientPlayerNum)) {
-				i = player.update(s, i);
-			}
-			else
-				i = opponent.update(s, i);
-			
-			int numSats = Integer.parseInt(s[i++]) ;
-			for (int j = 0; j < numSats; j++) {
-				//get name of satellite
-				//i = getSat(s[i]).update(s[i], i);
-				
-				/*
-				String obj = s[i++]; // satellite obj
-				if (obj.equals("satellite")) {
-					
-				}
-				else if (obj.equals("planet")) {
-					
-				}
-				else { // obj equals station
-					
-				}
-				*/
-			}
-			/*
-			for (int i = 1; i < s.length; i++) {
-				if (s[i].charAt(0) == 's')
-					addSatellite(s[i]);
-				else if (s[i].charAt(0) == 'P' && s[i].length() < 3) // current player info
-					clientPlayerNum = s[i];
-				else if (s[i].charAt(0) == 'P') // player info
-					i = 0;//createPlayer(s[i]);	
-				else if (s[i].charAt(0) == 'E') // end of input
-						addToMap();
-				}*/
-			return;
-		}
 		case "turn": { // interpret client's turn and update components
 			for (int i = 1; i < s.length; i++) { // update info
 				//System.out.println("+" + s[i] + "+");

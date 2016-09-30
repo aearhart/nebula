@@ -62,6 +62,9 @@ public class Sun extends Satellite implements MouseListener{
 			// do nothing
 			return;
 			}
+		case "Wait": {
+			return;
+		}
 		case "Upgrade": {
 			// 
 			switchColors();
@@ -79,7 +82,7 @@ public class Sun extends Satellite implements MouseListener{
 			// do nothing
 			return;
 			}
-		case "Test": {
+		case "Wait": {
 			// do nothing
 			return;
 			}

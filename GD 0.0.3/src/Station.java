@@ -116,7 +116,7 @@ public class Station extends Satellite implements MouseListener {
 			}
 		case "Wait": {
 			switchColors();
-			control.removeAoI();
+			control.drawAoI(this);
 			repaint();
 			String str = ".";
 			if (owner != null) {
