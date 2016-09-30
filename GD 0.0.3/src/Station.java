@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.sound.sampled.Control;
 
@@ -13,6 +14,9 @@ public class Station extends Satellite implements MouseListener {
 	protected int costGas = 0;
 	protected int costWater = 0;
 	protected int costMineral = 0;
+	protected int GasResource = 0;
+	protected int WaterResource = 0;
+	protected int MineralResource = 0;
 	
 	public Station(Integer locX, Integer locY, Integer sz, String n) {
 		super(locX, locY, sz);
@@ -40,10 +44,53 @@ public class Station extends Satellite implements MouseListener {
 		addMouseListener(this);
 	}
 	
-	public int getAoI() {
-		return AreaOfInfluence;
+	@Override
+	public String printState() {
+		ArrayList<String> aList = new ArrayList<String>();
+		aList.add("station");
+		aList.add(t);
+		aList.add(num);
+		aList.add(name);
+		aList.add(Integer.toString(x));
+		aList.add(Integer.toString(y));
+		aList.add(Integer.toString(s));
+		aList.add(Integer.toString(AreaOfInfluence));
+		aList.add(Integer.toString(costWater));
+		aList.add(Integer.toString(costGas));
+		aList.add(Integer.toString(costMineral));
+		aList.add(Integer.toString(GasResource));
+		aList.add(Integer.toString(WaterResource));
+		aList.add(Integer.toString(MineralResource));
+		aList.add(ownerNum);
+		aList.add(Integer.toString(level));
+		return Globals.addDelims(aList);
 	}
 	
+	@Override
+	public int update(String [] ary, int i) {
+		//station, num, name, x, y, s, AoI, costWater, costGas, 
+		//costMineral, gasResource, waterResource, mineralResource, ownerNum, level
+		if (! ary[i++].equals("station"))
+			return -1;
+		t = ary[i++];
+		num = ary[i++];
+		name = ary[i++];
+		x = Integer.parseInt(ary[i++]);
+		y = Integer.parseInt(ary[i++]);
+		s = Integer.parseInt(ary[i++]);
+		AreaOfInfluence = Integer.parseInt(ary[i++]);
+		costWater = Integer.parseInt(ary[i++]);
+		costGas = Integer.parseInt(ary[i++]);
+		costMineral = Integer.parseInt(ary[i++]);
+		GasResource = Integer.parseInt(ary[i++]);
+		WaterResource = Integer.parseInt(ary[i++]);
+		MineralResource = Integer.parseInt(ary[i++]);
+		ownerNum = ary[i++];
+		level = Integer.parseInt(ary[i++]);
+		setOwner(ownerNum);
+		return i;
+	}
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -56,6 +103,10 @@ public class Station extends Satellite implements MouseListener {
 		g.drawRect(0, 0, s, s);
 	}
 
+	public int getAoI() {
+		return AreaOfInfluence;
+	}
+	
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		switch (control.getStatus()) {

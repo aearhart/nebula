@@ -147,25 +147,25 @@ public class ServerController {
 	}
 	
 
-	public void startUp() {
+	public void createMap() {
 		// create the map
 		Satellite s00 = new Sun();
-		Satellite s01 = new WaterPlanet(450, 350, 30, 3, "1");
-		Satellite s02 = new WaterPlanet(766, 388, 58, 2, "2");
-		Satellite s03 = new WaterPlanet(140, 142, 70, 7, "3");
-		Satellite s04 = new	WaterPlanet(217, 530, 35, 5, "4");
-		Satellite s05 = new MineralPlanet(800, 104, 40, 5, "5");
-		Satellite s06 = new MineralPlanet(657, 720, 62, 7, "6");
-		Satellite s07 = new MineralPlanet(340, 460, 27, 2, "7");
-		Satellite s08 = new MineralPlanet(500, 680, 36, 2, "8");
-		Satellite s09 = new GasPlanet(645, 40, 26, 5, "9"); 
-		Satellite s10 = new GasPlanet(300, 200, 83, 3, "10");
-		Satellite s11 = new GasPlanet(240, 730, 47, 2, "11");
-		Satellite s12 = new GasPlanet(700, 600, 50, 3, "12");
-		Satellite s13 = new Station(700, 100, 30, "13");
-		Satellite s14 = new Station(313, 545, 30, "14");
-		Satellite s15 = new Station(168, 232, 30, "15");
-		Satellite s16 = new Station(826, 630, 30, "16");
+		Satellite s01 = new WaterPlanet(450, 350, 30, 3, "s01");
+		Satellite s02 = new WaterPlanet(766, 388, 58, 2, "s02");
+		Satellite s03 = new WaterPlanet(140, 142, 70, 7, "s03");
+		Satellite s04 = new	WaterPlanet(217, 530, 35, 5, "s04");
+		Satellite s05 = new MineralPlanet(800, 104, 40, 5, "s05");
+		Satellite s06 = new MineralPlanet(657, 720, 62, 7, "s06");
+		Satellite s07 = new MineralPlanet(340, 460, 27, 2, "s07");
+		Satellite s08 = new MineralPlanet(500, 680, 36, 2, "s08");
+		Satellite s09 = new GasPlanet(645, 40, 26, 5, "s09"); 
+		Satellite s10 = new GasPlanet(300, 200, 83, 3, "s10");
+		Satellite s11 = new GasPlanet(240, 730, 47, 2, "s11");
+		Satellite s12 = new GasPlanet(700, 600, 50, 3, "s12");
+		Satellite s13 = new Station(700, 100, 30, "s13");
+		Satellite s14 = new Station(313, 545, 30, "s14");
+		Satellite s15 = new Station(168, 232, 30, "s15");
+		Satellite s16 = new Station(826, 630, 30, "s16");
 
 		satellites.add(s00);
 		satellites.add(s01);
@@ -183,7 +183,10 @@ public class ServerController {
 		satellites.add(s14);
 		satellites.add(s15);
 		satellites.add(s16);
-		
+	}
+	
+	public void startup() {
+		createMap();
 		ArrayList<String> aList = new ArrayList<String>();
 		aList.add("start up");
 		aList.add(currentPlayer);
@@ -194,7 +197,28 @@ public class ServerController {
 			aList.add(s.printState());
 		}
 		
-		System.out.println(Globals.addDelims(aList));
+		currentState = Globals.addDelims(aList);
+		sendMessage(currentSocket);
+		switchCurrPlayer();
+		sendMessage(currentSocket);
+	}
+	
+	public void claimStation() {
+		ArrayList<String> aList = new ArrayList<String>();
+		aList.add("claim station");
+		aList.add(currentPlayer);
+		aList.add(p1.printState());
+		aList.add(p2.printState());
+		aList.add(Integer.toString(satellites.size()));
+		for (Satellite s : satellites) {
+			aList.add(s.printState());
+		}
+		
+		currentState = Globals.addDelims(aList);
+		
+		sendMessage(currentSocket);
+		getMessage(currentSocket);
+		read();
 	}
 	
 	public void setUp() {
@@ -206,18 +230,56 @@ public class ServerController {
 		firstContact();
 		
 		switchCurrPlayer();
-		startUp();
+		
+		startup();
+		
+		switchCurrPlayer();
+		claimStation();
+		switchCurrPlayer();
+		claimStation();
 		
 	}
 	
+	public int updatePlayer(String s[], int i, int p) {
+		if (s[p].equals("P1")) {
+			i = p1.update(s, i);
+		}
+		else {
+			i = p2.update(s, i);
+		}
+		return i;
+	}
 	
+	public Satellite getSat(String str) {
+		/* given str name, find the station matching that name */
+		for (Satellite sat: satellites) {
+			if (sat.getNum().equals(str))
+				return sat;
+		}
+		return null;
+	}
 	
+	public void read() {
+		// input into currentState
+		String s[] = input.split(Globals.delim);
+		
+		// s[0] = claim station
+		// s[1] = currentPlayer
+		// s[2] = player
+		int i = updatePlayer(s, 2, 3);
+		i = updatePlayer(s, i, i+1);
+		int numOfSat = Integer.parseInt(s[i++]);
+		for (int j = 0; j < numOfSat; j++) {
+			i = getSat(s[i+2]).update(s, i);
+		}	
+	}
 	
 	
 	public static void main(String[] args) {
 		ServerController server = new ServerController();
 		server.connectToClients();
 		server.setUp();
+		System.out.println("END");
 	}
 
 }
