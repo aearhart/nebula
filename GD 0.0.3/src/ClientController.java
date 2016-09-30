@@ -22,7 +22,7 @@ public class ClientController {
 	private InfoPanel2 infoPanel2;
 	private List<Satellite> satellites = new ArrayList<Satellite>();
 	private Player player;
-	private Player opponent;
+	private Player opponent = new Player(this);
 	private String clientPlayerNum = "P0";
 	private String status = "";
 	
@@ -38,6 +38,11 @@ public class ClientController {
 
 	/* SERVER METHODS */
 	
+	private Player Player(ClientController clientController) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private void error() {
 		System.out.println("FAILED");
 		System.exit(1);
@@ -96,20 +101,6 @@ public class ClientController {
 	
 	/* CREATING/UPDATING GAME INFO */
 	
-	public void getCurrentState(String state) {
-		/* create state string:
-		 * STATE_TYPE CURRENT_PLAYER CURRENT_PLAYER_INFO OPPONENT_INFO SATELLITE_INFO ... END
-		 */
-		currentState = state += " ";
-		currentState += "P" + opponent.getNum() + " ";
-		currentState += player.printState();
-		currentState += opponent.printState();
-		for (Satellite s: satellites) {
-			currentState += s.printState();
-		}
-		currentState += " END";
-	}
-	
 	public void readMessage() {
 		/* interprets input from server */
 		String[] s = input.split("@@");
@@ -117,7 +108,7 @@ public class ClientController {
 		
 		switch(s[0]) {
 		case "start up": {
-			startUp(); // will want to change this after implementing player name definition
+			startup(); // will want to change this after implementing player name definition
 			
 			clientPlayerNum = s[1]; //currPlayerNum
 			int i = 2; // entering player info
@@ -130,7 +121,7 @@ public class ClientController {
 			int numSats = Integer.parseInt(s[i++]) ;
 			for (int j = 0; j < numSats; j++) {
 				//get name of satellite
-				//i = getSat(s[i]).update(s[i], i);
+				i = getSat(s[i]).update(s, i);
 				
 				/*
 				String obj = s[i++]; // satellite obj
@@ -175,7 +166,7 @@ public class ClientController {
  					}
  				}
  				else if (s[i].charAt(0) == 's') { // satellite info
- 					satellites.get(Integer.parseInt(s[i].substring(1, 3))).update(s[i]);
+ 					satellites.get(Integer.parseInt(s[i].substring(1, 3))).update(s, i);
  				}
 			}
 			updateMap(); // update map
@@ -195,28 +186,13 @@ public class ClientController {
 		} // end case
 	}
 	
-	public void startUp() { // create components
-		status = "StartUp";
-		
-		window = new Window(this);
-		
-		infoPanel = new InfoPanel(this);
-		window.add(infoPanel);
-		
-		map = new Map(this);
-		window.add(map);
-		
-		infoPanel2 = new InfoPanel2(this);
-		window.add(infoPanel2);
-		
-		window.pack();
-		window.update();
-	}
+
 	
 	public Satellite getSat(String str) {
 		/* given str name, find the station matching that name */
+		System.out.println("looking for: " + str);
 		for (Satellite sat: satellites) {
-			if (sat.getName().equals(str))
+			if (sat.getNum().equals(str))
 				return sat;
 		}
 		return null;
@@ -225,36 +201,46 @@ public class ClientController {
 	public Station getStation(String str) {
 		/* given str name, find the station matching that name */
 		for (Satellite sat: satellites) {
-			if (("s" + sat.getName()).equals(str))
+			if ((sat.getNum()).equals(str))
 				return (Station) sat;
 		}
 		return null;
 	}
 	
-	public void addSatellite(String s) {
-		/* given string s info, create a satellite 
-		 * 	 "s__=T_X___Y___size___resource___owner_name__"
-		 *   "0   4 6   10   14    18         22    24      */
+	public int addSat(String[] s, int i) {
+		/* given string s info, create a satellite */
 		
 		Satellite sat;
+		
 		// determine type
-		if (s.charAt(5) == 'W') { // water planet
-			sat = new WaterPlanet(this, Integer.parseInt(s.substring(7, 10)), Integer.parseInt(s.substring(11, 14)), Integer.parseInt(s.substring(15, 18)), Integer.parseInt(s.substring(19, 22)), s.substring(25));
+		if (s[i+1].equals("W")) { // water planet
+			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			sat = new WaterPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
+			i+=13;
 		}
-		else if (s.charAt(5) == 'G') { // gas planet
-			sat = new GasPlanet(this, Integer.parseInt(s.substring(7, 10)), Integer.parseInt(s.substring(11, 14)), Integer.parseInt(s.substring(15, 18)), Integer.parseInt(s.substring(19, 22)), s.substring(25));
+		else if (s[i+1].equals("G")) { // gas planet
+			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			sat = new GasPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
+			i+=13;
 		}
-		else if (s.charAt(5) == 'M'){ // mineral planet
-			sat = new MineralPlanet(this, Integer.parseInt(s.substring(7, 10)), Integer.parseInt(s.substring(11, 14)), Integer.parseInt(s.substring(15, 18)), Integer.parseInt(s.substring(19, 22)), s.substring(25));
+		else if (s[i+1].equals("M")){ // mineral planet
+			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			sat = new MineralPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
+			i+=13;
 		}
-		else if (s.charAt(5) == 'O'){ // the sun
+		else if (s[i+1].equals("O")) { // the sun
+			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6]);
 			sat = new Sun(this);
+			i+=7;
 		}
 		else { // space station
-			sat = new Station(this, Integer.parseInt(s.substring(7, 10)), Integer.parseInt(s.substring(11, 14)), Integer.parseInt(s.substring(15, 18)), s.substring(25));		
+			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12] + " " + s[i+13] + " " + s[i+14] + " " + s[i+15]);
+			sat = new Station(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), s[i+2]);	
+			i+=16;
+			sat.setOwner(s[13]);
 		}
-		sat.setOwner(s.substring(23, 24));
 		satellites.add(sat); // add to list of satellites
+		return i;
 	}
 	
 	public void addToMap() {
@@ -285,18 +271,7 @@ public class ClientController {
 
 	/* GAME TURN */
 	
-	public void setUp() {
-		/* claim a space station set up */
-		status = "SetUp";
 
-		printToInstructionArea(player.getName() + ": Click on a space station to claim it");
-		status = "Claiming";
-		while (status.equals("Claiming")) {
-			System.out.print("");
-		}
-		
-		status = "";
-	}
 	
 	public void collectResources() {
 		/* current player collects resources in AoI */
@@ -435,6 +410,8 @@ public class ClientController {
 	}	
 	
 	
+	/* Main functions */
+	
 	public int firstContact() {
 		getMessage();
 		String s[] = input.split(Globals.delim);
@@ -455,6 +432,106 @@ public class ClientController {
 		return 0;
 	}
 	
+	public void createComponents() {
+		status = "StartUp";
+		
+		window = new Window(this);
+		
+		infoPanel = new InfoPanel(this);
+		window.add(infoPanel);
+		
+		map = new Map(this);
+		window.add(map);
+		
+		infoPanel2 = new InfoPanel2(this);
+		window.add(infoPanel2);
+		
+		window.pack();
+		window.update();		
+	}
+	
+	public int updatePlayer(String s[], int i, int p) {
+		if (s[p].equals(clientPlayerNum)) {
+			i = player.update(s, i);
+		}
+		else {
+			i = opponent.update(s, i);
+		}
+		return i;
+	}
+	
+	public void startup() { // create components
+		createComponents();
+		getMessage();
+		
+		String s[] = input.split(Globals.delim);
+		// state = start up
+
+		// currentPlayer = s[1]
+		// s[2] = "player"
+		int i = updatePlayer(s, 2, 3);
+		i = updatePlayer(s, i, i+1);
+		int numOfSat = Integer.parseInt(s[i++]);
+		for (int j = 0; j < numOfSat; j++) {
+			//i = getSat(s[i+1]).update(s, i);
+			i = addSat(s, i);
+		}
+		addToMap();
+		System.out.println(satellites.size());
+		updateMap();
+		status = "Wait";
+		
+		if (! s[1].equals(clientPlayerNum)) {
+			printToInstructionArea(opponent.getName() + " goes first. Please wait.");
+		}
+		
+	}
+	
+	public void claimStation() {
+		getMessage();
+		String s[] = input.split(Globals.delim);
+		
+		// s[0] = claim station
+		// s[1] = currentPlayer
+		// s[2] = player
+		int i = updatePlayer(s, 2, 3);
+		i = updatePlayer(s, i, i+1);
+		int numOfSat = Integer.parseInt(s[i++]);
+		for (int j = 0; j < numOfSat; j++) {
+			System.out.println(i + " " + s[i]);
+			i = getSat(s[i+2]).update(s, i);
+		}
+		updateMap();
+		
+		
+		printToInstructionArea(player.getName() + ": Click on a space station to claim it");
+		status = "Claiming";
+		while (status.equals("Claiming")) {
+			System.out.print("");
+		}
+		
+		status = "Wait";
+		
+		getCurrentState("claim end");
+		sendMessage();
+		
+	}
+	
+	public void getCurrentState(String state) {
+		ArrayList<String> aList = new ArrayList<String>();
+		aList.add(state);
+		aList.add(clientPlayerNum);
+		aList.add(player.printState());
+		aList.add(opponent.printState());
+		aList.add(Integer.toString(satellites.size()));
+		for (Satellite s : satellites) {
+			aList.add(s.printState());
+		}
+		
+		currentState = Globals.addDelims(aList);
+		
+	}
+	
 	/* MAIN */
 	
 	public static void main(String[] args) {
@@ -463,7 +540,9 @@ public class ClientController {
 		ClientController control = new ClientController();
 		control.connectToServer();	
 		control.firstContact();
-		close();
+		control.startup(); // create the window
+		control.claimStation();
+		//close();
 	}
 
 }

@@ -26,6 +26,10 @@ public class Player {
 		server = svr;
 	}
 	
+	public Player(ClientController c) {
+		control = c;
+	}
+	
 	public Player(ClientController clientController, String n){
 		// making a new player
 		num = n;
@@ -81,11 +85,8 @@ public class Player {
 		if (numStations == 0) // skip empty section
 			i++;
 		numPlanets = Integer.parseInt(ary[i++]);
-		System.out.println(printState() + "    numPlanets");
 		gas = Integer.parseInt(ary[i++]);
-		System.out.println(printState() + "    gas");
 		water = Integer.parseInt(ary[i++]);
-		System.out.println(printState() + "    water");
 		mineral = Integer.parseInt(ary[i++]);
 		
 		System.out.println("updated player " + printState());

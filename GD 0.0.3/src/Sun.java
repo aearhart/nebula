@@ -21,7 +21,7 @@ public class Sun extends Satellite implements MouseListener{
 		
 		// image
 		setImage("Sun.png");
-
+		//num = "s0";
 		this.setColors(blank, Color.BLACK, Color.ORANGE);
 		addMouseListener(this);
 	}

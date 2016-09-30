@@ -6,10 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Planet extends Satellite implements MouseListener {
-
-	protected int costGas = 0;
-	protected int costWater = 0;
-	protected int costMineral = 0;
 	
 	public Planet(Integer locX, Integer locY, Integer sz, Integer numResources) {
 		super(locX, locY, sz);
@@ -53,11 +49,11 @@ public class Planet extends Satellite implements MouseListener {
 		ArrayList<String> aList = new ArrayList<String>();
 		aList.add("planet");
 		aList.add(t);
+		aList.add(num);
+		aList.add(name);
 		aList.add(Integer.toString(x));
 		aList.add(Integer.toString(y));
 		aList.add(Integer.toString(s));
-		aList.add(num);
-		aList.add(name);
 		aList.add(Integer.toString(costWater));
 		aList.add(Integer.toString(costMineral));
 		aList.add(Integer.toString(costGas));
@@ -69,8 +65,25 @@ public class Planet extends Satellite implements MouseListener {
 	}
 	
 	@Override
-	public void update(String s) {
+	public int update(String[] ary, int i) {
+		// planet, type, x, y, size, num, name, costWater, costMineral, costGas, resource, ownerNum, level
+		if (! ary[i++].equals("planet"))
+			return -1;
+		t = ary[i++];
+		num = ary[i++];
+		name = ary[i++];
+		x = Integer.parseInt(ary[i++]);
+		y = Integer.parseInt(ary[i++]);
+		s = Integer.parseInt(ary[i++]);
+		costWater = Integer.parseInt(ary[i++]);
+		costMineral = Integer.parseInt(ary[i++]);
+		costGas = Integer.parseInt(ary[i++]);
+		resource = Integer.parseInt(ary[i++]);
+		ownerNum = ary[i++];
+		level = Integer.parseInt(ary[i++]);
 		
+		setOwner(ownerNum);
+		return i;
 	}
 	
 	public String info() {

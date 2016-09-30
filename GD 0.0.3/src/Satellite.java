@@ -13,8 +13,8 @@ public class Satellite extends JComponent {
 	protected ClientController control;
 	
 	// Attributes
-	protected String name = "";
-	protected String num = "0";
+	protected String name = " ";
+	protected String num = "s0";
 	protected String t = "O"; // O for sun
 	protected Integer resource = 0;
 	
@@ -30,6 +30,9 @@ public class Satellite extends JComponent {
 	protected Player owner = null;
 	protected Color ownerColor;
 	
+	int costWater = 0;
+	int costGas = 0;
+	int costMineral = 0;
 
 	protected int level = 0;
 	protected int maxLevel = 5;
@@ -55,41 +58,32 @@ public class Satellite extends JComponent {
 		ArrayList<String> aList = new ArrayList<String>();
 		aList.add("satellite");
 		aList.add(t);
+		aList.add(num);
+		aList.add(name);
 		aList.add(Integer.toString(x));
 		aList.add(Integer.toString(y));
 		aList.add(Integer.toString(s));
 		return Globals.addDelims(aList);
 	}
 	
-	public void update(String str) {
+	public int update(String[] ary, int i) {
 		/* UPDATE to satellite from server
 		 satellite, type, x, y, size   */
-		String[] s = str.split(Globals.delim);
-		
-		x = Integer.parseInt();
-		y = Integer.parseInt();
-		s = Integer.parseInt();
-		resource = Integer.parseInt();
-		if (ownerNum.equals("0")) // update owner if not currently owned
-			setOwner();
-	}
-	
-	
-	// eventually this should be imported
-	private String padLeft(String s, int n) { 
-	    return String.format("%1$" + n + "s", s).replace(' ', '0');
-	}
-
-	// eventually this should be imported
-	private String padLeft(int s, int n) { 
-	   // String str = String.format("%1$" + n + "s", Integer.toString(s)).replace(' ', '0');
-	   // return str.substring(str.length() - n);
-		
-		return String.format("%1$" + n + "s", Integer.toString(s)).replace(' ', '0');
+		if (! ary[i++].equals("satellite"))
+			return -1;
+		t = ary[i++];
+		num = ary[i++];
+		name = ary[i++];
+		x = Integer.parseInt(ary[i++]);
+		y = Integer.parseInt(ary[i++]);
+		s = Integer.parseInt(ary[i++]);
+		return i;
 	}
 	
 	public void setOwner(String own) {
 		/* set owner given string determining owner --used for UPDATES */
+		if (control == null)
+			return; // don't need to set owner variable
 		if ((own).equals(control.getPlayer().getNum())) { // equals current player
 			owner = control.getPlayer();
 			ownerNum = owner.getNum();
