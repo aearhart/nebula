@@ -140,7 +140,7 @@ public class ClientController {
 			winner = s[1];
 			System.out.println(winner + " just won.");
 			
-			int i = updatePlayer(s, 2, 3);
+			int i = updatePlayer(s, 2, 3); 
 			i = updatePlayer(s, i, i+1);
 			int numOfSat = Integer.parseInt(s[i++]);
 			for (int j = 0; j < numOfSat; j++) {
