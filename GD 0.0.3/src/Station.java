@@ -87,7 +87,8 @@ public class Station extends Satellite implements MouseListener {
 		MineralResource = Integer.parseInt(ary[i++]);
 		ownerNum = ary[i++];
 		level = Integer.parseInt(ary[i++]);
-		setOwner(ownerNum);
+		if(owner == null)
+			setOwner(ownerNum);
 		return i;
 	}
 

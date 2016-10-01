@@ -123,7 +123,7 @@ public class ClientController {
 			i = updatePlayer(s, i, i+1);
 			int numOfSat = Integer.parseInt(s[i++]);
 			for (int j = 0; j < numOfSat; j++) {
-				System.out.println(i + " " + s[i]);
+				//System.out.println(i + " " + s[i]);
 				i = getSat(s[i+2]).update(s, i);
 			}	
 			updateMap(); // update map
@@ -144,7 +144,7 @@ public class ClientController {
 			i = updatePlayer(s, i, i+1);
 			int numOfSat = Integer.parseInt(s[i++]);
 			for (int j = 0; j < numOfSat; j++) {
-				System.out.println(i + " " + s[i]);
+				//System.out.println(i + " " + s[i]);
 				i = getSat(s[i+2]).update(s, i);
 			}
 			updateMap();
@@ -280,7 +280,7 @@ public class ClientController {
 		/* upgrade or buy a space station/planet */
 		printToInstructionArea("Click on a planet or space station to upgrade.");
 		while (status.equals("Upgrade")) { // continue until player successfully spends turn
-			System.out.println("!"); 
+			System.out.print(""); 
 		}
 	}
 	

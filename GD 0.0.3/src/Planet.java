@@ -82,7 +82,8 @@ public class Planet extends Satellite implements MouseListener {
 		ownerNum = ary[i++];
 		level = Integer.parseInt(ary[i++]);
 		
-		setOwner(ownerNum);
+		if(owner == null)
+			setOwner(ownerNum);
 		return i;
 	}
 	
@@ -125,7 +126,7 @@ public class Planet extends Satellite implements MouseListener {
 					control.printToHoverArea("This planet is owned by someone else. Don't throw resources at " + control.getOpponent().getName() + ".");
 				}
 				if (this.owner == null && canPurchase()) { // not owned, buying the planet
-					upgradeSatellite();
+					addSatellite();
 					control.setStatus("EndTurn");
 					control.printToHoverArea(this.getName() + " is now level " + level + ", gives out " + this.getResources() + ".");
 					control.printToPlayerArea();
