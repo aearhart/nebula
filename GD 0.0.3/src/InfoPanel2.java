@@ -38,9 +38,11 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		// Hover Area
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.NORTHWEST;
-		c.gridx = 0; c.gridy = 0;
+		c.gridx = 0;
+		c.gridy = 0;
 		c.fill = GridBagConstraints.BOTH;
-		c.ipadx = 5; c.ipady = 10;
+		c.weightx = 1.0;
+		c.weighty = 1.0;
 		c.insets = new Insets(5, 5, 5, 5);
 		hoverArea = new JTextArea(20, 3);
 		hoverArea.setPreferredSize(new Dimension(100, 300));
@@ -52,10 +54,11 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		hoverArea.setText(hoverText);
 		hoverArea.setEditable(false);
 		this.add(hoverArea, c);
-		  
+		
 		// skip button
 		c.gridx = 0; c.gridy = 1;
 		//c.gridwidth =1; c.gridheight =1;
+		c.ipadx = 5; c.ipady = 10;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		// testing with buttons
 		JButton b1 = new JButton("Wait turn.");
