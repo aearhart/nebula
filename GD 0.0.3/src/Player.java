@@ -71,7 +71,7 @@ public class Player {
 	}
 	
 	public int update(String[] ary, int i) {
-		// player @@ num @@ name @@ R @@ G @@ B @@ numStations @@ stationList @@ numPlanets @@ gas @@ wate @@ mineral
+		// player @@ num @@ name @@ R @@ G @@ B @@ numStations @@ stationList @@ numPlanets @@ gas @@ water @@ mineral
 		// i         +1     +2     +3   +4    +5     +6             +7             +8          +9     +10     +12
 		if (! ary[i++].equals("player"))
 			return -1;
@@ -87,10 +87,16 @@ public class Player {
 		}
 		if (numStations == 0) // skip empty section
 			i++;
-		numPlanets = Integer.parseInt(ary[i++]);
+		
+
+		//numPlanets = Integer.parseInt(ary[i++]);
+		i++; // skipping this step because updating the planets does this already. TODO I think I'd rather this handle it than planet but this will do for now.
+		
+		
 		gas = Integer.parseInt(ary[i++]);
 		water = Integer.parseInt(ary[i++]);
 		mineral = Integer.parseInt(ary[i++]);
+		
 		return i;
 	}
 	
@@ -152,7 +158,10 @@ public class Player {
 	}
 	
 	public void addPlanet() {
+		
 		numPlanets++;
+		
+		System.out.println("Player " + name + " added a planet. They now have " + numPlanets + " planets.");
 	}
 
 	public int getNumStations(){

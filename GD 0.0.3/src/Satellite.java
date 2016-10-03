@@ -114,6 +114,7 @@ public class Satellite extends JComponent {
 			this.setColors(owner.getColor(), this.getBorderCol(), this.getSelectCol());
 		}
 		else { // it's a planet
+			owner.addPlanet();
 			ownerColor = owner.getColor();
 		}
 	}
@@ -123,13 +124,26 @@ public class Satellite extends JComponent {
 		return (control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMineral && control.getPlayer().getWater() >= costWater);
 	}
 	
+	protected void addSatellite() {
+		control.getPlayer().subGas(costGas);
+		control.getPlayer().subMineral(costMineral);
+		control.getPlayer().subWater(costWater);
+		level++;
+		setOwner(control.getPlayer());
+		repaint();
+		// cost doubles
+		costGas += costGas;
+		costMineral += costMineral;
+		costWater += costWater;
+		this.addResources(3);
+	}
+	
 	protected void upgradeSatellite() {
 		/* after buying/upgrading update Satellite and Player info*/
 		control.getPlayer().subGas(costGas);
 		control.getPlayer().subMineral(costMineral);
 		control.getPlayer().subWater(costWater);
 		level++;
-		setOwner(control.getPlayer());
 		repaint();
 		// cost doubles
 		costGas += costGas;
