@@ -52,7 +52,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		hoverArea.setText(hoverText);
 		hoverArea.setEditable(false);
 		this.add(hoverArea, c);
-		
+		  
 		// skip button
 		c.gridx = 0; c.gridy = 1;
 		//c.gridwidth =1; c.gridheight =1;

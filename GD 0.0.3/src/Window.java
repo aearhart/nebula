@@ -6,7 +6,7 @@ public class Window extends JFrame {
 	
 	private Map map;
 	private ClientController control;
-	
+	 
 	public Window(ClientController clientController, String playerName) {
 		super("Game Demo 0.0.3 for " + playerName);
 		this.setLayout(new FlowLayout());

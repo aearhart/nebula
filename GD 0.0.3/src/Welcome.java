@@ -42,7 +42,7 @@ public class Welcome extends JPanel implements ActionListener{
 		textArea.setEditable(false);
 		textArea.setFont(f1);
 		textArea.setText(areaText);
-		
+		 
 		//JScrollPane scrollPane = new JScrollPane(textArea);
 		
 		JButton b1 = new JButton("Yes");

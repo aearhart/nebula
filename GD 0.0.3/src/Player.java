@@ -105,7 +105,7 @@ public class Player {
 				//e.printStackTrace();
 				System.out.print("threading error");
 			}
-		}
+		} 
 		w.close();
 	}
 	
