@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
+
 public class Player {
 	public String name;
 
@@ -34,6 +36,7 @@ public class Player {
 		// making a new player
 		num = n;
 		name = "Player" + n; // name currently can't have @@
+		askName();
 		control = clientController;
 		if (num.equals("P1")) { // eventually could potentially choose colors
 			R = 230;
@@ -89,6 +92,21 @@ public class Player {
 		water = Integer.parseInt(ary[i++]);
 		mineral = Integer.parseInt(ary[i++]);
 		return i;
+	}
+	
+	public void askName() {
+		Welcome w = new Welcome(this);
+		int i = 0;
+		while (w.notFinished()) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				System.out.print("threading error");
+			}
+		}
+		w.close();
 	}
 	
 	public void updateStations(String sat) {

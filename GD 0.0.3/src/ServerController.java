@@ -16,6 +16,7 @@ public class ServerController {
 	private static String input = "";
 	private static String currentState = "";
 	private Boolean valid = true;
+	private Boolean noName = true;
 	
 	private Player p1 = new Player(this);
 	private Player p2 = new Player(this);
@@ -56,6 +57,10 @@ public class ServerController {
 			error();
 		}
 		System.out.println("Receiving information from Socket " + socket.getInetAddress() + "...  " + input);
+	}
+	
+	public void setName() {
+		noName = false;
 	}
 	
 	public void sendMessage(Socket socket)  {

@@ -23,8 +23,8 @@ public class InfoPanel extends JPanel implements ActionListener{
 	private ClientController control; 
 	private Player player;
 	
-	private String string1;
-	private String string2;
+	private String instructionText = "Welcome to Game Demo 0.0.3! \nPlease wait while we are setting up the game.";
+	private String playerText;// = "Hello " + control.getPlayer().getName() + ", you can find your stats here.";
 	private char [] chars;
 	
 	private JTextArea instructionArea;
@@ -32,7 +32,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	public InfoPanel(ClientController clientController) {
 		control = clientController;
-
+		playerText = "Hello " + control.getPlayer().getName() + ", you can find your stats here.";
 		this.setPreferredSize(new Dimension (300,1000));
 		
 		//this.setLayout(new GridLayout(3, 1, 0, 5));
@@ -56,11 +56,8 @@ public class InfoPanel extends JPanel implements ActionListener{
 		
 		// PANEL 1
 		c.gridx = 0; c.gridy = 1;
-		//c.ipady = 100;
-		//c. ipadx = 5; c.ipady = 300;
 		c.insets = new Insets(5, 5, 5, 5);
 		c.fill = GridBagConstraints.BOTH;
-		string1 = "Welcome to Game Demo 0.0.2!";
 		instructionArea = new JTextArea(20, 3);
 		playerArea = new JTextArea(20, 3);
 		instructionArea.setPreferredSize(new Dimension(100, 300));
@@ -74,7 +71,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		//instructionArea.setRows(1);
 		instructionArea.setLineWrap(true);
 		instructionArea.setWrapStyleWord(true);
-		instructionArea.setText(string1);
+		instructionArea.setText(instructionText);
 		instructionArea.setEditable(false);
 		this.add(instructionArea, c);
 		
@@ -105,7 +102,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		//playerArea.setColumns(10);
 		playerArea.setLineWrap(true);
 		playerArea.setWrapStyleWord(true);
-		playerArea.setText(string1);
+		playerArea.setText(playerText);
 		playerArea.setEditable(false);
 		
 		this.add(playerArea, c);

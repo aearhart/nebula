@@ -280,7 +280,13 @@ public class ClientController {
 		/* upgrade or buy a space station/planet */
 		printToInstructionArea("Click on a planet or space station to upgrade.");
 		while (status.equals("Upgrade")) { // continue until player successfully spends turn
-			System.out.println("!"); 
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				System.out.print("threading error");
+			}
 		}
 	}
 	
@@ -388,7 +394,7 @@ public class ClientController {
 	public void createComponents() {
 		status = "StartUp";
 		
-		window = new Window(this);
+		window = new Window(this, player.getName());
 		
 		infoPanel = new InfoPanel(this);
 		window.add(infoPanel);
@@ -458,7 +464,13 @@ public class ClientController {
 		printToInstructionArea(player.getName() + ": Click on a space station to claim it");
 		status = "Claiming";
 		while (status.equals("Claiming")) {
-			System.out.print("");
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				System.out.print("threading error");
+			}
 		}
 		
 		waitTurn();
@@ -508,7 +520,12 @@ public class ClientController {
 	}
 	
 	public void win() {
-		printToInstructionArea(winner + " just won. Thank you for playing. Click anywhere to close");
+		if (winner.equals(clientPlayerNum)) {
+		printToInstructionArea("You won! Congratulations " + player.getName() + ". Thank you for playing. Click anywhere to close.");
+		}
+		else
+			printToInstructionArea(opponent.getName() + " just won. You should play again to enact your revenge! Click anywhere to close.");
+		
 	}
 	
 	/* MAIN */

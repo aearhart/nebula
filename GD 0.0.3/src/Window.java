@@ -7,8 +7,8 @@ public class Window extends JFrame {
 	private Map map;
 	private ClientController control;
 	
-	public Window(ClientController clientController) {
-		super("Game Demo 0.0.2");
+	public Window(ClientController clientController, String playerName) {
+		super("Game Demo 0.0.3 for " + playerName);
 		this.setLayout(new FlowLayout());
 		control = clientController;
 		this.setResizable(false);
@@ -16,6 +16,7 @@ public class Window extends JFrame {
 	
 		//Map m = new Map();
 		//this.add(m);
+		this.setLocationRelativeTo(null);
 		this.setVisible(true);
 	}
 	/*
