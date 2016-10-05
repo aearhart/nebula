@@ -142,7 +142,7 @@ public class Player {
 
 	
 	public void addStationToList(Satellite satellite) {
-		stationList.add("s" + satellite.getName());
+		stationList.add("s" + satellite.getNum());
 	}
 	
 	public void setColor(Color c) {
@@ -169,7 +169,7 @@ public class Player {
 	}
 	
 	public void addStation(Satellite satellite) {
-		if (! stationList.contains("s" + satellite.getName())) {
+		if (! stationList.contains("s" + satellite.getNum())) {
 			stations.add((Station) satellite);
 			addStationToList(satellite);
 			numStations++;

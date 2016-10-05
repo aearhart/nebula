@@ -141,6 +141,8 @@ public class Station extends Satellite implements MouseListener {
 					control.setStatus("collectResources");
 					control.printToHoverArea("Upgraded station to level " + level + ".");
 					control.printToPlayerArea();
+					control.removeAoI();
+					control.drawAoI(this);
 				}
 				else { // you don't have the resources
 					control.printToHoverArea("You don't have enough resources to upgrade this station. Patience, " + owner.getName());
