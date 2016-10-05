@@ -198,6 +198,7 @@ public class ServerController {
 	
 	/* GAMEPLAY methods */
 	
+	
 	/* first contact */
 	public void firstContact() {
 		currentState = "firstContact" + Globals.delim + currentPlayer;

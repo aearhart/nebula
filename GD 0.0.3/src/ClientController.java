@@ -182,30 +182,32 @@ public class ClientController {
 		
 		// determine type
 		if (s[i+1].equals("W")) { // water planet
-			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
 			sat = new WaterPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
-			i+=13;
+			i+=15;
 		}
 		else if (s[i+1].equals("G")) { // gas planet
-			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
 			sat = new GasPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
-			i+=13;
+			i+=15;
 		}
 		else if (s[i+1].equals("M")){ // mineral planet
-			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
 			sat = new MineralPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
-			i+=13;
+			i+=15;
 		}
 		else if (s[i+1].equals("O")) { // the sun
-			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6]);
+			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6]);
 			sat = new Sun(this);
-			i+=7;
+			i+=10;
 		}
 		else { // space station
-			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12] + " " + s[i+13] + " " + s[i+14] + " " + s[i+15]);
+			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12] + " " + s[i+13] + " " + s[i+14] + " " + s[i+15]);
 			sat = new Station(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), s[i+2]);	
+
+			System.out.println(s[i+15] + " <-- owner?");
+			sat.setOwner(s[i+15]);
 			i+=16;
-			sat.setOwner(s[13]);
 		}
 		satellites.add(sat); // add to list of satellites
 		return i;
@@ -236,6 +238,64 @@ public class ClientController {
 		}
 	}
 	
+	
+
+	public Boolean withinSector (double x, double y, int sector) {
+		double D = .5*Globals.winSize;
+		double root3 = Math.pow(3, .5);
+		if (x < 0 || x > Globals.winSize || y < 0 || y > Globals.winSize)
+			return false;
+		switch(sector) {
+			case 1: {
+				if (y > D)
+					return false;
+				if (x  > ((y/root3) + (D - (D/root3))))
+					return false;
+			}
+			case 2: {
+				if (y > D)
+					return false;
+				if (x  < ((y/root3)  + (D - (D/root3))))
+					return false;
+				if (x > ((y/root3) + D))
+					return false;
+			}
+			case 3: {
+				if (y > D)
+					return false;
+				if (x < ((y/root3) + D))
+					return false;
+			}
+			case 4: {
+				if (y < D)
+					return false;
+				if (x < (((y - D)/root3) + D))
+					return false;
+			}
+			case 5: {
+				if (y < D)
+					return false;
+				if (x > (((y - D)/root3) + D))
+					return false;
+				if (x < (((y - D)/root3) + (D - (D/root3))))
+					return false;
+			}
+			case 6: {
+				if (y < D)
+					return false;
+				if (x > (((y - D)/root3) + (D - (D/root3))))
+					return false;
+			}
+		}
+		return true;
+	}
+
+	public void findSector (double x, double y) {
+		for (int i = 1; i <= 6; i++)
+			if(withinSector(x, y, i))
+				System.out.println(i);
+	}
+	
 
 	/* GAME TURN */
 	
@@ -247,27 +307,14 @@ public class ClientController {
 		// for each station
 		str += "\nResources collected:";
 		for (Station stat: player.getStations()) {
-			player.addWater(1);
-			player.addGas(1);
-			player.addMineral(1);
+			str += stat.collectResources(player);
 			for (Satellite sat: satellites) {
-				if ( !(sat instanceof Station) && (!(sat instanceof Sun)) && (withinDistance(stat, sat))) {
-					str += "\n+" + ((Planet) sat).getResources() + " " + 
-							((Planet) sat).getType() + " from " + sat.getName() + ".";
-
+				if (!(sat instanceof Sun) && withinDistance(stat, sat)) {
+					str += sat.collectResources(player);
 					//System.out.println("planet: " + all[p].getMidX() + " " + all[p].getMidY());
 					//System.out.println("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
-
-					if (sat instanceof WaterPlanet) {
-						player.addWater(((Planet) sat).getResources());
-					}
-					else if (sat instanceof MineralPlanet){
-						player.addMineral(((Planet) sat).getResources());
-					}
-					else
-						player.addGas(((Planet) sat).getResources());
 				}
-				}
+			}
 		}
 		printToPlayerArea(player.info() + str);
 		status = "Upgrade";

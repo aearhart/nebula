@@ -16,8 +16,23 @@ public class Satellite extends JComponent {
 	protected String name = " ";
 	protected String num = "s0";
 	protected String t = "O"; // O for sun
-	protected Integer resource = 0;
 	
+	// resources given out by satellite
+	protected int gasResource = 0;
+	protected int mineralResource = 0;
+	protected int waterResource = 0;
+	
+	// cost of upgrading satellite
+	protected int costGas = 0;
+	protected int costMineral = 0;
+	protected int costWater = 0;
+	
+	// upgrading satellite leads to change in resources
+	protected int gasUpgrade = 3;
+	protected int mineralUpgrade = 3;
+	protected int waterUpgrade = 3;
+	
+	// location of satellite
 	protected Integer x;
 	protected Integer y;
 	protected Integer s = 100; // size of sphere
@@ -29,10 +44,6 @@ public class Satellite extends JComponent {
 	protected String ownerNum = "0"; // default not owned
 	protected Player owner = null;
 	protected Color ownerColor;
-	
-	int costWater = 0;
-	int costGas = 0;
-	int costMineral = 0;
 
 	protected int level = 0;
 	protected int maxLevel = 5;
@@ -63,6 +74,10 @@ public class Satellite extends JComponent {
 		aList.add(Integer.toString(x));
 		aList.add(Integer.toString(y));
 		aList.add(Integer.toString(s));
+		aList.add(Integer.toString(gasResource));
+		aList.add(Integer.toString(mineralResource));
+		aList.add(Integer.toString(waterResource));
+		
 		return Globals.addDelims(aList);
 	}
 	
@@ -77,14 +92,19 @@ public class Satellite extends JComponent {
 		x = Integer.parseInt(ary[i++]);
 		y = Integer.parseInt(ary[i++]);
 		s = Integer.parseInt(ary[i++]);
+		gasResource = Integer.parseInt(ary[i++]);
+		mineralResource = Integer.parseInt(ary[i++]);
+		waterResource = Integer.parseInt(ary[i++]);
 		return i;
 	}
 	
 	public void setOwner(String own) {
 		/* set owner given string determining owner --used for UPDATES */
+		System.out.println("setting owner: " + own);
+		
 		if (control == null)
 			return; // don't need to set owner variable
-		if ((own).equals(control.getPlayer().getNum())) { // equals current player
+		else if ((own).equals(control.getPlayer().getNum())) { // equals current player
 			owner = control.getPlayer();
 			ownerNum = owner.getNum();
 			setOwnerInfo();
@@ -124,18 +144,10 @@ public class Satellite extends JComponent {
 		return (control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMineral && control.getPlayer().getWater() >= costWater);
 	}
 	
-	protected void addSatellite() {
-		control.getPlayer().subGas(costGas);
-		control.getPlayer().subMineral(costMineral);
-		control.getPlayer().subWater(costWater);
-		level++;
+	protected void addSatelliteOwner() {
 		setOwner(control.getPlayer());
-		repaint();
-		// cost doubles
-		costGas += costGas;
-		costMineral += costMineral;
-		costWater += costWater;
-		this.addResources(3);
+		upgradeSatellite();
+		
 	}
 	
 	protected void upgradeSatellite() {
@@ -144,12 +156,17 @@ public class Satellite extends JComponent {
 		control.getPlayer().subMineral(costMineral);
 		control.getPlayer().subWater(costWater);
 		level++;
-		repaint();
-		// cost doubles
+		repaint(); 
 		costGas += costGas;
 		costMineral += costMineral;
 		costWater += costWater;
-		this.addResources(3);
+		this.addResources();
+	}
+	
+	protected void addResources() {
+		gasResource += gasUpgrade;
+		mineralResource += mineralUpgrade;
+		waterResource += waterUpgrade;
 	}
 	
 	/* basic get/set/add methods */
@@ -187,16 +204,22 @@ public class Satellite extends JComponent {
 		t = str;
 	}
 	
-	public int getResources() {
-		return resource;
-	}
-	
-	public void setResource(int n) {
-		resource = n;
-	}
-	
-	public void addResources(int n) {
-		resource += n;
+	public String collectResources(Player p) {
+		p.addGas(gasResource);
+		p.addMineral(mineralResource);
+		p.addWater(waterResource);
+		String s = "Planet " + num;
+		
+		if (t.equals("G")) {
+			s += " produced \u07F7" + gasResource;
+		}
+		else if (t.equals("M")) {
+			s += " produced " + mineralResource + " mineral";
+		}
+		else {
+			s += " produced " + waterResource + " water";
+		}
+		return s;
 	}
 	
 	public String getNum() {

@@ -7,9 +7,8 @@ import java.util.List;
 
 public class Planet extends Satellite implements MouseListener {
 	
-	public Planet(Integer locX, Integer locY, Integer sz, Integer numResources) {
+	public Planet(Integer locX, Integer locY, Integer sz) {
 		super(locX, locY, sz);
-		this.setResource(numResources);
 		
 		costWater = 3;
 		costMineral = 3;
@@ -18,10 +17,9 @@ public class Planet extends Satellite implements MouseListener {
 		addMouseListener(this); 
 	}
 	
-	public Planet(ClientController clientController, Integer locX, Integer locY, Integer sz, Integer numResources) {
+	public Planet(ClientController clientController, Integer locX, Integer locY, Integer sz) {
 		super(clientController, locX, locY, sz);
 		control = clientController;
-		this.setResource(numResources);
 		
 		costWater = 3;
 		costMineral = 3;
@@ -57,7 +55,9 @@ public class Planet extends Satellite implements MouseListener {
 		aList.add(Integer.toString(costWater));
 		aList.add(Integer.toString(costMineral));
 		aList.add(Integer.toString(costGas));
-		aList.add(Integer.toString(resource));
+		aList.add(Integer.toString(gasResource));
+		aList.add(Integer.toString(mineralResource));
+		aList.add(Integer.toString(waterResource));
 		aList.add(ownerNum);
 		aList.add(Integer.toString(level));
 		
@@ -78,7 +78,9 @@ public class Planet extends Satellite implements MouseListener {
 		costWater = Integer.parseInt(ary[i++]);
 		costMineral = Integer.parseInt(ary[i++]);
 		costGas = Integer.parseInt(ary[i++]);
-		resource = Integer.parseInt(ary[i++]);
+		gasResource = Integer.parseInt(ary[i++]);
+		mineralResource = Integer.parseInt(ary[i++]);
+		waterResource = Integer.parseInt(ary[i++]);
 		ownerNum = ary[i++];
 		level = Integer.parseInt(ary[i++]);
 		
@@ -89,7 +91,18 @@ public class Planet extends Satellite implements MouseListener {
 	
 	public String info() {
 		/* return info of planet */
-		String str = getName() + ":\nLevel " + level + "\nResources: " + this.getResources() + "\nCost: " + costWater + " water, " + costMineral + " metal, " + costGas + " gas.";
+		String str = "";
+		if (t.equals("G")) {
+			str = "Gas planet " + getNum() + " (" + getName() + ") is level " + level + ".\nProduces: " + gasResource + " gas\nUpgrade cost: " + costGas + "g " + costMineral + "m " + costWater + "w";			
+		}
+		else if (t.equals("M")) {
+
+			str = "Mineral planet " + getNum() + " (" + getName() + ") is level " + level + ".\nProduces: " + mineralResource + " mineral\nUpgrade cost: " + costGas + "g " + costMineral + "m " + costWater + "w";	
+		}
+		else {
+
+			str = "Water planet " + getNum() + " (" + getName() + ") is level " + level + ".\nProduces: " + waterResource + " water\nUpgrade cost: " + costGas + "g " + costMineral + "m " + costWater + "w";	
+		}
 		return str;
 	}
 	
@@ -126,9 +139,9 @@ public class Planet extends Satellite implements MouseListener {
 					control.printToHoverArea("This planet is owned by someone else. Don't throw resources at " + control.getOpponent().getName() + ".");
 				}
 				if (this.owner == null && canPurchase()) { // not owned, buying the planet
-					addSatellite();
+					addSatelliteOwner();
 					control.setStatus("EndTurn");
-					control.printToHoverArea(this.getName() + " is now level " + level + ", gives out " + this.getResources() + ".");
+					control.printToHoverArea(info());
 					control.printToPlayerArea();
 				}
 				else if (level > maxLevel) {
@@ -137,7 +150,7 @@ public class Planet extends Satellite implements MouseListener {
 				else if (this.owner == control.getPlayer() && canPurchase()) { // owned, upgrading planet
 					upgradeSatellite();
 					control.setStatus("EndTurn");
-					control.printToHoverArea(this.getName() + " is now level " + level + ", gives out " + this.getResources() + ".");
+					control.printToHoverArea(info());
 					control.printToPlayerArea();
 				}
 				else { // couldn't afford it

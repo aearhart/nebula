@@ -11,21 +11,13 @@ public class Station extends Satellite implements MouseListener {
 	private static final long serialVersionUID = 1L;
 	private int AreaOfInfluence = 100;
 	
-	protected int costGas = 0;
-	protected int costWater = 0;
-	protected int costMineral = 0;
-	protected int GasResource = 0;
-	protected int WaterResource = 0;
-	protected int MineralResource = 0;
-	
 	public Station(Integer locX, Integer locY, Integer sz, String n) {
 		super(locX, locY, sz);
 		
 		this.setType("S");
-		this.setResource(0);
-		costWater = 5;
-		costMineral = 5;
 		costGas = 5;
+		costMineral = 5;
+		costWater = 5;
 		this.setNum(n);
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);
@@ -35,10 +27,9 @@ public class Station extends Satellite implements MouseListener {
 		super(clientController, locX, locY, sz);
 		
 		this.setType("S");
-		this.setResource(0);
-		costWater = 5;
-		costMineral = 5;
 		costGas = 5;
+		costMineral = 5;
+		costWater = 5;
 		this.setNum(n);
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);
@@ -58,9 +49,10 @@ public class Station extends Satellite implements MouseListener {
 		aList.add(Integer.toString(costWater));
 		aList.add(Integer.toString(costGas));
 		aList.add(Integer.toString(costMineral));
-		aList.add(Integer.toString(GasResource));
-		aList.add(Integer.toString(WaterResource));
-		aList.add(Integer.toString(MineralResource));
+		aList.add(Integer.toString(gasResource));
+		aList.add(Integer.toString(mineralResource));
+		aList.add(Integer.toString(waterResource));
+
 		aList.add(ownerNum);
 		aList.add(Integer.toString(level));
 		return Globals.addDelims(aList);
@@ -82,9 +74,9 @@ public class Station extends Satellite implements MouseListener {
 		costWater = Integer.parseInt(ary[i++]);
 		costGas = Integer.parseInt(ary[i++]);
 		costMineral = Integer.parseInt(ary[i++]);
-		GasResource = Integer.parseInt(ary[i++]);
-		WaterResource = Integer.parseInt(ary[i++]);
-		MineralResource = Integer.parseInt(ary[i++]);
+		gasResource = Integer.parseInt(ary[i++]);
+		mineralResource = Integer.parseInt(ary[i++]);
+		waterResource = Integer.parseInt(ary[i++]);
 		ownerNum = ary[i++];
 		level = Integer.parseInt(ary[i++]);
 		if(owner == null)
@@ -92,6 +84,15 @@ public class Station extends Satellite implements MouseListener {
 		return i;
 	}
 
+	@Override
+	public String collectResources(Player p) {
+		p.addGas(gasResource);
+		p.addMineral(mineralResource);
+		p.addWater(waterResource);
+		String s = "Station " + num + "produced " + gasResource + "g " + mineralResource + "m " + waterResource + "w.";
+		return s;
+	}
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);

@@ -49,6 +49,7 @@ public class Map extends JPanel implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
+		control.findSector((double)e.getX(), (double)e.getY());
 		if (control.getStatus().equals("WIN"))
 			control.close();
 	}
