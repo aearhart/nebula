@@ -251,6 +251,7 @@ public class ClientController {
 					return false;
 				if (x  > ((y/root3) + (D - (D/root3))))
 					return false;
+				break;
 			}
 			case 2: {
 				if (y > D)
@@ -259,18 +260,21 @@ public class ClientController {
 					return false;
 				if (x > ((y/root3) + D))
 					return false;
+				break;
 			}
 			case 3: {
 				if (y > D)
 					return false;
 				if (x < ((y/root3) + D))
 					return false;
+				break;
 			}
 			case 4: {
 				if (y < D)
 					return false;
 				if (x < (((y - D)/root3) + D))
 					return false;
+				break;
 			}
 			case 5: {
 				if (y < D)
@@ -279,12 +283,14 @@ public class ClientController {
 					return false;
 				if (x < (((y - D)/root3) + (D - (D/root3))))
 					return false;
+				break;
 			}
 			case 6: {
 				if (y < D)
 					return false;
 				if (x > (((y - D)/root3) + (D - (D/root3))))
 					return false;
+				break;
 			}
 		}
 		return true;
