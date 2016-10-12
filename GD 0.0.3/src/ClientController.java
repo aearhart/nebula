@@ -186,17 +186,17 @@ public class ClientController {
 		// determine type
 		if (s[i+1].equals("W")) { // water planet
 			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
-			sat = new WaterPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
+			sat = new WaterPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), s[i+6], s[i+2]);
 			i+=15;
 		}
 		else if (s[i+1].equals("G")) { // gas planet
 			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
-			sat = new GasPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
+			sat = new GasPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), s[i+6], s[i+2]);
 			i+=15;
 		}
 		else if (s[i+1].equals("M")){ // mineral planet
 			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
-			sat = new MineralPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), Integer.parseInt(s[i+10]), s[i+2]);
+			sat = new MineralPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), s[i+6], s[i+2]);
 			i+=15;
 		}
 		else if (s[i+1].equals("O")) { // the sun
@@ -253,49 +253,57 @@ public class ClientController {
 					return false;
 				if (x  > ((y/root3) + (D - (D/root3))))
 					return false;
+				break;
 			}
 			case 2: {
 				if (y > D)
 					return false;
 				if (x  < ((y/root3)  + (D - (D/root3))))
 					return false;
-				if (x > ((y/root3) + D))
+				if (x > (((D - y)/root3) + D))
 					return false;
+				break;
 			}
 			case 3: {
 				if (y > D)
 					return false;
-				if (x < ((y/root3) + D))
+				if (x < (((D - y)/root3) + D))
 					return false;
+				break;
 			}
 			case 4: {
 				if (y < D)
 					return false;
 				if (x < (((y - D)/root3) + D))
 					return false;
+				break;
 			}
 			case 5: {
 				if (y < D)
 					return false;
 				if (x > (((y - D)/root3) + D))
 					return false;
-				if (x < (((y - D)/root3) + (D - (D/root3))))
+				if (x < (((D - y)/root3) + D))
 					return false;
+				break;
 			}
 			case 6: {
 				if (y < D)
 					return false;
-				if (x > (((y - D)/root3) + (D - (D/root3))))
+				if (x > (((D - y)/root3) + D))
 					return false;
 			}
 		}
 		return true;
 	}
 
-	public void findSector (double x, double y) {
+	public int findSector (double x, double y) {
 		for (int i = 1; i <= 6; i++)
-			if(withinSector(x, y, i))
-				System.out.println(i);
+			if(withinSector(x, y, i)) {
+				//System.out.println(i);
+				return i;
+			}
+		return 7;
 	}
 	
 

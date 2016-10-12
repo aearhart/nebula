@@ -212,26 +212,53 @@ public class ServerController {
 		definePlayer();
 	}
 	
-
 	public void createMap() {
 		// create the map
+		
+		Satellite s0 = new Sun();
+		satellites.add(s0);
+		int key = 1;
+		
+		Random ran = new Random();
+		int ws = Globals.winSize;
+		double[] xs = {.261843*ws, .500*ws, .738157*ws, .738157*ws, .500*ws, .261843*ws};
+		double[] ys = {.3625*ws, .225*ws, .6375*ws, .6375*ws, .775*ws, .3625*ws};
+		
+		List<Integer> sectors = new ArrayList<Integer>();
+		
+		sectors.add(0); sectors.add(1); sectors.add(2); sectors.add(3); sectors.add(4); sectors.add(5);
+		
+		for (int i = 0; i < 4; i++) {
+			int r = ran.nextInt(sectors.size());
+			int sect = sectors.get(r);
+			sectors.remove(r);
+			
+			
+			Satellite s = new Station((int)xs[sect], (int)ys[sect], 30, "s" + Integer.toString(key++));
+			satellites.add(s);
+		}
+	}
+	
+	public void createMapOld() {
+		// create the map
+
 		Satellite s00 = new Sun();
-		Satellite s01 = new WaterPlanet(450, 350, 30, 3, "s01");
-		Satellite s02 = new WaterPlanet(766, 388, 58, 2, "s02");
-		Satellite s03 = new WaterPlanet(140, 142, 70, 7, "s03");
-		Satellite s04 = new	WaterPlanet(217, 530, 35, 5, "s04");
-		Satellite s05 = new MineralPlanet(800, 104, 40, 5, "s05");
-		Satellite s06 = new MineralPlanet(657, 720, 62, 7, "s06");
-		Satellite s07 = new MineralPlanet(340, 460, 27, 2, "s07");
-		Satellite s08 = new MineralPlanet(500, 680, 36, 2, "s08");
-		Satellite s09 = new GasPlanet(645, 40, 26, 5, "s09"); 
-		Satellite s10 = new GasPlanet(300, 200, 83, 3, "s10");
-		Satellite s11 = new GasPlanet(240, 730, 47, 2, "s11");
-		Satellite s12 = new GasPlanet(700, 600, 50, 3, "s12");
+		Satellite s01 = new WaterPlanet(450, 350, "m", "s01");
+		Satellite s02 = new WaterPlanet(766, 388, "l", "s02");
+		Satellite s03 = new WaterPlanet(140, 142, "l", "s03");
+		Satellite s04 = new	WaterPlanet(217, 530, "m", "s04");
+		Satellite s05 = new MineralPlanet(800, 104, "m", "s05");
+		Satellite s06 = new MineralPlanet(657, 720,"s", "s06");
+		Satellite s07 = new MineralPlanet(340, 460, "s", "s07");
+		Satellite s08 = new MineralPlanet(500, 680, "s", "s08");
+		Satellite s09 = new GasPlanet(645, 40, "s", "s09"); 
+		Satellite s10 = new GasPlanet(300, 200, "l", "s10");
+		Satellite s11 = new GasPlanet(240, 730, "m", "s11");
+		Satellite s12 = new GasPlanet(700, 600, "m", "s12");
 		Satellite s13 = new Station(700, 100, 30, "s13");
 		Satellite s14 = new Station(313, 545, 30, "s14");
 		Satellite s15 = new Station(168, 232, 30, "s15");
-		Satellite s16 = new Station(826, 630, 30, "s16");
+		Satellite s16 = new Station(826, 630, 30,  "s16");
 
 		satellites.add(s00);
 		satellites.add(s01);
@@ -250,6 +277,9 @@ public class ServerController {
 		satellites.add(s15);
 		satellites.add(s16);
 	}
+	
+	
+	
 	
 	public String chooseName() {
 		if (planetNames.size() == 0) {

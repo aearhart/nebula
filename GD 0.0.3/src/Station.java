@@ -15,24 +15,35 @@ public class Station extends Satellite implements MouseListener {
 	private double waterInfluence = 1;
 	
 	public Station(Integer locX, Integer locY, Integer sz, String n) {
-		super(locX, locY, sz);
-		
+		super(locX, locY);
+		setSz(sz);
 		this.setType("S");
+	
 		costGas = 5;
 		costMineral = 5;
 		costWater = 5;
+		
+		gasResource = 3;
+		mineralResource = 3;
+		waterResource = 3;
+		
 		this.setNum(n);
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);
 	}
 	
 	public Station(ClientController clientController, Integer locX, Integer locY, Integer sz, String n) {
-		super(clientController, locX, locY, sz);
-		
+		super(clientController, locX, locY);
+		setSz(sz);
 		this.setType("S");
 		costGas = 5;
 		costMineral = 5;
 		costWater = 5;
+		
+		gasResource = 3;
+		mineralResource = 3;
+		waterResource = 3;
+		
 		this.setNum(n);
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);

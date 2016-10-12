@@ -13,11 +13,11 @@ public class Sun extends Satellite implements MouseListener{
 	private Color blank = new Color(0, 0, 0, 0);
 	
 	public Sun() {
-		super(450, 450, 100);
+		super(450, 450);
 	}
 	
 	public Sun(ClientController clientController) {
-		super(clientController, 450, 450, 100);
+		super(clientController, 450, 450);
 		
 		// image
 		setImage("Sun.png");

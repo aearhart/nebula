@@ -4,28 +4,28 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Planet extends Satellite implements MouseListener {
 	
-	public Planet(Integer locX, Integer locY, Integer sz) {
-		super(locX, locY, sz);
-		
-		costWater = 3;
-		costMineral = 3;
-		costGas = 3;
+	int largeSize = Globals.winSize / 20;
+	int medSize = Globals.winSize / 35;
+	int smallSize = Globals.winSize / 50;
+	
+	public Planet(Integer locX, Integer locY, String sz, String ty) {
+		super(locX, locY);
+		planetSetup(sz, ty);
 		
 		addMouseListener(this); 
 	}
 	
-	public Planet(ClientController clientController, Integer locX, Integer locY, Integer sz) {
-		super(clientController, locX, locY, sz);
+	public Planet(ClientController clientController, Integer locX, Integer locY, String sz, String ty) {
+		super(clientController, locX, locY);
 		control = clientController;
 		
-		costWater = 3;
-		costMineral = 3;
-		costGas = 3;
+		planetSetup(sz, ty);
 		
-		addMouseListener(this); 
+		addMouseListener(this);
 	}
 	
 	@Override
@@ -60,7 +60,7 @@ public class Planet extends Satellite implements MouseListener {
 		aList.add(Integer.toString(waterResource));
 		aList.add(ownerNum);
 		aList.add(Integer.toString(level));
-		
+
 		return Globals.addDelims(aList);
 	}
 	
@@ -109,6 +109,44 @@ public class Planet extends Satellite implements MouseListener {
 	public String info(String str) {
 		/* return str + planet info */
 		return str + " " + info();
+	}
+	
+	private void planetSetup(String sz, String ty) {
+		setType(ty);
+		Random ran = new Random();
+		int i = ran.nextInt(Globals.winSize/100);
+		if (sz.equals("s")) { // small
+			setSz(i + smallSize);
+			costWater = 2;
+			costMineral = 2;
+			costGas = 2;
+			setResource(3);
+		}
+		else if (sz.equals("m")) { // med
+			setSz(i + medSize);
+			costWater = 3;
+			costMineral = 3;
+			costGas = 3;
+			setResource(4);
+		}
+		else { // large
+			setSz(i + largeSize);
+			costWater = 4;
+			costMineral = 4;
+			costGas = 4;
+			setResource(5);
+		}
+	}
+	
+	private void setResource(int r) {
+		if (t.equals("G"))
+			gasResource = r;
+		else if (t.equals("M")) {
+			mineralResource = r;
+		}
+		else {
+			waterResource = r;
+		}
 	}
 	
 	public Boolean planetWithinAoI() {

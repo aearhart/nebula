@@ -50,17 +50,15 @@ public class Satellite extends JComponent {
 	
 	protected BufferedImage image = null;
 	
-	public Satellite(Integer locX, Integer locY, Integer sz) {
+	public Satellite(Integer locX, Integer locY) {
 		x = locX;
 		y = locY;
-		s = sz;
 	}
 	
-	public Satellite(ClientController clientController, Integer locX, Integer locY, Integer sz) {
+	public Satellite(ClientController clientController, Integer locX, Integer locY) {
 		control = clientController;
 		x = locX;
 		y = locY;
-		s = sz;
 	}
 	
 	public String printState() {
@@ -95,6 +93,7 @@ public class Satellite extends JComponent {
 		gasResource = Integer.parseInt(ary[i++]);
 		mineralResource = Integer.parseInt(ary[i++]);
 		waterResource = Integer.parseInt(ary[i++]);
+		this.setBounds(x, y, s, s);
 		return i;
 	}
 	
@@ -202,6 +201,12 @@ public class Satellite extends JComponent {
 	
 	public Integer getMidY() {
 		return y + s/2;
+	}
+	
+	public void setSz(int sz) {
+
+		s = sz;
+		this.setBounds(x, y, s, s);
 	}
 	
 	public Integer getSz() {
