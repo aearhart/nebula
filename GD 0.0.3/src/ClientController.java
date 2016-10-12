@@ -16,6 +16,7 @@ public class ClientController {
 	private static String input;
 	private static String currentState = "";
 	
+	private String ipAddress = "2605:e000:1c02:8e:6d73:7e5:5e67:f8b5";
 	String winner = "";
 	
 	// components
@@ -90,7 +91,8 @@ public class ClientController {
 		/* connects to server */
 		System.out.println("Connecting to server...");
 		try {
-			socket = new Socket("localhost", 7777); // local server
+			socket = new Socket(ipAddress, 7777);
+			//socket = new Socket("localhost", 7777); // local server
 			//	socket = new Socket("70.95.122.247", 7777);
 			//	socket = new Socket("2605:e000:1c02:8e:9587:d3d9:c5cd:9780", 7777); // computer server
 		} catch (IOException e) {
@@ -571,7 +573,7 @@ public class ClientController {
 			// pirate attack
 			printToPlayerArea(player.info() + "\nYou're under attack!! Pirates have attacked the base!");
 		
-			player.getBase().pirateAttack();
+			//player.getBase().pirateAttack();
 		}
 		
 	}
