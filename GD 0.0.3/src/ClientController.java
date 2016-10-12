@@ -91,11 +91,11 @@ public class ClientController {
 		try {
 			//socket = new Socket("localhost", 7777); // local server
 			//	socket = new Socket("70.95.122.247", 7777);
-			//	socket = new Socket("2605:e000:1c02:8e:9587:d3d9:c5cd:9780", 7777); // computer server
-			socket = new Socket("2001:0:9d38:90d7:3cea:1372:e88c:3a87", 7777);
+			socket = new Socket("2605:e000:1c02:8e:e4c2:9657:3a56:ea9d", 7777); // computer server
+			//socket = new Socket("2001:0:9d38:90d7:3cea:1372:e88c:3a87", 7777);
 		} catch (IOException e) {
-			error("Unable to connect to server.");
-			//e.printStackTrace();
+			e.printStackTrace();			error("Unable to connect to server!");
+
 		}
 
 		System.out.println("Connection established.");
