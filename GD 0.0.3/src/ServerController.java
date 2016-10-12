@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class ServerController {
 	
@@ -28,7 +30,10 @@ public class ServerController {
 
 	private List<Satellite> satellites = new ArrayList<Satellite>();
 	
+	private List<String> planetNames = new ArrayList<String>();  
+	//(Arrays.asList("Phobos", "Gaspra", "Eros", "Ida I", "Kalliope", "Jupiter XV", "Metis", "Callirrhoe", "Isonoe", "Praxidike", "Hyperion", "Paaliaq", "Mundilfari", "Saturn XXVVI", "Aegir", "Farbuati", "Setebos", "Trinculo", "Halimede", "Psamathe", "Kerberos", "Makemake", "Hi'iaka"));		
 	
+			
 	public ServerController() {
 	}
 	
@@ -246,6 +251,40 @@ public class ServerController {
 		satellites.add(s16);
 	}
 	
+	public String chooseName() {
+		if (planetNames.size() == 0) {
+			planetNames.add("Phobos");
+			planetNames.add("Gaspra");
+			planetNames.add("Eros");
+			planetNames.add("Ida I");
+			planetNames.add("Kalliope");
+			planetNames.add("Jupiter XV");
+			planetNames.add("Metis");
+			planetNames.add("Callirrhoe");
+			planetNames.add("Isonoe");
+			planetNames.add("Praxidike");
+			planetNames.add("Hyperion");
+			planetNames.add("Paaliaq");
+			planetNames.add("Mundilfari");
+			planetNames.add("Saturn XXVVI");
+			planetNames.add("Aegir");
+			planetNames.add("Farbuati");
+			planetNames.add("Setebos");
+			planetNames.add("Trinculo");
+			planetNames.add("Halimede");
+			planetNames.add("Psamathe");
+			planetNames.add("Kerberos");
+			planetNames.add("Makemake");
+			planetNames.add("Hi'iaka");
+		}
+		Random ran = new Random();
+		int i = ran.nextInt(planetNames.size());
+		String p = planetNames.get(i);
+		planetNames.remove(i);
+		System.out.println(i + " " +p);
+		return p;
+	}
+	
 	public void startup() {
 		createMap();
 		ArrayList<String> aList = new ArrayList<String>();
@@ -255,6 +294,7 @@ public class ServerController {
 		aList.add(p2.printState());
 		aList.add(Integer.toString(satellites.size()));
 		for (Satellite s : satellites) {
+			s.setName(chooseName());// name them
 			aList.add(s.printState());
 		}
 		

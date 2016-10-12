@@ -10,6 +10,9 @@ public class Station extends Satellite implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
 	private int AreaOfInfluence = 100;
+	private double gasInfluence = 1;
+	private double mineralInfluence = 1;
+	private double waterInfluence = 1;
 	
 	public Station(Integer locX, Integer locY, Integer sz, String n) {
 		super(locX, locY, sz);
@@ -85,15 +88,6 @@ public class Station extends Satellite implements MouseListener {
 	}
 
 	@Override
-	public String collectResources(Player p) {
-		p.addGas(gasResource);
-		p.addMineral(mineralResource);
-		p.addWater(waterResource);
-		String s = "Station " + num + "produced " + gasResource + "g " + mineralResource + "m " + waterResource + "w.";
-		return s;
-	}
-	
-	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
@@ -105,10 +99,45 @@ public class Station extends Satellite implements MouseListener {
 		g.drawRect(0, 0, s, s);
 	}
 
+	@Override
+	public String collectResources(Player p) {
+		p.addGas((int) (gasResource*gasInfluence));
+		p.addMineral((int) (mineralResource*mineralInfluence));
+		p.addWater((int) (waterResource*waterInfluence));
+		String s = "Station " + num + "produced " + gasResource + "g " + mineralResource + "m " + waterResource + "w.";
+		return s;
+	}
+	
+	public void malfunction(char a) {
+		if (a == 'g') {
+			gasInfluence = 0.5;
+		}
+	}
+	
+	public void fixMalfunction() {
+		gasInfluence = 1;
+		mineralInfluence = 1;
+		waterInfluence = 1;
+	}
+	
 	public int getAoI() {
 		return AreaOfInfluence;
 	}
 	
+	private void select() {
+		switchColors();
+		control.drawAoI(this);
+		repaint();
+	}
+	
+	private void deselect() {
+		switchColors();
+		control.removeAoI();
+		control.printToHoverArea();
+		repaint();
+	}
+	
+	/* MOUSE events */
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
 		switch (control.getStatus()) {
@@ -159,31 +188,24 @@ public class Station extends Satellite implements MouseListener {
 		switch (control.getStatus()) {
 		case "Claiming": { // Claiming a station
 			if(this.owner == null) { // not owned
-				switchColors();
-				control.drawAoI(this);
-				repaint(); }
+				select(); }
 			if (this.owner == control.getOpponent()) {
-				control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". 100% off limits.");
-			}
+				control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". 100% off limits."); }
 			else { 
 				control.printToHoverArea("You do not own this space station. But you could, for the price of a click of a button!"); }
 			return;	
 			}
 		case "Wait": {
-			switchColors();
-			control.drawAoI(this);
-			repaint();
-			String str = ".";
+			select();
+			String str = "";
 			if (owner != null) {
 				str = " owned by " + owner.getName();
 			}
 			control.printToHoverArea("A level " + level + " space station");
-		}
+			}
 		case "Upgrade": { // Upgrading a station
 			if(this.owner == control.getPlayer()) { // draw AoI
-				switchColors();
-				control.drawAoI(this);
-				repaint(); 
+				select(); 
 				control.printToHoverArea("Your level " + level + " " + "station costs : " + costWater + " water, " + costMineral + " metal, and " + costGas + " gas.");
 				}
 			else if (this.owner == control.getOpponent()) {
@@ -193,6 +215,7 @@ public class Station extends Satellite implements MouseListener {
 			return;
 			} // end case
 		} // end switch
+
 	}
 
 	@Override
@@ -200,23 +223,15 @@ public class Station extends Satellite implements MouseListener {
 		switch (control.getStatus()) {
 		case "Claiming": { // Claiming a station
 				if(this.owner == null || this.owner == control.getPlayer()) {
-					switchColors();
-					control.removeAoI();
-					control.printToHoverArea();
-					repaint(); }
+					deselect(); }
 				return;
 			}
 		case "Wait": {
-			switchColors();
-			control.removeAoI();
-			repaint();
-			control.printToHoverArea();
+			deselect();
 		}
 		case "Upgrade": { // Upgrading a station
 			if(this.owner == control.getPlayer()) { // remove AoI
-				switchColors();
-				control.removeAoI();
-				repaint();
+				deselect();
 				}
 			control.printToHoverArea();
 			return;

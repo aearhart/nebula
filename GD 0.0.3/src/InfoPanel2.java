@@ -88,6 +88,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 				}
 			case "Upgrade": { // Sun taking place as "skip" option.
 				// 
+				control.getPlayer().addEventChance(0.25);
 				control.setStatus("collectResources");
 				control.printToInstructionArea("Skipping turn.");
 				control.printToPlayerArea();

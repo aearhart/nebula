@@ -13,7 +13,7 @@ public class Satellite extends JComponent {
 	protected ClientController control;
 	
 	// Attributes
-	protected String name = " ";
+	protected String name = "";
 	protected String num = "s0";
 	protected String t = "O"; // O for sun
 	
@@ -100,7 +100,6 @@ public class Satellite extends JComponent {
 	
 	public void setOwner(String own) {
 		/* set owner given string determining owner --used for UPDATES */
-		System.out.println("setting owner: " + own);
 		
 		if (control == null)
 			return; // don't need to set owner variable
@@ -169,6 +168,24 @@ public class Satellite extends JComponent {
 		waterResource += waterUpgrade;
 	}
 	
+	public String collectResources(Player p) {
+		p.addGas(gasResource);
+		p.addMineral(mineralResource);
+		p.addWater(waterResource);
+		String s = "Planet " + num;
+		
+		if (t.equals("G")) {
+			s += " produced \u07F7" + gasResource;
+		}
+		else if (t.equals("M")) {
+			s += " produced " + mineralResource + " mineral";
+		}
+		else {
+			s += " produced " + waterResource + " water";
+		}
+		return s;
+	}
+	
 	/* basic get/set/add methods */
 	
 	public Integer getLocX() {
@@ -195,31 +212,12 @@ public class Satellite extends JComponent {
 		return s+1;
 	}
 	
-	
 	public String getType() {
 		return t;
 	}
 	
 	public void setType(String str) {
 		t = str;
-	}
-	
-	public String collectResources(Player p) {
-		p.addGas(gasResource);
-		p.addMineral(mineralResource);
-		p.addWater(waterResource);
-		String s = "Planet " + num;
-		
-		if (t.equals("G")) {
-			s += " produced \u07F7" + gasResource;
-		}
-		else if (t.equals("M")) {
-			s += " produced " + mineralResource + " mineral";
-		}
-		else {
-			s += " produced " + waterResource + " water";
-		}
-		return s;
 	}
 	
 	public String getNum() {

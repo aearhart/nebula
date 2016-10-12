@@ -23,6 +23,8 @@ public class Player {
 	public int B = 0;
 	public String num = "P1";
 	
+	public double eventChance = Globals.baseEventChance;
+	
 	
 	public Player(ServerController svr) { // server
 		server = svr;
@@ -176,7 +178,10 @@ public class Player {
 		}
 	}
 	
-
+	public Station getBase() {
+		if (stations == null) return null;
+		return stations.get(0);
+	}
 	public List<Station> getStations() {
 		return stations;
 	}
@@ -225,4 +230,7 @@ public class Player {
 		this.gas -= gas;
 	}
 	
+	public void addEventChance(double d) {
+		eventChance += d;
+	}
 }

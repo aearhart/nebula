@@ -4,7 +4,7 @@ import java.util.ArrayList;
 public class Globals {
 	public static String delim = "@@";
 	public static int winSize = 1000;
-	
+	public static double baseEventChance = 1.0;
 	public static String addDelims(ArrayList<String> s) {
 		if (s.size() == 0)
 			return "";

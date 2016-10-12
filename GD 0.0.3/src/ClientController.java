@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ClientController {
 
@@ -205,7 +206,6 @@ public class ClientController {
 			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12] + " " + s[i+13] + " " + s[i+14] + " " + s[i+15]);
 			sat = new Station(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), s[i+2]);	
 
-			System.out.println(s[i+15] + " <-- owner?");
 			sat.setOwner(s[i+15]);
 			i+=16;
 		}
@@ -552,8 +552,33 @@ public class ClientController {
 		return;
 	}
 	
+	public void event() {
+		
+		Random ran = new Random();
+		double e = ran.nextInt(20) * player.eventChance;
+		System.out.println("event: " + e);
+		if (e <= 10) {
+			// do nothing
+			printToPlayerArea(player.info() + "\nIt's real quiet out in space.");
+		}
+		else if (e <= 15) {
+			// malfunction
+			printToPlayerArea(player.info() + "\nOh noes an asteroid hit the station! Limited gas supply until fixed.");
+			player.getBase().malfunction('g');
+		}
+		else // between 16 & 20
+		{
+			// pirate attack
+			printToPlayerArea(player.info() + "\nYou're under attack!! Pirates have attacked the base!");
+		
+			player.getBase().pirateAttack();
+		}
+		
+	}
+	
 	public void turn() {
 		collectResources();
+		event();
 		upgradeTime();
 		getCurrentState("turn");
 		sendMessage();
@@ -568,10 +593,10 @@ public class ClientController {
 	
 	public void win() {
 		if (winner.equals(clientPlayerNum)) {
-		printToInstructionArea("You won! Congratulations " + player.getName() + ". Thank you for playing. Click anywhere to close.");
+		printToInstructionArea("You won! Congratulations " + player.getName() + ". Thank you for playing. I'm sure your momma is as proud as can be. Click anywhere to close.");
 		}
 		else
-			printToInstructionArea(opponent.getName() + " just won. You should play again to enact your revenge! Click anywhere to close.");
+			printToInstructionArea(opponent.getName() + " just won. Ouch that stings. You should play again to enact your revenge! Click anywhere to close.");
 		
 	}
 	
