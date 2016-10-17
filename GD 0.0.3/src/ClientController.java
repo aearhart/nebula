@@ -16,7 +16,7 @@ public class ClientController {
 	private static String input;
 	private static String currentState = "";
 	
-	private String ipAddress = "2605:e000:1c02:8e:6d73:7e5:5e67:f8b5";
+	private String ipAddress = "localhost";//"2605:e000:1c02:8e:6d73:7e5:5e67:f8b5";
 	String winner = "";
 	
 	// components
@@ -490,7 +490,9 @@ public class ClientController {
 		int numOfSat = Integer.parseInt(s[i++]);
 		for (int j = 0; j < numOfSat; j++) {
 			//i = getSat(s[i+1]).update(s, i);
+			int copy = i;
 			i = addSat(s, i);
+			getSat(s[copy+1]).update(s, copy);
 		}
 		addToMap();
 		updateMap();

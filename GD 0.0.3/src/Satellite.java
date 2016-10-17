@@ -195,6 +195,14 @@ public class Satellite extends JComponent {
 		return y;
 	}
 	
+	public void placeX(int newX) {
+		x = newX;
+	}
+	
+	public void placeY(int newY) {
+		y = newY;
+	}
+	
 	public Integer getMidX() {
 		return x + s/2;
 	}

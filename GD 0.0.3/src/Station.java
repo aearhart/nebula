@@ -148,6 +148,13 @@ public class Station extends Satellite implements MouseListener {
 		repaint();
 	}
 	
+	public void placePlanet(Satellite p) {
+		// change x/y coordinates to place planet correctly w/in AoI
+		int planetSize = p.getSz();
+		p.placeX(x - planetSize - 50);
+		p.placeY(y - 90);
+	}
+	
 	/* MOUSE events */
 	@Override
 	public void mouseClicked(MouseEvent arg0) {

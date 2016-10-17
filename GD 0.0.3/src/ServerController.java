@@ -221,22 +221,53 @@ public class ServerController {
 		
 		Random ran = new Random();
 		int ws = Globals.winSize;
+		// location of satellites
 		double[] xs = {.261843*ws, .500*ws, .738157*ws, .738157*ws, .500*ws, .261843*ws};
-		double[] ys = {.3625*ws, .225*ws, .6375*ws, .6375*ws, .775*ws, .3625*ws};
+		double[] ys = {.3625*ws, .225*ws, .3625*ws, .6375*ws, .775*ws, .6375*ws};
+
 		
 		List<Integer> sectors = new ArrayList<Integer>();
-		
 		sectors.add(0); sectors.add(1); sectors.add(2); sectors.add(3); sectors.add(4); sectors.add(5);
 		
+		// number of satellites = 4
 		for (int i = 0; i < 4; i++) {
-			int r = ran.nextInt(sectors.size());
+			// BASE STATION
+			int r = ran.nextInt(sectors.size()); // 6 sectors
 			int sect = sectors.get(r);
 			sectors.remove(r);
 			
-			
 			Satellite s = new Station((int)xs[sect], (int)ys[sect], 30, "s" + Integer.toString(key++));
 			satellites.add(s);
+			
+			// PLANETS W/IN AoI
+			
+			// possibly station provides a list of possible planets it could contain and the number of 
+			//       planets that should be created
+			// hard program: 1 med mineral, 1 small gas, 1 small water planet
+					List<String[]> basePlanets = new ArrayList<String[]>();
+			String[] planetPair = {"M", "m"}; basePlanets.add(planetPair); 
+			String [] planetPair1 = {"G", "s"}; basePlanets.add(planetPair1); 
+			String [] planetPair2 = {"W", "s"}; basePlanets.add(planetPair2);
+			int baseNoPlanets = 1;
+			for (int j = 0; j < baseNoPlanets; j++) {
+				r = ran.nextInt(basePlanets.size());
+				String [] planetSet = basePlanets.get(r);
+				basePlanets.remove(r);
+				Satellite p;
+				if (planetSet[0].equals("G")) {
+					p = new GasPlanet(0, 0, planetSet[1], "s" + Integer.toString(key++));
+				}
+				else if (planetSet[0].equals("M")) {
+					p = new MineralPlanet(0, 0, planetSet[1], "s" + Integer.toString(key++));
+				}
+				else {
+					p = new WaterPlanet(0, 0, planetSet[1], "s" + Integer.toString(key++));
+				}
+				((Station)(s)).placePlanet(p);
+				satellites.add(p);
+			}
 		}
+
 	}
 	
 	public void createMapOld() {
