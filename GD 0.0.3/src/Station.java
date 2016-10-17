@@ -19,9 +19,9 @@ public class Station extends Satellite implements MouseListener {
 		setSz(sz);
 		this.setType("S");
 	
-		costGas = 5;
-		costMineral = 5;
-		costWater = 5;
+		costGas = 15;
+		costMineral = 15;
+		costWater = 15;
 		
 		gasResource = 3;
 		mineralResource = 3;
@@ -36,9 +36,9 @@ public class Station extends Satellite implements MouseListener {
 		super(clientController, locX, locY);
 		setSz(sz);
 		this.setType("S");
-		costGas = 5;
-		costMineral = 5;
-		costWater = 5;
+		costGas = 15;
+		costMineral = 15;
+		costWater = 15;
 		
 		gasResource = 3;
 		mineralResource = 3;

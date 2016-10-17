@@ -139,6 +139,9 @@ public class Satellite extends JComponent {
 	
 	protected Boolean canPurchase() {
 		/* return true or false if player can purchase this satellite */
+		System.out.println("cost: " + costGas + "g " + costMineral + "m " + costWater + "w");
+		System.out.println("player: " + control.getPlayer().getGas() + "g " + control.getPlayer().getMineral() + "m" + control.getPlayer().getWater() + "w");
+		System.out.println("results: " + (control.getPlayer().getGas() >= costGas) + "(g)" + (control.getPlayer().getMineral() >= costMineral) + "(m)" + (control.getPlayer().getWater() >= costWater) + "(w)");
 		return (control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMineral && control.getPlayer().getWater() >= costWater);
 	}
 	
@@ -155,9 +158,9 @@ public class Satellite extends JComponent {
 		control.getPlayer().subWater(costWater);
 		level++;
 		repaint(); 
-		costGas += costGas;
-		costMineral += costMineral;
-		costWater += costWater;
+		costGas += costGas*.5;
+		costMineral += costMineral*.5;
+		costWater += costWater*.5;
 		this.addResources();
 	}
 	

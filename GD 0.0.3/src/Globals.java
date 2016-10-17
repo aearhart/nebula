@@ -21,11 +21,11 @@ public class Globals {
 		
 		/* win conditions:
 		 * 
-		 * gas, water, mineral > 10
+		 * gas, water, mineral > 40
 		 * numPlanets > 2
 		 * 
 		 */
 		
-		return (p.gas > 10 && p.water > 10 && p.mineral > 10);// && p.numPlanets > 2);
+		return (p.gas > 40 && p.water > 40 && p.mineral > 40 && p.numPlanets > 2);
 	}
 }

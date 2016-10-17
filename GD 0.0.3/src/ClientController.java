@@ -488,13 +488,16 @@ public class ClientController {
 		int i = updatePlayer(s, 2, 3);
 		i = updatePlayer(s, i, i+1);
 		int numOfSat = Integer.parseInt(s[i++]);
+		int copy = i;
 		for (int j = 0; j < numOfSat; j++) {
 			//i = getSat(s[i+1]).update(s, i);
-			int copy = i;
 			i = addSat(s, i);
-			getSat(s[copy+1]).update(s, copy);
+			//getSat(s[copy+1]).update(s, copy);
 		}
 		addToMap();
+		for (int j = 0; j < numOfSat; j++) {
+			copy = getSat(s[copy+2]).update(s, copy);
+		}
 		updateMap();
 		status = "Wait";
 		
