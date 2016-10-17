@@ -236,36 +236,29 @@ public class ServerController {
 			int sect = sectors.get(r);
 			sectors.remove(r);
 			
-			Satellite s = new Station((int)xs[sect], (int)ys[sect], 30, "s" + Integer.toString(key++));
+			Satellite s = new DefaultStation((int)xs[sect], (int)ys[sect], 30, "s" + Integer.toString(key++));
 			satellites.add(s);
 			
-			// PLANETS W/IN AoI
 			
-			// possibly station provides a list of possible planets it could contain and the number of 
-			//       planets that should be created
-			// hard program: 1 med mineral, 1 small gas, 1 small water planet
-					List<String[]> basePlanets = new ArrayList<String[]>();
-			String[] planetPair = {"M", "m"}; basePlanets.add(planetPair); 
-			String [] planetPair1 = {"G", "s"}; basePlanets.add(planetPair1); 
-			String [] planetPair2 = {"W", "s"}; basePlanets.add(planetPair2);
-			int baseNoPlanets = 1;
-			for (int j = 0; j < baseNoPlanets; j++) {
-				r = ran.nextInt(basePlanets.size());
-				String [] planetSet = basePlanets.get(r);
-				basePlanets.remove(r);
+			
+			String plans = ((Station) s).getPlanetsToCreate();
+			for (int j = 0; j < plans.length(); j+=2) {
 				Satellite p;
-				if (planetSet[0].equals("G")) {
-					p = new GasPlanet(0, 0, planetSet[1], "s" + Integer.toString(key++));
+				if (plans.charAt(j) == 'G') {
+					p = new GasPlanet(0, 0, plans.substring(j+1, j+2), "s" + Integer.toString(key++));
 				}
-				else if (planetSet[0].equals("M")) {
-					p = new MineralPlanet(0, 0, planetSet[1], "s" + Integer.toString(key++));
+				else if (plans.charAt(j) == 'M') {
+					p = new MineralPlanet(0, 0, plans.substring(j+1, j+2), "s" + Integer.toString(key++));
 				}
 				else {
-					p = new WaterPlanet(0, 0, planetSet[1], "s" + Integer.toString(key++));
+					p = new WaterPlanet(0, 0, plans.substring(j+1, j+2), "s" + Integer.toString(key++));
 				}
-				((Station)(s)).placePlanet(p);
+				((Station)(s)).placePlanet(p, 0);
 				satellites.add(p);
+					
 			}
+			
+			
 		}
 
 	}

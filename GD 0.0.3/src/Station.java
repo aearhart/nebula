@@ -3,30 +3,42 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Random;
 
 import javax.sound.sampled.Control;
 
 public class Station extends Satellite implements MouseListener {
 
 	private static final long serialVersionUID = 1L;
-	private int AreaOfInfluence = 100;
-	private double gasInfluence = 1;
-	private double mineralInfluence = 1;
-	private double waterInfluence = 1;
+	protected int AreaOfInfluence = 100;
+	protected double gasInfluence = 1;
+	protected double mineralInfluence = 1;
+	protected double waterInfluence = 1;
+	
+	protected int gasAccess;
+	protected int mineralAccess;
+	protected int waterAccess;
+	protected int gasSector;
+	protected int mineralSector;
+	protected int waterSector;
+	protected int gasGenerated;
+	protected int mineralGenerated;
+	protected int waterGenerated;
+	protected int upgradeCost;
+	protected int gasStart;
+	protected int mineralStart;
+	protected int waterStart;
+	
+	private String planetsToCreate = "";
+	private char[] positionsPossible = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+	private String positions = "";
+	
 	
 	public Station(Integer locX, Integer locY, Integer sz, String n) {
 		super(locX, locY);
 		setSz(sz);
 		this.setType("S");
-	
-		costGas = 15;
-		costMineral = 15;
-		costWater = 15;
-		
-		gasResource = 3;
-		mineralResource = 3;
-		waterResource = 3;
-		
+
 		this.setNum(n);
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);
@@ -36,18 +48,13 @@ public class Station extends Satellite implements MouseListener {
 		super(clientController, locX, locY);
 		setSz(sz);
 		this.setType("S");
-		costGas = 15;
-		costMineral = 15;
-		costWater = 15;
-		
-		gasResource = 3;
-		mineralResource = 3;
-		waterResource = 3;
 		
 		this.setNum(n);
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);
 	}
+	
+	
 	
 	@Override
 	public String printState() {
@@ -148,8 +155,77 @@ public class Station extends Satellite implements MouseListener {
 		repaint();
 	}
 	
-	public void placePlanet(Satellite p) {
+	public String dividePlanets (String type, int num) {
+		Random rand = new Random();
+		int r = rand.nextInt(3);
+		switch (num) {
+		case(0): 
+			return "";
+		case(1): // 1 s planet
+			return type + "s";
+		case(2): // 1 m planet or 2 s planets
+			if (r == 0)
+				return type + "m";
+			else
+				return type + "s" + type + "s";
+		case(3): // 1 l planet or 1 s planet and 1 m planet
+			if (r == 0)
+				return type + "l";
+			else
+				return type + "s" + type + "m";
+		case(4): // 2 m planets or 1 s planet and 1 l planet
+			if (r == 0)
+				return type + "m" + type + "m";
+			else
+				return type + "s" + type + "l";
+		default:
+			return "";
+		}
+		
+	}
+	
+	public void createPlanets() {
+		planetsToCreate += dividePlanets("G", gasAccess);
+		planetsToCreate += dividePlanets("M", mineralAccess);
+		planetsToCreate += dividePlanets("W", waterAccess);
+		
+		int numPlanets = planetsToCreate.length()/2;
+		Random rand = new Random();
+		for (int i = 0; i < numPlanets; i++) {
+			int p = rand.nextInt(16);
+			if (positionsPossible[p] != '.') {
+				positions += Character.toString(positionsPossible[p]);
+				System.out.println("p: " + p);
+				int j = p-1;
+				int k = p+1;
+				if (p == 0) {
+					j = 15;
+				}
+				else if (p == 15) {
+					k = 0;
+				}
+				positionsPossible[j] = '.';
+				positionsPossible[p] = '.';
+				positionsPossible[k] = '.';
+			}
+			else
+				i--;
+		}
+		System.out.print("PositionsPossible = ");
+		for (int i = 0; i < 16; i++)
+			System.out.print(positionsPossible[i]);
+		System.out.println("");
+		System.out.println("Positions = " + positions);
+		System.out.println("planetsToCreate = " + planetsToCreate);
+	}
+	
+	public String getPlanetsToCreate() {
+		return planetsToCreate;
+	}
+	
+	public void placePlanet(Satellite p, int planetPos) {
 		// change x/y coordinates to place planet correctly w/in AoI
+		//TODO  Harry
 		int planetSize = p.getSz();
 		p.placeX(x - planetSize - 50);
 		p.placeY(y - 90);

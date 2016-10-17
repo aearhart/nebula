@@ -495,6 +495,7 @@ public class ClientController {
 			//getSat(s[copy+1]).update(s, copy);
 		}
 		addToMap();
+		// TODO Fix this. Inefficient
 		for (int j = 0; j < numOfSat; j++) {
 			copy = getSat(s[copy+2]).update(s, copy);
 		}
@@ -515,7 +516,7 @@ public class ClientController {
 		// s[1] = currentPlayer
 		// s[2] = player
 		int i = updatePlayer(s, 2, 3);
-		i = updatePlayer(s, i, i+1);
+		i = updatePlayer(s, i, i+1);	
 		int numOfSat = Integer.parseInt(s[i++]);
 		for (int j = 0; j < numOfSat; j++) {
 			i = getSat(s[i+2]).update(s, i);
