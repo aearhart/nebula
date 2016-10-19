@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 public class ClientController {
 
 	// socket info
@@ -438,6 +442,7 @@ public class ClientController {
 	}
 	
 	public void createComponents() {
+		/*
 		status = "StartUp";
 		
 		window = new Window(this, player.getName());
@@ -452,7 +457,26 @@ public class ClientController {
 		window.add(infoPanel2);
 		
 		window.pack();
-		window.update();		
+		window.update();	
+		*/
+		status = "StartUp";
+		
+		window = new Window(this, player.getName());
+		//tab Menu
+		MenuTab menuTab = new MenuTab(this);
+		JTextField tf = new JTextField("This is the menu", 100);
+		JButton b = new JButton("Quit Game");
+		menuTab.addComponents(tf, b);
+		
+		//tab Map
+		MapTab mapTab = new MapTab(this);
+		infoPanel = new InfoPanel(this);
+		map = new Map(this);
+		infoPanel2 = new InfoPanel2(this);
+		mapTab.addComponents(infoPanel, map, infoPanel2);
+		
+		JPanel[] tabs = {menuTab, mapTab};
+		window.addTabs(tabs);
 	}
 	
 	public int updatePlayer(String s[], int i, int p) {

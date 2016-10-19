@@ -32,7 +32,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	public InfoPanel(ClientController clientController) {
 		control = clientController;
-		playerText = "Hello " + control.getPlayer().getName() + ", you can find your stats here.";
+		playerText = "Hello "; //+ control.getPlayer().getName() + ", you can find your stats here.";
 		this.setPreferredSize(new Dimension (300,1000));
 		
 		//this.setLayout(new GridLayout(3, 1, 0, 5));
