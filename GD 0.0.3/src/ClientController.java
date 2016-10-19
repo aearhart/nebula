@@ -48,12 +48,12 @@ public class ClientController {
 	}
 
 	private void error() {
-		System.out.println("FAILED");
+		System.out.println("Error. FAILED");
 		System.exit(1);
 	}
 	
 	private void error(String s) {
-		System.out.println(s);
+		System.out.println("Error: " + s);
 		System.exit(1);
 	}
 	
@@ -92,9 +92,6 @@ public class ClientController {
 		System.out.println("Connecting to server...");
 		try {
 			socket = new Socket(ipAddress, 7777);
-			//socket = new Socket("localhost", 7777); // local server
-			//	socket = new Socket("70.95.122.247", 7777);
-			//	socket = new Socket("2605:e000:1c02:8e:9587:d3d9:c5cd:9780", 7777); // computer server
 		} catch (IOException e) {
 			error("Unable to connect to server.");
 			//e.printStackTrace();
@@ -107,16 +104,16 @@ public class ClientController {
 	/* CREATING/UPDATING GAME INFO */
 	
 	public void read() {
-		/* interprets input from server */
+		/* default read of state  input from server */
+		
 		String[] s = input.split(Globals.delim);
+		// s[0] = win
+		// s[1] = winner
+		// s[2] = player
 		switch(s[0]) {
 		case "turn": { // interpret client's turn and update components
 			System.out.println(player.getNum() + " is playing.");
 			
-			
-			// s[0] = turn
-			// s[1] = currentPlayer
-			// s[2] = player
 			if (s[1].equals(opponent.getNum())) {
 				error("not current player's turn!");
 				// this should be done in validate
@@ -126,7 +123,6 @@ public class ClientController {
 			i = updatePlayer(s, i, i+1);
 			int numOfSat = Integer.parseInt(s[i++]);
 			for (int j = 0; j < numOfSat; j++) {
-				//System.out.println(i + " " + s[i]);
 				i = getSat(s[i+2]).update(s, i);
 			}	
 			updateMap(); // update map
@@ -137,9 +133,7 @@ public class ClientController {
 			return;
 		}
 		case "WIN": { // there has been a winner
-			// s[0] = win
-			// s[1] = winner
-			// s[2] = player
+
 			winner = s[1];
 			System.out.println(winner + " just won.");
 			
@@ -161,7 +155,7 @@ public class ClientController {
 
 	
 	public Satellite getSat(String str) {
-		/* given str name, find the station matching that name */
+		/* given str name, find the satellite matching that name */
 		for (Satellite sat: satellites) {
 			if (sat.getNum().equals(str))
 				return sat;
@@ -179,35 +173,38 @@ public class ClientController {
 	}
 	
 	public int addSat(String[] s, int i) {
-		/* given string s info, create a satellite */
+		/* given string s info, create a satellite and add it to the satellite list */
 		
 		Satellite sat;
 		
 		// determine type
 		if (s[i+1].equals("W")) { // water planet
-			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
 			sat = new WaterPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), s[i+6], s[i+2]);
+			//sat = new WaterPlanet(this, s, i);
 			i+=15;
 		}
 		else if (s[i+1].equals("G")) { // gas planet
-			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
 			sat = new GasPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), s[i+6], s[i+2]);
+			//sat = new GasPlanet(this, s, i);
 			i+=15;
 		}
 		else if (s[i+1].equals("M")){ // mineral planet
-			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
 			sat = new MineralPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), s[i+6], s[i+2]);
+			//sat = new MineralPlanet(this, s, i);
 			i+=15;
 		}
 		else if (s[i+1].equals("O")) { // the sun
-			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6]);
+			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6]);
 			sat = new Sun(this);
 			i+=10;
 		}
 		else { // space station
-			System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12] + " " + s[i+13] + " " + s[i+14] + " " + s[i+15]);
+			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12] + " " + s[i+13] + " " + s[i+14] + " " + s[i+15]);
 			sat = new Station(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), Integer.parseInt(s[i+6]), s[i+2]);	
-
+			//sat = new Station(this, s, i);
 			sat.setOwner(s[i+15]);
 			i+=16;
 		}
@@ -215,15 +212,9 @@ public class ClientController {
 		return i;
 	}
 	
-	public void addToMap() {
-		/* add satellites to map */
-		for (Satellite s: satellites) {
-			map.add(s); 
-			s.setBounds(s.getLocX(), s.getLocY(), s.getBoundSize(), s.getBoundSize());
-		}
-	}
-	
 	public void updateMap() {
+		// update the visuals on the map: have to repaint each satellite in order
+		// for changes to take effect
 		for (Satellite sat: satellites) {
 			if (sat instanceof WaterPlanet) {
 				((WaterPlanet)sat).repaint();
@@ -240,8 +231,6 @@ public class ClientController {
 		}
 	}
 	
-	
-
 	public Boolean withinSector (double x, double y, int sector) {
 		double D = .5*Globals.winSize;
 		double root3 = Math.pow(3, .5);
@@ -494,7 +483,11 @@ public class ClientController {
 			i = addSat(s, i);
 			//getSat(s[copy+1]).update(s, copy);
 		}
-		addToMap();
+		// add satellites in list to map 
+		for (Satellite sat: satellites) {
+			map.add(sat); 
+			//sat.setBounds(sat.getLocX(), sat.getLocY(), sat.getBoundSize(), sat.getBoundSize());
+		}
 		// TODO Fix this. Inefficient
 		for (int j = 0; j < numOfSat; j++) {
 			copy = getSat(s[copy+2]).update(s, copy);

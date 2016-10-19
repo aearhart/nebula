@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,7 +20,7 @@ public class Welcome extends JPanel implements ActionListener{
 
 	protected JTextField textField;
 	protected JTextArea textArea;
-	private String areaText = "Welcome to GD 0.0.3!\nPlease enter your name in the text field above. \n\n";
+	private String areaText = "Welcome to GD 0.0.3!\nPlease enter your name in the text field above to play. \n\n";
 	private String fieldText = "Player Name (hit enter to select)";
 	private Player p;
 	private Boolean finished = false;
@@ -93,6 +94,12 @@ public class Welcome extends JPanel implements ActionListener{
 		// TODO Auto-generated method stub
 		//System.out.println("event");
 		if ("Done".equals(e.getActionCommand())) {
+			if (textField.getText().equals(fieldText)) {
+				Random rand = new Random();
+				int r = rand.nextInt(5);
+				String[] names = {"What's your name again?", "Anonymous", "Me who shall not be named", "[insert name here]", "Lazy the Nameless"};
+				textField.setText(names[r]);
+			}
 			p.setName(textField.getText());
 			finished = true;
 			//System.out.println("done -- " + p.getName() + "   " + notFinished());

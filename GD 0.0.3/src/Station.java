@@ -24,7 +24,7 @@ public class Station extends Satellite implements MouseListener {
 	protected int gasGenerated;
 	protected int mineralGenerated;
 	protected int waterGenerated;
-	protected int upgradeCost;
+	//protected int upgradeCost; this is in satellite now
 	protected int gasStart;
 	protected int mineralStart;
 	protected int waterStart;
@@ -54,7 +54,12 @@ public class Station extends Satellite implements MouseListener {
 		addMouseListener(this);
 	}
 	
-	
+	public Station(ClientController clientController, String [] s_array, int pos) {
+		super(clientController, Integer.parseInt(s_array[pos+4]), Integer.parseInt(s_array[pos+5]));
+		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
+		update(s_array, pos);
+		
+	}
 	
 	@Override
 	public String printState() {
@@ -117,6 +122,51 @@ public class Station extends Satellite implements MouseListener {
 		g.drawRect(0, 0, s, s);
 	}
 
+	protected void setup() {
+		setupResources('G', gasGenerated);
+		setupResources('M', mineralGenerated);
+		setupResources('W', waterGenerated);
+		
+	}
+	
+	private void setupResources(char res, int generate) {
+		int resourceProduced = 0;
+		switch (generate) {
+		
+		case 1: {
+			resourceProduced = 2;
+			break;}
+		case 2: {
+			resourceProduced = 3;
+			break;}
+		case 3: {
+			resourceProduced = 4;
+			break;}
+		case 4: {
+			resourceProduced = 5;
+			break;}
+		case 5: {
+			resourceProduced = 6;
+			break;
+		}
+		}
+		if (res == 'G') {
+			gasResource = resourceProduced;
+		}
+		else if (res == 'M') {
+			mineralResource = resourceProduced;
+		}
+		else
+			waterResource = resourceProduced;
+	}
+	
+	@Override
+	public void startingResources(Player p) {
+		p.addGas(gasStart);
+		p.addMineral(mineralStart);
+		p.addWater(waterStart);
+	}
+	
 	@Override
 	public String collectResources(Player p) {
 		p.addGas((int) (gasResource*gasInfluence));
@@ -195,7 +245,6 @@ public class Station extends Satellite implements MouseListener {
 			int p = rand.nextInt(16);
 			if (positionsPossible[p] != '.') {
 				positions += Character.toString(positionsPossible[p]);
-				System.out.println("p: " + p);
 				int j = p-1;
 				int k = p+1;
 				if (p == 0) {

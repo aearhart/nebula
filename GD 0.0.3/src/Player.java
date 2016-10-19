@@ -91,8 +91,8 @@ public class Player {
 			i++;
 		
 
-		//numPlanets = Integer.parseInt(ary[i++]);
-		i++; // skipping this step because updating the planets does this already. TODO I think I'd rather this handle it than planet but this will do for now.
+		numPlanets = Integer.parseInt(ary[i++]);
+		//i++; // skipping this step because updating the planets does this already. TODO I think I'd rather this handle it than planet but this will do for now.
 		
 		
 		gas = Integer.parseInt(ary[i++]);

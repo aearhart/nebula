@@ -26,6 +26,6 @@ public class Globals {
 		 * 
 		 */
 		
-		return (p.gas > 40 && p.water > 40 && p.mineral > 40 && p.numPlanets > 2);
+		return (p.gas >= 40 && p.water >= 40 && p.mineral >= 40 && p.numPlanets >= 1);
 	}
 }

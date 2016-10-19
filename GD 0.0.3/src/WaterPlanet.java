@@ -19,4 +19,8 @@ public class WaterPlanet extends Planet {
 		this.setColors(Color.CYAN, Color.BLACK, Color.BLUE);
 	}
 	
+	public WaterPlanet(ClientController clientController, String[] s_array, int pos) {
+		super(clientController, Integer.parseInt(s_array[pos+4]), Integer.parseInt(s_array[pos+5]), s_array[pos+6], "W");
+		update(s_array, pos);
+	}
 }

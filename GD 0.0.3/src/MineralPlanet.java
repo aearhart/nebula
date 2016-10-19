@@ -16,5 +16,10 @@ import java.awt.Color;
 			this.setColors(Color.DARK_GRAY, Color.BLACK, Color.GRAY);
 		}
 
+		public MineralPlanet(ClientController clientController, String[] s_array, int pos) {
+			super(clientController, Integer.parseInt(s_array[pos+4]), Integer.parseInt(s_array[pos+5]), s_array[pos+6], "M");
+			update(s_array, pos);
+		}
+		
 }
 

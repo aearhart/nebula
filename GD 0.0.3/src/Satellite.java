@@ -27,10 +27,11 @@ public class Satellite extends JComponent {
 	protected int costMineral = 0;
 	protected int costWater = 0;
 	
-	// upgrading satellite leads to change in resources
-	protected int gasUpgrade = 3;
-	protected int mineralUpgrade = 3;
-	protected int waterUpgrade = 3;
+	// upgrading satellite leads to change in resources -> percentage (i.e. Resource += Resource*Upgrade)
+	protected double gasUpgrade = 1;
+	protected double mineralUpgrade = 1;
+	protected double waterUpgrade = 1;
+	protected double upgradeCost = 1;
 	
 	// location of satellite
 	protected Integer x;
@@ -60,6 +61,7 @@ public class Satellite extends JComponent {
 		x = locX;
 		y = locY;
 	}
+	
 	
 	public String printState() {
 		/* the current state of the satellite */
@@ -127,12 +129,14 @@ public class Satellite extends JComponent {
 		/* Station: send station info to the player
 		 * Planet: set owner color to mark ownership
 		 */
+		System.out.println("changing owner......");
 		if (t.equals("S")) { // it's a station
 			owner.addStation(this);
 			this.setColors(owner.getColor(), this.getBorderCol(), this.getSelectCol());
 		}
 		else { // it's a planet
 			owner.addPlanet();
+			System.out.println("ADDING A PLANET......................................");
 			ownerColor = owner.getColor();
 		}
 	}
@@ -145,10 +149,15 @@ public class Satellite extends JComponent {
 		return (control.getPlayer().getGas() >= costGas && control.getPlayer().getMineral() >= costMineral && control.getPlayer().getWater() >= costWater);
 	}
 	
+	public void startingResources(Player p) {
+		
+	}
+	
 	protected void addSatelliteOwner() {
 		setOwner(control.getPlayer());
 		upgradeSatellite();
-		
+		if (t.equals("G") || t.equals("M") || t.equals("W")) control.getPlayer().addPlanet();
+		startingResources(control.getPlayer()); // if the new owner has any starting resources, add to player
 	}
 	
 	protected void upgradeSatellite() {
@@ -158,16 +167,17 @@ public class Satellite extends JComponent {
 		control.getPlayer().subWater(costWater);
 		level++;
 		repaint(); 
-		costGas += costGas*.5;
-		costMineral += costMineral*.5;
-		costWater += costWater*.5;
+		costGas += costGas*upgradeCost;
+		costMineral += costMineral*upgradeCost;
+		costWater += costWater*upgradeCost;
 		this.addResources();
 	}
 	
 	protected void addResources() {
-		gasResource += gasUpgrade;
-		mineralResource += mineralUpgrade;
-		waterResource += waterUpgrade;
+		// upon upgrading, increase number of resources produced
+		gasResource += gasResource * gasUpgrade;
+		mineralResource += mineralResource * mineralUpgrade;
+		waterResource += waterResource * waterUpgrade;
 	}
 	
 	public String collectResources(Player p) {
@@ -175,9 +185,9 @@ public class Satellite extends JComponent {
 		p.addMineral(mineralResource);
 		p.addWater(waterResource);
 		String s = "Planet " + num;
-		
+		System.out.println("collecting:" + this.name + ": " + gasResource + mineralResource + waterResource);
 		if (t.equals("G")) {
-			s += " produced \u07F7" + gasResource;
+			s += " produced gas" + gasResource;
 		}
 		else if (t.equals("M")) {
 			s += " produced " + mineralResource + " mineral";
