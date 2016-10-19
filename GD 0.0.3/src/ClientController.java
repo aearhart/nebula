@@ -428,7 +428,7 @@ public class ClientController {
 		if (! s[0].equals("firstContact"))
 			return -1;
 		clientPlayerNum = s[1];
-		player = new Player(this, s[1]);
+		player.setNum(s[1]);
 		ArrayList<String> aList = new ArrayList<String>();
 		aList.add("playerSetup"); 
 		aList.add(clientPlayerNum);
@@ -461,7 +461,6 @@ public class ClientController {
 		*/
 		status = "StartUp";
 		
-		window = new Window(this, player.getName());
 		//tab Menu
 		MenuTab menuTab = new MenuTab(this);
 		JTextField tf = new JTextField("This is the menu", 100);
@@ -633,15 +632,37 @@ public class ClientController {
 		
 	}
 	
-	/* MAIN */
+	public void welcome() {
+		window = new Window(this, "player");
+		JPanel waiting = new JPanel();
+		waiting.add(new JTextField("Waiting to connect to server....", 100));
+		window.addTab(waiting, "Waiting to connect...");
+		player = new Player(this, "");
+	}
 	
+	public void playerTab() {
+		window.removeAtab(0);
+
+		
+		WelcomeTab welcome = new WelcomeTab(this);
+		while (welcome.notFinished()) {
+			System.out.println("");
+		}
+		window.removeAtab(0);
+	}
+	
+	/* MAIN */
+	 
 	public static void main(String[] args) {
 
 		
 		ClientController control = new ClientController();
+		control.welcome();
 		control.connectToServer();	
 		control.firstContact();
+
 		control.startup(); // create the window
+		control.playerTab();
 		control.claimStation();
 		control.gameplay();
 		control.win();

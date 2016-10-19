@@ -9,7 +9,9 @@ public class Window extends JFrame {
 	
 	JTabbedPane tabbedPane = new JTabbedPane();
 	private String[] tabNames = {"Menu", "Map"};
-	 
+	private Color[] tabColors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.MAGENTA};
+	
+	
 	public Window(ClientController clientController, String playerName) {
 		super("Game Demo 0.0.3 for " + playerName);
 		//this.setLayout(new FlowLayout());
@@ -20,16 +22,30 @@ public class Window extends JFrame {
 		
 		//Map m = new Map();
 		//this.add(m);
+		
 		this.setLocationRelativeTo(null);
+		this.add(tabbedPane, BorderLayout.CENTER);
 		this.pack();
 		this.setVisible(true);
+	}
+	
+	public void addTab(JPanel tab, String tabName) {
+		tabbedPane.addTab(tabName, tab);
+		this.pack();
+		update();
 	}
 	
 	public void addTabs(JPanel[] tabs) {
 		for (int i = 0; i < tabNames.length; i++)
 			tabbedPane.addTab(tabNames[i], tabs[i]);
-	
 		this.add(tabbedPane, BorderLayout.CENTER);
+		
+		this.pack();
+		update();
+	}
+	
+	public void removeAtab(int tabPosition) {
+		tabbedPane.remove(tabPosition);
 		this.pack();
 		update();
 	}
