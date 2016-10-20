@@ -42,7 +42,7 @@ public class Map extends JPanel implements MouseListener{
 			for(int j = 0; j < 11; j++)
 				g.drawRect(i*100, j*100, 100, 100);
 		Color[] sectorCols = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW, Color.ORANGE, Color.MAGENTA};
-		for (int i = 0; i < 1000; i+=5) {
+		for (int i = 0; i < 1000; i+=10) {
 			for (int j = 0; j < 1000; j+=5) {
 				int sector = control.findSector((double)i, (double)j);
 				g.setColor(sectorCols[sector-1]);

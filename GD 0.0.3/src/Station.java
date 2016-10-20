@@ -217,16 +217,16 @@ public class Station extends Satellite implements MouseListener {
 		case(2): // 1 m planet or 2 s planets
 			if (r == 0)
 				return type + "m";
-			else
-				return type + "s" + type + "s";
+			//else
+			//	return type + "s" + type + "s";
 		case(3): // 1 l planet or 1 s planet and 1 m planet
 			if (r == 0)
 				return type + "l";
 			else
-				return type + "s" + type + "m";
+				return type + "s" + type + "s";
 		case(4): // 2 m planets or 1 s planet and 1 l planet
 			if (r == 0)
-				return type + "m" + type + "m";
+				return type + "m" + type + "s";
 			else
 				return type + "s" + type + "l";
 		default:
