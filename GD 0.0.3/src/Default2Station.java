@@ -1,28 +1,27 @@
-import java.awt.Color;
 
-public class DefaultStation extends Station {
+public class Default2Station extends Station{
 
-	public DefaultStation(Integer locX, Integer locY, Integer sz, String n) {
+	public Default2Station(Integer locX, Integer locY, Integer sz, String n) {
 		super(locX, locY, sz, n);
 
 		// to create planets
-		gasAccess = 3;
+		gasAccess = 1;
 		mineralAccess = 3;
-		waterAccess = 3;
-		gasSector = 5;
-		mineralSector = 5;
+		waterAccess = 2;
+		gasSector = 4;
+		mineralSector = 6;
 		waterSector = 5;
 		
 		// to affect station
 		gasGenerated = 5;
 		mineralGenerated = 5;
 		waterGenerated = 5;
-		upgradeCost = 5;
+		upgradeCost = 1;
 		
 		// to affect player
-		gasStart = 5;
-		mineralStart = 5;
-		waterStart = 5;
+		gasStart = 8;
+		mineralStart = 8;
+		waterStart = 8;
 		
 		
 		// old stuff
@@ -36,27 +35,28 @@ public class DefaultStation extends Station {
 
 	}
 
-	public DefaultStation(ClientController clientController, Integer locX, Integer locY, Integer sz, String n) {
+	public Default2Station(ClientController clientController, Integer locX, Integer locY, Integer sz, String n) {
 		super(clientController, locX, locY, sz, n);
 
+
 		// to create planets
-		gasAccess = 3;
+		gasAccess = 1;
 		mineralAccess = 3;
-		waterAccess = 3;
-		gasSector = 5;
-		mineralSector = 5;
+		waterAccess = 2;
+		gasSector = 4;
+		mineralSector = 6;
 		waterSector = 5;
 		
 		// to affect station
-		gasGenerated = 3;
-		mineralGenerated = 3;
-		waterGenerated = 3;
-		upgradeCost = 1.5;
+		gasGenerated = 5;
+		mineralGenerated = 5;
+		waterGenerated = 5;
+		upgradeCost = 1;
 		
 		// to affect player
-		gasStart = 5;
-		mineralStart = 5;
-		waterStart = 5;
+		gasStart = 8;
+		mineralStart = 8;
+		waterStart = 8;
 		
 		
 		// old stuff
@@ -66,6 +66,8 @@ public class DefaultStation extends Station {
 		
 		setup();
 		createPlanets();
+		
+
 	}
 
 }

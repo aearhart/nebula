@@ -486,7 +486,7 @@ public class ClientController {
 		// add satellites in list to map 
 		for (Satellite sat: satellites) {
 			map.add(sat); 
-			//sat.setBounds(sat.getLocX(), sat.getLocY(), sat.getBoundSize(), sat.getBoundSize());
+			sat.setBounds(sat.getLocX(), sat.getLocY(), 100, 100);
 		}
 		// TODO Fix this. Inefficient
 		for (int j = 0; j < numOfSat; j++) {

@@ -10,7 +10,7 @@ public class Planet extends Satellite implements MouseListener {
 	
 	int largeSize = Globals.winSize / 20;
 	int medSize = Globals.winSize / 35;
-	int smallSize = Globals.winSize / 50;
+	int smallSize = Globals.winSize / 40;
 	
 	public Planet(Integer locX, Integer locY, String sz, String ty) {
 		super(locX, locY);
