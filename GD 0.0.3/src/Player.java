@@ -39,18 +39,7 @@ public class Player {
 		num = n;
 		name = "Player" + n; // name currently can't have @@
 		control = clientController;
-		if (num.equals("P1")) { // eventually could potentially choose colors
-			R = 230;
-			G = 140;
-			B = 255;
-			col = new Color(R, G, B);
-		}
-		else {
-			R = 255;
-			G = 215;
-			B = 140;
-			col = new Color(R, G, B);
-		}
+
 	}
 
 	public String printState() {
@@ -181,6 +170,18 @@ public class Player {
 	
 	public void setNum(String n) {
 		num = n;
+		if (num.equals("P1")) { // eventually could potentially choose colors
+			R = 230;
+			G = 140;
+			B = 255;
+			col = new Color(R, G, B);
+		}
+		else {
+			R = 255;
+			G = 215;
+			B = 140;
+			col = new Color(R, G, B);
+		}
 	}
 
 	public int getWater() { 

@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -373,7 +375,7 @@ public class ClientController {
 	
 	/* BASIC METHODS */
 	
-	public static void close() {
+	public void close() {
 		/* close the game */
 		System.exit(0);
 	}
@@ -463,9 +465,14 @@ public class ClientController {
 		
 		//tab Menu
 		MenuTab menuTab = new MenuTab(this);
-		JTextField tf = new JTextField("This is the menu", 100);
-		JButton b = new JButton("Quit Game");
-		menuTab.addComponents(tf, b);
+		SoundTest st = null;
+		try {
+			st = new SoundTest();
+		} catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		menuTab.createTab(st);
 		
 		//tab Map
 		MapTab mapTab = new MapTab(this);
@@ -638,6 +645,7 @@ public class ClientController {
 		waiting.add(new JTextField("Waiting to connect to server....", 100));
 		window.addTab(waiting, "Waiting to connect...");
 		player = new Player(this, "");
+		
 	}
 	
 	public void playerTab() {
@@ -645,9 +653,16 @@ public class ClientController {
 
 		
 		WelcomeTab welcome = new WelcomeTab(this);
+		window.addTab(welcome, "Connection successful");
 		while (welcome.notFinished()) {
-			System.out.println("");
-		}
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				System.out.print("threading error");
+			}
+		} 
 		window.removeAtab(0);
 	}
 	
@@ -659,10 +674,11 @@ public class ClientController {
 		ClientController control = new ClientController();
 		control.welcome();
 		control.connectToServer();	
+		control.playerTab();
 		control.firstContact();
 
 		control.startup(); // create the window
-		control.playerTab();
+
 		control.claimStation();
 		control.gameplay();
 		control.win();

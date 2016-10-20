@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 public class ServerController {
 	
 	static ServerSocket server;
@@ -406,6 +409,7 @@ public class ServerController {
 	}
 	
 	public static void main(String[] args) {
+		
 		ServerController server = new ServerController();
 		server.connectToClients();
 		server.setUp();

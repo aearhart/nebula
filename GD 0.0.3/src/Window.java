@@ -18,7 +18,7 @@ public class Window extends JFrame {
 		control = clientController;
 		//this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-	
+
 		
 		//Map m = new Map();
 		//this.add(m);
@@ -26,6 +26,7 @@ public class Window extends JFrame {
 		this.setLocationRelativeTo(null);
 		this.add(tabbedPane, BorderLayout.CENTER);
 		this.pack();
+
 		this.setVisible(true);
 	}
 	
