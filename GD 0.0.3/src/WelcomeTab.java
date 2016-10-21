@@ -20,7 +20,7 @@ public class WelcomeTab extends JPanel implements ActionListener{
 	protected JTextField textField;
 	protected JTextArea textArea;
 	private String areaText = "Welcome to GD 0.0.3!\n\nPlease enter your name in the text field above to play. \n\n";
-	private String fieldText = "Player Name (hit enter to select)";
+	private String fieldText = "What is your name? (hit enter to select)";
 	private Player p;
 	Boolean finished = false;
 
@@ -39,6 +39,7 @@ public class WelcomeTab extends JPanel implements ActionListener{
 		
 		textArea = new JTextArea(5, 20);
 		textArea.setEditable(false);
+		textArea.setLineWrap(true);
 		textArea.setFont(f1);
 		textArea.setText(areaText);
 		 
@@ -47,6 +48,7 @@ public class WelcomeTab extends JPanel implements ActionListener{
 		JButton b1 = new JButton("Yes");
 		b1.setMnemonic('h');
 		b1.setActionCommand("Done");
+		b1.setFont(f1);
 		b1.addActionListener(this);
 		
 		GridBagConstraints c= new GridBagConstraints();

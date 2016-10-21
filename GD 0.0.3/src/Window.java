@@ -22,8 +22,10 @@ public class Window extends JFrame {
 		
 		//Map m = new Map();
 		//this.add(m);
+		Font f = new Font("Consolas", Font.PLAIN, 20);
 		
 		this.setLocationRelativeTo(null);
+		tabbedPane.setFont(f);
 		this.add(tabbedPane, BorderLayout.CENTER);
 		this.pack();
 

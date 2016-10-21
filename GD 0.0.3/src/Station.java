@@ -30,9 +30,10 @@ public class Station extends Satellite implements MouseListener {
 	protected int waterStart;
 	
 	private String planetsToCreate = "";
-	private char[] positionsPossible = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+	private char[] positionsPossible = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?'};//'A', 'B', 'C', 'D', 'E', 'F'};
 	private String positions = "";
-	
+	double [] planetXs = {0, .382683, .707107, .92388, 1, .92388, .707107, .382683, 0, -.382683, -.707107, -.92388, -1, -.92388, -.707107, -.382683};
+	double [] planetYs = {1, .92388, .707107, .382683, 0, -.382683, -.707107, -.92388, -1, -.92388, -.707107, -.382683, 0, .382683, .707107, .92388};
 	
 	public Station(Integer locX, Integer locY, Integer sz, String n) {
 		super(locX, locY);
@@ -224,16 +225,16 @@ public class Station extends Satellite implements MouseListener {
 		case(2): // 1 m planet or 2 s planets
 			if (r == 0)
 				return type + "m";
-			else
-				return type + "s" + type + "s";
+			//else
+			//	return type + "s" + type + "s";
 		case(3): // 1 l planet or 1 s planet and 1 m planet
 			if (r == 0)
 				return type + "l";
 			else
-				return type + "s" + type + "m";
+				return type + "s" + type + "s";
 		case(4): // 2 m planets or 1 s planet and 1 l planet
 			if (r == 0)
-				return type + "m" + type + "m";
+				return type + "m" + type + "s";
 			else
 				return type + "s" + type + "l";
 		default:
@@ -282,10 +283,25 @@ public class Station extends Satellite implements MouseListener {
 	
 	public void placePlanet(Satellite p, int planetPos) {
 		// change x/y coordinates to place planet correctly w/in AoI
-		//TODO  Harry
+		//TODO  
+		Random rand = new Random();
+		
 		int planetSize = p.getSz();
-		p.placeX(x - planetSize - 50);
-		p.placeY(y - 90);
+		int r = rand.nextInt(planetSize/3);
+		int posOrneg = rand.nextInt(3);
+		int addX = 0;
+		int addY = 0;
+		if (posOrneg == 0) addX -= planetSize;
+		else if (posOrneg == 1) addX += planetSize;
+		r = rand.nextInt(3);
+		if (posOrneg == 0) addY += planetSize;
+		else if (posOrneg == 1) addY -= planetSize;
+		
+		int AoISector = (positions.charAt(planetPos) - '0');
+		int planetX = (int)(planetXs[AoISector]*AreaOfInfluence) + x;
+		p.placeX(planetX + addX);
+		int planetY = (int)(planetYs[AoISector]*AreaOfInfluence) + y;
+		p.placeY(planetY + addY);
 	}
 	
 	/* MOUSE events */

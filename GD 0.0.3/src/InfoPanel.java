@@ -23,7 +23,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	private ClientController control; 
 	private Player player;
 	
-	private String instructionText = "Welcome to Game Demo 0.0.3! \nPlease wait while we are setting up the game.";
+	private String instructionText = "Welcome to Game Demo 0.0.3! \nThis is where you will find information about your current turn and available actions.";
 	private String playerText;// = "Hello " + control.getPlayer().getName() + ", you can find your stats here.";
 	private char [] chars;
 	
@@ -32,7 +32,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	public InfoPanel(ClientController clientController) {
 		control = clientController;
-		playerText = "Hello "; //+ control.getPlayer().getName() + ", you can find your stats here.";
+		playerText = "Hello " + control.getPlayer().getName() + ", you can find your stats here.";
 		this.setPreferredSize(new Dimension (300,1000));
 		
 		//this.setLayout(new GridLayout(3, 1, 0, 5));

@@ -1,10 +1,23 @@
+import java.awt.Dimension;
 import java.awt.List;
+import java.awt.Toolkit;
 import java.util.ArrayList;
  
 public class Globals {
 	public static String delim = "@@";
 	public static int winSize = 1000;
 	public static double baseEventChance = 1.0;
+	
+	public static void setWinSize() {
+		// set winSize according to size of monitor
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
+		if (width > height) winSize = (int) height;
+		else winSize = (int) width;
+		System.out.println(".......................WINSIZE = " + winSize);
+	}
+	
 	public static String addDelims(ArrayList<String> s) {
 		if (s.size() == 0)
 			return "";

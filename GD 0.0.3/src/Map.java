@@ -10,24 +10,23 @@ public class Map extends JLayeredPane implements MouseListener{
 	private static final long serialVersionUID = 1L;
 	private ClientController control;
 	private BufferedImage bg = null;
-	private int winsize = 1000;
-	private JLabel l = new JLabel("HEYYYYYYYYYY over here", SwingConstants.CENTER);
-	private Color labelBackgroundColor = new Color(141, 178, 167, 200);
+	private JLabel l = new JLabel("", SwingConstants.CENTER);
+	private Color labelBackgroundColor = new Color(141, 178, 167, 0);
 	public Boolean hovering = true;
 	
 	public Map(ClientController clientController){
 		control = clientController;
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension (winsize, winsize));
+		this.setPreferredSize(new Dimension (Globals.winSize, Globals.winSize));
 		
 		// text label
-		Font f = new Font("Consolas", Font.PLAIN, 50);
+		Font f = new Font("Consolas", Font.PLAIN, 30);
 		l.setFont(f);
 		l.setForeground(Color.WHITE);
 		l.setOpaque(true);
 		l.setBackground(labelBackgroundColor);
 		l.setLocation(0, 0);
-		l.setBounds(0, 0, 1000, 1000);
+		l.setBounds(0, 0, Globals.winSize, Globals.winSize);
 		this.add(l, 5);
 		
 		
@@ -54,11 +53,12 @@ public class Map extends JLayeredPane implements MouseListener{
 		hovering = false; 
 	}
 	
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		g.drawImage(bg, 0, 0, winsize, winsize, null);
+		g.drawImage(bg, 0, 0, Globals.winSize, Globals.winSize, null);
 		//other
 		
 		/*g.setColor(control.AoIc);
@@ -70,9 +70,9 @@ public class Map extends JLayeredPane implements MouseListener{
 			for(int j = 0; j < 11; j++)
 				g.drawRect(i*100, j*100, 100, 100);
 
-		/*
+		/* PRINT SECTOR COLORS
 		Color[] sectorCols = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW, Color.ORANGE, Color.MAGENTA};
-		for (int i = 0; i < 1000; i+=5) {
+		for (int i = 0; i < 1000; i+=10) {
 			for (int j = 0; j < 1000; j+=5) {
 				int sector = control.findSector((double)i, (double)j);
 				g.setColor(sectorCols[sector-1]);

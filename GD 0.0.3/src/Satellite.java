@@ -112,7 +112,7 @@ public class Satellite extends JComponent {
 		else if (! own.equals("0")) { // equals opponent
 			owner = control.getOpponent();
 			ownerNum = owner.getNum();
-			setOwnerInfo();
+			setOwnerInfo(); 
 		}
 		else // isn't owned, it's free!
 			return;
@@ -135,7 +135,7 @@ public class Satellite extends JComponent {
 			this.setColors(owner.getColor(), this.getBorderCol(), this.getSelectCol());
 		}
 		else { // it's a planet
-			owner.addPlanet();
+			if (owner == control.getPlayer()) owner.addPlanet();
 			System.out.println("ADDING A PLANET......................................");
 			ownerColor = owner.getColor();
 		}
@@ -156,7 +156,7 @@ public class Satellite extends JComponent {
 	protected void addSatelliteOwner() {
 		setOwner(control.getPlayer());
 		upgradeSatellite();
-		if (t.equals("G") || t.equals("M") || t.equals("W")) control.getPlayer().addPlanet();
+		//if (t.equals("G") || t.equals("M") || t.equals("W")) control.getPlayer().addPlanet();
 		startingResources(control.getPlayer()); // if the new owner has any starting resources, add to player
 	}
 	

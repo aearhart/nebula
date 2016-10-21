@@ -1,8 +1,10 @@
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -235,11 +237,22 @@ public class ServerController {
 			int sect = sectors.get(r);
 			sectors.remove(r);
 			
-			Satellite s = new DefaultStation((int)xs[sect], (int)ys[sect], 30, "s" + Integer.toString(key++));
+			// choose between two types
+			r = ran.nextInt(2);
+			Satellite s;
+			if (r == 0) { // default
+					s = new DefaultStation((int)xs[sect], (int)ys[sect], 30, "s" + Integer.toString(key++));
+					s.setName("Default");
+			}
+			else { // slow_default
+				s = new Default2Station((int)xs[sect], (int)ys[sect], 30, "s" + Integer.toString(key++));
+				s.setName("Default2 (slow start)");
+			}
 			satellites.add(s);
 			
 	
 			String plans = ((Station) s).getPlanetsToCreate();
+			int pos = 0;
 			for (int j = 0; j < plans.length(); j+=2) {
 				Satellite p;
 				if (plans.charAt(j) == 'G') {
@@ -251,10 +264,12 @@ public class ServerController {
 				else {
 					p = new WaterPlanet(0, 0, plans.substring(j+1, j+2), "s" + Integer.toString(key++));
 				}
-				((Station)(s)).placePlanet(p, 0);
+				((Station)(s)).placePlanet(p, pos);
 				satellites.add(p);
+				pos++;
 					
 			}
+			System.out.println("Station in sector " + sect + " has " + pos + " planets");
 			
 			
 		}
@@ -308,7 +323,8 @@ public class ServerController {
 		aList.add(p2.printState());
 		aList.add(Integer.toString(satellites.size()));
 		for (Satellite s : satellites) {
-			s.setName(chooseName());// name them
+			if (! s.getType().equals("S"))
+				s.setName(chooseName());// name them
 			aList.add(s.printState());
 		}
 		
@@ -409,7 +425,7 @@ public class ServerController {
 	}
 	
 	public static void main(String[] args) {
-		
+
 		ServerController server = new ServerController();
 		server.connectToClients();
 		server.setUp();

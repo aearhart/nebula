@@ -432,6 +432,7 @@ public class ClientController {
 	/* Main functions */
 	
 	public int firstContact() {
+		// First contact with server, occurs when second player has been found
 		getMessage();
 		String s[] = input.split(Globals.delim);
 		// validate:
@@ -448,29 +449,15 @@ public class ClientController {
 		
 		sendMessage();
 		
+		// visuals:
+		setStatus("pause");
+		map.hover("Please wait while we are setting up the game.");
+
+		
 		return 0;
 	}
 	
-	public void createComponents() {
-		/*
-		status = "StartUp";
-		
-		window = new Window(this, player.getName());
-		
-		infoPanel = new InfoPanel(this);
-		window.add(infoPanel);
-		
-		map = new Map(this);
-		window.add(map);
-		
-		infoPanel2 = new InfoPanel2(this);
-		window.add(infoPanel2);
-		
-		window.pack();
-		window.update();	
-		*/
-		status = "StartUp";
-		
+	public void createMenu() {
 		//tab Menu
 		MenuTab menuTab = new MenuTab(this);
 		SoundTest st = null;
@@ -482,6 +469,12 @@ public class ClientController {
 		}
 		menuTab.createTab(st);
 		
+	}
+	
+	public void createComponents() {
+		status = "StartUp";
+		
+	
 		//tab Map
 		MapTab mapTab = new MapTab(this);
 		infoPanel = new InfoPanel(this);
@@ -490,7 +483,7 @@ public class ClientController {
 		infoPanel2 = new InfoPanel2(this);
 		mapTab.addComponents(infoPanel, map, infoPanel2);
 		
-		JPanel[] tabs = {menuTab, mapTab};
+		JPanel[] tabs = {mapTab};
 		window.addTabs(tabs);
 	}
 	
@@ -505,6 +498,7 @@ public class ClientController {
 	}
 	
 	public void startup() { // create components
+		map.clear(); // unpause
 		createComponents();
 		getMessage();
 		
@@ -525,7 +519,7 @@ public class ClientController {
 		// add satellites in list to map 
 		for (Satellite sat: satellites) {
 			map.add(sat, 2); 
-			//sat.setBounds(sat.getLocX(), sat.getLocY(), sat.getBoundSize(), sat.getBoundSize());
+			sat.setBounds(sat.getLocX(), sat.getLocY(), 100, 100);
 		}
 		// TODO Fix this. Inefficient
 		for (int j = 0; j < numOfSat; j++) {
@@ -673,14 +667,15 @@ public class ClientController {
 			}
 		} 
 		window.removeAtab(0);
+		createMenu();
 	}
 	
 	/* MAIN */
 	 
 	public static void main(String[] args) {
 
-		
 		ClientController control = new ClientController();
+		//Globals.setWinSize();
 		control.welcome();
 		control.connectToServer();	
 		control.playerTab();
