@@ -1,7 +1,9 @@
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -11,7 +13,8 @@ public class MenuTab extends JPanel implements ActionListener{
 	public SoundTest s;
 	public JButton b;
 	public JButton b1;
-	public JTextField tf;
+	public JButton b2;
+	public JLabel l;
 	
 	public MenuTab(ClientController clientController) {
 		control = clientController;
@@ -19,7 +22,7 @@ public class MenuTab extends JPanel implements ActionListener{
 	
 	public void createTab(SoundTest st) {
 		s = st;
-		tf = new JTextField("This is the menu", 100);
+		
 		b = new JButton("Quit Game");
 		b.setActionCommand("Quit");
 		b.setMnemonic('q');
@@ -28,14 +31,20 @@ public class MenuTab extends JPanel implements ActionListener{
 		b1.setMnemonic('m');
 		b1.setActionCommand("Music");
 		b1.addActionListener(this);
-		this.add(tf);
+		
+		b2 = new JButton("Test hover over map");
+		b2.setMnemonic('h');
+		b2.setActionCommand("Hover");
+		b2.addActionListener(this);
+		
+		l = new JLabel("This is the menu");
+		l.setForeground(Color.BLACK);
+		//l.setBounds(x, y, width, height);
+		
+		this.add(l);
 		this.add(b);
 		this.add(b1);
-	}
-	
-	public void addComponents(JTextField f1, JButton b1) {
-		this.add(f1);
-		this.add(b1);
+		this.add(b2);
 	}
 	
 	public void update() {
@@ -63,6 +72,14 @@ public class MenuTab extends JPanel implements ActionListener{
 		}
 		else if ("Quit".equals(e.getActionCommand())) {
 			control.close();
+		}
+		else if ("Hover".equals(e.getActionCommand())) {
+			Map m = control.getMap();
+			if (m.hovering) {
+				m.clear();
+			}
+			else
+				m.hover("Hovering text");
 		}
 	}
 }

@@ -129,6 +129,14 @@ public class Station extends Satellite implements MouseListener {
 		
 	}
 	
+	public String info() {
+		String str = "";
+		str += "This " + name + " station is level " + level;
+		str += ".\nProduces: " + gasResource + "g " + mineralResource + "m " + waterResource + "w\n";
+		str += "Upgrade costs: " + costGas + "g " + mineralResource + "m " + waterResource + "w";
+		return str;
+	}
+	
 	private void setupResources(char res, int generate) {
 		int resourceProduced = 0;
 		switch (generate) {
@@ -335,7 +343,7 @@ public class Station extends Satellite implements MouseListener {
 			if (this.owner == control.getOpponent()) {
 				control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". 100% off limits."); }
 			else { 
-				control.printToHoverArea("You do not own this space station. But you could, for the price of a click of a button!"); }
+				control.printToHoverArea("You do not own this space station. But you could, for the price of a click of a button!" + info()); }
 			return;	
 			}
 		case "Wait": {
@@ -354,7 +362,7 @@ public class Station extends Satellite implements MouseListener {
 			else if (this.owner == control.getOpponent()) {
 				control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". ");
 			}
-			else {control.printToHoverArea("This space station is unmanned! Would you like to build here?"); }
+			else {control.printToHoverArea("This space station is unmanned! Would you like to build here?" + info()); }
 			return;
 			} // end case
 		} // end switch

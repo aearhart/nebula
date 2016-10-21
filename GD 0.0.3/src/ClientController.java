@@ -396,6 +396,14 @@ public class ClientController {
 		return player;
 	}
 	
+	public Window getWindow() {
+		return window;
+	}
+	
+	public Map getMap() {
+		return map;
+	}
+	
 	public Player getOpponent() {
 		return opponent;
 	}
@@ -478,6 +486,7 @@ public class ClientController {
 		MapTab mapTab = new MapTab(this);
 		infoPanel = new InfoPanel(this);
 		map = new Map(this);
+
 		infoPanel2 = new InfoPanel2(this);
 		mapTab.addComponents(infoPanel, map, infoPanel2);
 		
@@ -515,7 +524,7 @@ public class ClientController {
 		}
 		// add satellites in list to map 
 		for (Satellite sat: satellites) {
-			map.add(sat); 
+			map.add(sat, 2); 
 			//sat.setBounds(sat.getLocX(), sat.getLocY(), sat.getBoundSize(), sat.getBoundSize());
 		}
 		// TODO Fix this. Inefficient
@@ -524,7 +533,7 @@ public class ClientController {
 		}
 		updateMap();
 		status = "Wait";
-		
+		printToPlayerArea();
 		if (! s[1].equals(clientPlayerNum)) {
 			printToInstructionArea(opponent.getName() + " goes first. Please wait.");
 		}

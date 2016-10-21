@@ -13,7 +13,7 @@ public class Window extends JFrame {
 	
 	
 	public Window(ClientController clientController, String playerName) {
-		super("Game Demo 0.0.3 for " + playerName);
+		super("Welcome to Game Demo 0.0.3");
 		//this.setLayout(new FlowLayout());
 		control = clientController;
 		//this.setResizable(false);
@@ -57,6 +57,10 @@ public class Window extends JFrame {
 		this.setVisible(true);
 	}
 	*/
+	
+	public void rename(String str) {
+		this.setTitle("Game Demo 0.0.3 for " + str);
+	}
 	
 	public void update() {
 		this.setVisible(true);

@@ -19,7 +19,7 @@ public class WelcomeTab extends JPanel implements ActionListener{
 	
 	protected JTextField textField;
 	protected JTextArea textArea;
-	private String areaText = "Welcome to GD 0.0.3!\nPlease enter your name in the text field above to play. \n\n";
+	private String areaText = "Welcome to GD 0.0.3!\n\nPlease enter your name in the text field above to play. \n\n";
 	private String fieldText = "Player Name (hit enter to select)";
 	private Player p;
 	Boolean finished = false;
@@ -102,6 +102,7 @@ public class WelcomeTab extends JPanel implements ActionListener{
 				textField.setText(names[r]);
 			}
 			p.setName(textField.getText());
+			control.getWindow().rename(p.getName());
 			finished = true;
 			//System.out.println("done -- " + p.getName() + "   " + notFinished());
 			return;
