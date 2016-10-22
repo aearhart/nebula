@@ -53,8 +53,9 @@ public class ClientController {
 		return null;
 	}
 
-	private void error() {
+	private void error(IOException e) {
 		System.out.println("Error. FAILED");
+		e.printStackTrace();
 		System.exit(1);
 	}
 	
@@ -68,12 +69,12 @@ public class ClientController {
 		try {
 			in = new DataInputStream(socket.getInputStream());
 		} catch (IOException e) {
-			error();
+			error(e);
 		}
 		try {
 			input = in.readUTF();
 		} catch (IOException e) {
-			error();
+			error(e);
 		}
 		System.out.println("Receiving information...  " + input);
 	}
@@ -83,12 +84,12 @@ public class ClientController {
 		try {
 			out = new DataOutputStream(socket.getOutputStream());
 		} catch (IOException e) {
-			error();
+			error(e);
 		}
 		try {
 			out.writeUTF(currentState);
 		} catch (IOException e) {
-			error();
+			error(e);
 		}
 		System.out.println("Message sent: " + currentState);
 		} 
@@ -450,8 +451,6 @@ public class ClientController {
 		sendMessage();
 		
 		// visuals:
-		setStatus("pause");
-		map.hover("Please wait while we are setting up the game.");
 
 		
 		return 0;
@@ -468,7 +467,7 @@ public class ClientController {
 			e.printStackTrace();
 		}
 		menuTab.createTab(st);
-		
+		window.addTab(menuTab, "Menu");
 	}
 	
 	public void createComponents() {
@@ -485,6 +484,9 @@ public class ClientController {
 		
 		JPanel[] tabs = {mapTab};
 		window.addTabs(tabs);
+		setStatus("pause");
+		map.hover("Please wait while we are setting up the game.");
+
 	}
 	
 	public int updatePlayer(String s[], int i, int p) {
@@ -498,8 +500,8 @@ public class ClientController {
 	}
 	
 	public void startup() { // create components
-		map.clear(); // unpause
 		createComponents();
+		map.clear();
 		getMessage();
 		
 		String s[] = input.split(Globals.delim);
@@ -535,6 +537,7 @@ public class ClientController {
 	}
 	
 	public void claimStation() {
+
 		getMessage();
 		String s[] = input.split(Globals.delim);
 		

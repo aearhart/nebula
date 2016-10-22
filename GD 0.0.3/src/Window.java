@@ -8,7 +8,7 @@ public class Window extends JFrame {
 	private ClientController control;
 	
 	JTabbedPane tabbedPane = new JTabbedPane();
-	private String[] tabNames = {"Menu", "Map"};
+	private String[] tabNames = {"Map"};
 	private Color[] tabColors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.MAGENTA};
 	
 	
@@ -16,6 +16,8 @@ public class Window extends JFrame {
 		super("Welcome to Game Demo 0.0.3");
 		//this.setLayout(new FlowLayout());
 		control = clientController;
+		
+		
 		//this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 
