@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 // Contains:
@@ -23,7 +24,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 	private ClientController control; 
 	private Player player;
 	
-	private String instructionText = "Welcome to Game Demo 0.0.3! \nThis is where you will find information about your current turn and available actions.";
+	private String instructionText = "Welcome to Game Demo 0.0.3! This is where you will find information about your current turn and available actions.";
 	private String playerText;// = "Hello " + control.getPlayer().getName() + ", you can find your stats here.";
 	private char [] chars;
 	
@@ -37,79 +38,77 @@ public class InfoPanel extends JPanel implements ActionListener{
 		
 		//this.setLayout(new GridLayout(3, 1, 0, 5));
 		this.setLayout(new GridBagLayout());
-
-		// BUTTON 1
 		GridBagConstraints c = new GridBagConstraints();
-		c.anchor = GridBagConstraints.NORTHWEST;
 		
+		
+		// PANEL 1
+		instructionArea = new JTextArea();
+		instructionArea.setPreferredSize(new Dimension(100, 300));
+		instructionArea.setFont(Globals.f);
+		instructionArea.setLineWrap(true);
+		instructionArea.setWrapStyleWord(true);
+		printToInstructionArea(instructionText);
+		instructionArea.setEditable(false);
+		instructionArea.setBackground(Globals.backgroundColor);
+		instructionArea.setForeground(Globals.textColor);
+		JScrollPane instructionScrollPane = new JScrollPane(instructionArea);
+		
+		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 0; c.gridy = 0;
-		//c.gridwidth =1; c.gridheight =1;
-		c.ipadx = 5; c.ipady = 10;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(5, 5, 5, 5);
-		// testing with buttons
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1.0; c.weighty = 1.0;
+		c.gridheight = 1; c.gridwidth = 2;
+		this.add(instructionScrollPane, c);
+		
+		
+		// BUTTON 1
 		JButton b1 = new JButton("?");
 		b1.setMnemonic('h');
 		b1.setActionCommand("help");
+		b1.setFont(Globals.f);
+		b1.setForeground(Globals.textColor);
+		b1.setBackground(Globals.backgroundColor);
 		b1.addActionListener(this);
+		
+		c.anchor = GridBagConstraints.NORTHWEST;
+		c.gridx = 0; c.gridy = 1;
+		c.gridheight = 1; c.gridwidth = 1; 
+		c.weightx = 1.0; c.weighty = 0.0;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		this.add(b1, c);
 		
-		// PANEL 1
-		c.gridx = 0; c.gridy = 1;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.fill = GridBagConstraints.BOTH;
-		instructionArea = new JTextArea(20, 3);
-		playerArea = new JTextArea(20, 3);
-		instructionArea.setPreferredSize(new Dimension(100, 300));
-		playerArea.setPreferredSize(new Dimension(100, 200));
-		//playerArea.setColumns(40);
-		Font f1 = new Font("Consolas", Font.PLAIN, 22);
-		
-		instructionArea.setFont(f1);
-		
-		//instructionArea.setColumns(10);
-		//instructionArea.setRows(1);
-		instructionArea.setLineWrap(true);
-		instructionArea.setWrapStyleWord(true);
-		instructionArea.setText(instructionText);
-		instructionArea.setEditable(false);
-		this.add(instructionArea, c);
-		
-		
 		// BUTTON 2
-		c.gridx = 0; c.gridy = 2;
-		//c.gridwidth =1; c.gridheight =1;
-		c.ipadx = 5; c.ipady = 10;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		// testing with buttons
 		JButton b2 = new JButton("Done");
 		b2.setMnemonic('d');
 		b2.setActionCommand("done");
+		b2.setFont(Globals.f);
+		b2.setForeground(Globals.textColor);
+		b2.setBackground(Globals.backgroundColor);
 		b2.addActionListener(this);
-		this.add(b2, c);
+
+		c.anchor = GridBagConstraints.NORTHWEST;
+		c.gridx = 1; c.gridy = 1;
+		c.gridheight = 1; c.gridwidth = 1; 
+		c.weightx = 1.0; c.weighty = 0.0;
+		c.fill = GridBagConstraints.HORIZONTAL;this.add(b2, c);
 		
 		// PANEL 2
-		c.gridx = 0; c.gridy = 3;
-		//c.ipady = 10;		
-		c.ipadx = 5; c.ipady = 100;
-		c.insets = new Insets(5, 5, 5, 5);
-		c.weighty = 1.0;
-		c.fill = GridBagConstraints.BOTH;
-		playerArea.setFont(f1);
-
-		//playerArea.setRows(1);
-		//playerArea.setColumns(10);
+		playerArea = new JTextArea();
+		playerArea.setPreferredSize(new Dimension(100, 300));
+		playerArea.setFont(Globals.f);
 		playerArea.setLineWrap(true);
 		playerArea.setWrapStyleWord(true);
-		playerArea.setText(playerText);
+		printToPlayerArea(playerText);
 		playerArea.setEditable(false);
+		playerArea.setBackground(Globals.backgroundColor);
+		playerArea.setForeground(Globals.textColor);
 		
+		c.anchor = GridBagConstraints.NORTHWEST;
+		c.gridx = 0; c.gridy = 2;
+		c.gridheight = 1; c.gridwidth = 2;
+		c.weightx = 1.0; c.weighty = 1.0;
+		c.fill = GridBagConstraints.BOTH;
 		this.add(playerArea, c);
-		
-		
-		
-		
 	}
 	
 	public static String padRight(String s, int n) {
@@ -117,16 +116,18 @@ public class InfoPanel extends JPanel implements ActionListener{
 	}
 	
 	public void printToInstructionArea(String s) {
-		instructionArea.setText(padRight(s, 280));
+		//instructionArea.setText(padRight(s, 280));
+		instructionArea.setText(s);
 	}
 	
 	public void printToPlayerArea(String s){
-		playerArea.setText(padRight(s, 280));
+		//playerArea.setText(padRight(s, 280));
+		playerArea.setText(s);
 	}
 	
 	public void actionPerformed(ActionEvent e) {
 		if ("help".equals(e.getActionCommand())) {
-			printToInstructionArea("Help coming your way?/n whatever");
+			printToInstructionArea("Help coming your way?");
 		}
 		else if ("done".equals(e.getActionCommand())) {
 			printToInstructionArea("I guess you're done.");

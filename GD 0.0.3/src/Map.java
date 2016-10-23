@@ -11,7 +11,7 @@ public class Map extends JLayeredPane implements MouseListener{
 	private ClientController control;
 	private BufferedImage bg = null;
 	private JLabel l = new JLabel("", SwingConstants.CENTER);
-	private Color labelBackgroundColor = new Color(141, 178, 167, 0);
+	private Color labelBackgroundColor = new Color(4, 45, 45, 120);
 	public Boolean hovering = true;
 	
 	public Map(ClientController clientController){

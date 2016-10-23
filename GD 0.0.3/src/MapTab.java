@@ -1,5 +1,7 @@
 
 
+import java.awt.Color;
+
 import javax.swing.JPanel;
 
 public class MapTab extends JPanel{
@@ -8,6 +10,7 @@ public class MapTab extends JPanel{
 	
 	public MapTab(ClientController clientController) {
 		control = clientController;
+		this.setBackground(new Color(142, 255, 253, 255));
 	}
 	
 	public void addComponents(InfoPanel p1, Map m, InfoPanel2 p2) {
