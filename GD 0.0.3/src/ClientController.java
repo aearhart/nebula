@@ -100,7 +100,8 @@ public class ClientController {
 		try {
 			socket = new Socket(ipAddress, 7777);
 		} catch (IOException e) {
-			error("Unable to connect to server.");
+			//error("Unable to connect to server.");
+			status = "test";
 			//e.printStackTrace();
 		}
 
@@ -682,14 +683,21 @@ public class ClientController {
 		control.welcome();
 		control.connectToServer();	
 		control.playerTab();
-		control.firstContact();
+		if (! control.getStatus().equals("test")) {
 
-		control.startup(); // create the window
+			control.firstContact();
+			
+			control.startup(); // create the window
 
-		control.claimStation();
-		control.gameplay();
-		control.win();
-		//close();
+			control.claimStation();
+			control.gameplay();
+			control.win();
+			//close();
+		}
+		else {
+			control.createComponents();
+			control.getMap().hover("This is just a test.");
+		}
 	}
 
 }
