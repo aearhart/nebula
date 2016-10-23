@@ -1,4 +1,6 @@
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.List;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -7,7 +9,8 @@ public class Globals {
 	public static String delim = "@@";
 	public static int winSize = 1000;
 	public static double baseEventChance = 1.0;
-	
+	public static Font f = new Font("Consolas", Font.PLAIN, 30);
+	public static Color textColor = new Color(99, 234, 237, 100);
 	public static void setWinSize() {
 		// set winSize according to size of monitor
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
