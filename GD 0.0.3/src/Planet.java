@@ -32,8 +32,13 @@ public class Planet extends Satellite implements MouseListener {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		g.setColor(fillCol);
-		g.fillOval(0, 0, s, s);	
+		if (image == null) {
+			g.setColor(fillCol);
+			g.fillOval(0, 0, s, s);	
+		}
+		else {
+			g.drawImage(image, 0, 0, s, s, null);
+		}
 		g.setColor(borderCol);
 		g.drawOval(0, 0, s, s);
 		if (owner != null) {
@@ -60,6 +65,7 @@ public class Planet extends Satellite implements MouseListener {
 		aList.add(Integer.toString(waterResource));
 		aList.add(ownerNum);
 		aList.add(Integer.toString(level));
+		aList.add(imageName);
 
 		return Globals.addDelims(aList);
 	}
@@ -83,7 +89,11 @@ public class Planet extends Satellite implements MouseListener {
 		waterResource = Integer.parseInt(ary[i++]);
 		ownerNum = ary[i++];
 		level = Integer.parseInt(ary[i++]);
-		
+		imageName = ary[i++];
+		if (image==null) {
+			System.out.println("Setting image: " + imageName);
+			setImage(imageName);
+		}
 		if(owner == null)
 			setOwner(ownerNum);
 		return i;

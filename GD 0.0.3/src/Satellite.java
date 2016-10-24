@@ -50,6 +50,7 @@ public class Satellite extends JComponent {
 	protected int maxLevel = 5;
 	
 	protected BufferedImage image = null;
+	public String imageName = " ";
 	
 	public Satellite(Integer locX, Integer locY) {
 		x = locX;

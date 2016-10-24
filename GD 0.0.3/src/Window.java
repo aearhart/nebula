@@ -20,7 +20,7 @@ public class Window extends JFrame {
 		
 		//this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
-
+		this.setBackground(Color.BLACK);
 		
 		//Map m = new Map();
 		//this.add(m);
