@@ -23,7 +23,6 @@ public class ServerController {
 	private static String input = "";
 	private static String currentState = "";
 	private Boolean valid = true;
-	
 	private Player p1 = new Player(this);
 	private Player p2 = new Player(this);
 	
@@ -33,9 +32,9 @@ public class ServerController {
 	private String winner = "P0";
 
 	private List<Satellite> satellites = new ArrayList<Satellite>();
-	
 	private List<String> planetNames = new ArrayList<String>();  
 			
+	
 	public ServerController() {
 	}
 	
@@ -269,13 +268,9 @@ public class ServerController {
 				pos++;
 					
 			}
-			System.out.println("Station in sector " + sect + " has " + pos + " planets");
-			
-			
+			System.out.println("Station in sector " + sect + " has " + pos + " planets");	
 		}
-
 	}
-	
 	
 	public String chooseName() {
 		// choose a random name for a planet
@@ -410,20 +405,23 @@ public class ServerController {
 	
 	public void turn() {
 		// server sends state to current player and player takes one turn
-		if (gameEnd()) {
+		
+		if (gameEnd()) { // look for winner
 			win();
 			System.exit(0);
 		}
 		
+		// send out state to current player
 		getCurrentState("turn");
 		sendMessage(currentSocket);
+
 		getMessage(currentSocket);
 		validate();
 		read(); // parse input into current state and update
 		switchCurrPlayer();
 		turn();
 	}
-	
+
 	public static void main(String[] args) {
 
 		ServerController server = new ServerController();

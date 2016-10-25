@@ -49,7 +49,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		instructionArea.setWrapStyleWord(true);
 		printToInstructionArea(instructionText);
 		instructionArea.setEditable(false);
-		instructionArea.setBackground(Globals.backgroundColor);
+		//instructionArea.setBackground(Globals.backgroundColor);
 		instructionArea.setForeground(Globals.textColor);
 		JScrollPane instructionScrollPane = new JScrollPane(instructionArea);
 		
@@ -100,7 +100,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		playerArea.setWrapStyleWord(true);
 		printToPlayerArea(playerText);
 		playerArea.setEditable(false);
-		playerArea.setBackground(Globals.backgroundColor);
+		//playerArea.setBackground(Globals.backgroundColor);
 		playerArea.setForeground(Globals.textColor);
 		
 		c.anchor = GridBagConstraints.NORTHWEST;

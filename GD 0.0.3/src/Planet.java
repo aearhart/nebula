@@ -91,7 +91,7 @@ public class Planet extends Satellite implements MouseListener {
 		level = Integer.parseInt(ary[i++]);
 		imageName = ary[i++];
 		if (image==null) {
-			System.out.println("Setting image: " + imageName);
+			//System.out.println("Setting image: " + imageName);
 			setImage(imageName);
 		}
 		if(owner == null)

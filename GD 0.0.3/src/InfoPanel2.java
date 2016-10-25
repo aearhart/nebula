@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -27,6 +28,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 	private char [] chars;
 	
 	private JTextArea hoverArea;
+	public ChatBox chatBox;
 	
 	public InfoPanel2(ClientController clientController) {
 		control = clientController;
@@ -34,7 +36,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		this.setPreferredSize(new Dimension (300,1000));
 		
 		this.setLayout(new GridBagLayout());
-
+		this.setBackground(new Color(0, 0, 0, 0));
 		// Hover Area
 		GridBagConstraints c = new GridBagConstraints();
 		c.anchor = GridBagConstraints.NORTHWEST;
@@ -66,6 +68,18 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		b1.setActionCommand("wait");
 		b1.addActionListener(this);
 		this.add(b1, c);
+		
+		// chat box
+		c.anchor = GridBagConstraints.NORTHWEST;
+		c.gridx = 0;
+		c.gridy = 2;
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.insets = new Insets(5, 5, 5, 5);
+		
+		chatBox = new ChatBox(control);
+		this.add(chatBox, c);
 		
 	}
 	

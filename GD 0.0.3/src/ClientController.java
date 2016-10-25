@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.io.BufferedReader;
 
 public class ClientController {
 
@@ -20,7 +23,7 @@ public class ClientController {
 	static DataInputStream in;
 	static DataOutputStream out;
 	private static String input;
-	private static String currentState = "";
+	public static String currentState = "";
 	
 	private String ipAddress = "localhost";//"2605:e000:1c02:8e:6d73:7e5:5e67:f8b5";
 	String winner = "";
@@ -42,16 +45,13 @@ public class ClientController {
 	int AoIs = 0;
 	Color AoIc;
 	
+	public boolean testing = false;
+	
 	public ClientController() {
  
 	}
 
 	/* SERVER METHODS */
-	
-	private Player Player(ClientController clientController) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	private void error(IOException e) {
 		System.out.println("Error. FAILED");
@@ -333,16 +333,18 @@ public class ClientController {
 	public void upgradeTime() {
 		/* upgrade or buy a space station/planet */
 		printToInstructionArea("Click on a planet or space station to upgrade.");
-		while (status.equals("Upgrade")) { // continue until player successfully spends turn
+	
+		while (status.equals("Upgrade")) {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				//e.printStackTrace();
-				System.out.print("threading error");
-			}
+				System.out.print("threading error"); }
+		
 		}
 	}
+	
 	
 	/* DRAWING AOI */
 	
@@ -683,6 +685,7 @@ public class ClientController {
 		control.welcome();
 		control.connectToServer();	
 		control.playerTab();
+		System.out.println("PLAYER!!!!!!!" + control.getPlayer().getName());
 		if (! control.getStatus().equals("test")) {
 
 			control.firstContact();
@@ -695,6 +698,7 @@ public class ClientController {
 			//close();
 		}
 		else {
+			control.testing  = true;
 			control.createComponents();
 			control.getMap().hover("This is just a test.");
 		}
