@@ -42,6 +42,7 @@ public class ChatBox extends JPanel implements ActionListener{
 	private JTextField inputField;
 	private JTextArea chatHistory;
 	private String currentHistory = "";
+	public String message = "";
 	
 	public ChatBox(ClientController clientController) {
 		// TODO Auto-generated constructor stub
@@ -59,7 +60,7 @@ public class ChatBox extends JPanel implements ActionListener{
 		chatHistory.setLineWrap(true);
 		chatHistory.setWrapStyleWord(true);
 		chatHistory.setFont(Globals.f);
-		chatHistory.setText(currentHistory);
+		chatHistory.setText("Chat not currently available");
 		JScrollPane chatScrollPane = new JScrollPane(chatHistory);
 		chatScrollPane.setPreferredSize(new Dimension(100, 300));
 	
@@ -72,19 +73,31 @@ public class ChatBox extends JPanel implements ActionListener{
 		inputField.setFont(Globals.f);
 		inputField.setDocument(new JTextFieldLimit(40));
 		inputField.setText(">>");
+		inputField.setEditable(false);
 		
 		this.add(title, BorderLayout.NORTH);
 		this.add(chatScrollPane, BorderLayout.CENTER);
 		this.add(inputField, BorderLayout.SOUTH);
 	}
 	
-	public Boolean illegal(String t) {
-		return t.equals("");
+	public void turnOn() {
+		chatHistory.setText(currentHistory);
+		inputField.setEditable(true);
+		control.chatEnabled = true;
 	}
 	
-	public void sendChatMessage(String t) {
-		control.currentState = "MESSAGE@@" + t;
-		control.sendMessage();
+	public void turnOff(String msg) {
+		chatHistory.setText(msg);
+		inputField.setEditable(false);
+		control.chatEnabled = false;
+	}
+	
+	public void emptyMessage() {
+		message = "";
+	}
+	
+	public Boolean illegal(String t) {
+		return t.equals("");
 	}
 	
 	public void updateHistory(String t) {
@@ -101,11 +114,13 @@ public class ChatBox extends JPanel implements ActionListener{
 			return;
 		}
 		else {
-			text = control.getPlayer().getName() + ":" + text.substring(2, text.length());
+			if (text.substring(0, 2).equals(">>")) {
+				text = text.substring(2, text.length());
+			}
+			text = control.getPlayer().getName() + ":" + text;
 			updateHistory(text);
 			inputField.setText(">>");
-			if (! control.testing)
-				sendChatMessage(text);
+			message = text;
 		}
 
 		

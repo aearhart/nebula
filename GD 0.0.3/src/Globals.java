@@ -10,7 +10,7 @@ public class Globals {
 	public static int winSize = 1000;
 	public static double baseEventChance = 1.0;
 	public static Font f = new Font("Consolas", Font.PLAIN, 22);
-	public static Color textColor = new Color(99, 234, 237, 100);
+	public static Color textColor = Color.BLACK;//new Color(99, 234, 237, 100);
 	public static Color backgroundColor = new Color(31, 106, 119, 127);
 	public static void setWinSize() {
 		// set winSize according to size of monitor
