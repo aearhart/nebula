@@ -39,22 +39,22 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		this.setBackground(new Color(0, 0, 0, 0));
 		// Hover Area
 		GridBagConstraints c = new GridBagConstraints();
+		
 		c.anchor = GridBagConstraints.NORTHWEST;
-		c.gridx = 0;
-		c.gridy = 0;
+		c.gridx = 0; c.gridy = 0;
 		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weightx = 1.0; c.weighty = 1.0;
 		c.insets = new Insets(5, 5, 5, 5);
+		
 		hoverArea = new JTextArea(20, 3);
 		hoverArea.setPreferredSize(new Dimension(100, 300));
-		Font f1 = new Font("Consolas", Font.PLAIN, 22);
-		hoverArea.setFont(f1);
+		hoverArea.setFont(Globals.f);
 		hoverArea.setLineWrap(true);
 		hoverArea.setRows(1);
 		hoverArea.setWrapStyleWord(true);
 		hoverArea.setText(hoverText);
 		hoverArea.setEditable(false);
+		hoverArea.setOpaque(false);
 		this.add(hoverArea, c);
 		
 		// skip button
@@ -71,11 +71,9 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		
 		// chat box
 		c.anchor = GridBagConstraints.NORTHWEST;
-		c.gridx = 0;
-		c.gridy = 2;
+		c.gridx = 0; c.gridy = 2;
 		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
+		c.weightx = 1.0; c.weighty = 1.0;
 		c.insets = new Insets(5, 5, 5, 5);
 		
 		chatBox = new ChatBox(control);

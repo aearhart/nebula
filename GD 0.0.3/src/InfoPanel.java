@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
@@ -13,6 +14,12 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
 
 // Contains:
 //   Instruction Text Area
@@ -35,7 +42,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		control = clientController;
 		playerText = "Hello " + control.getPlayer().getName() + ", you can find your stats here.";
 		this.setPreferredSize(new Dimension (300,1000));
-		
+		this.setOpaque(false);
 		//this.setLayout(new GridLayout(3, 1, 0, 5));
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -48,10 +55,14 @@ public class InfoPanel extends JPanel implements ActionListener{
 		instructionArea.setLineWrap(true);
 		instructionArea.setWrapStyleWord(true);
 		printToInstructionArea(instructionText);
-		instructionArea.setEditable(false);
-		//instructionArea.setBackground(Globals.backgroundColor);
 		instructionArea.setForeground(Globals.textColor);
+		instructionArea.setEditable(false);
+		instructionArea.setOpaque(false);
+		//instructionArea.setBackground(Globals.backgroundColor);
+		//instructionArea.setForeground(Globals.textColor);
 		JScrollPane instructionScrollPane = new JScrollPane(instructionArea);
+		instructionScrollPane.setOpaque(false);
+		instructionScrollPane.getViewport().setOpaque(false);
 		
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 0; c.gridy = 0;
@@ -67,7 +78,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 		b1.setActionCommand("help");
 		b1.setFont(Globals.f);
 		b1.setForeground(Globals.textColor);
-		b1.setBackground(Globals.backgroundColor);
+		//b1.setOpaque(false);
+		b1.setContentAreaFilled(false);
+		b1.setBorder(new EtchedBorder(new Color(45, 126, 255, 70), new Color(45, 126, 255, 30)));
 		b1.addActionListener(this);
 		
 		c.anchor = GridBagConstraints.NORTHWEST;
@@ -83,7 +96,8 @@ public class InfoPanel extends JPanel implements ActionListener{
 		b2.setActionCommand("done");
 		b2.setFont(Globals.f);
 		b2.setForeground(Globals.textColor);
-		b2.setBackground(Globals.backgroundColor);
+		b2.setContentAreaFilled(false);
+		b2.setBorder(new EtchedBorder(new Color(45, 126, 255, 70), new Color(45, 126, 255, 30)));
 		b2.addActionListener(this);
 
 		c.anchor = GridBagConstraints.NORTHWEST;
@@ -102,6 +116,7 @@ public class InfoPanel extends JPanel implements ActionListener{
 		playerArea.setEditable(false);
 		//playerArea.setBackground(Globals.backgroundColor);
 		playerArea.setForeground(Globals.textColor);
+		playerArea.setOpaque(false);
 		
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 0; c.gridy = 2;
@@ -117,12 +132,12 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	public void printToInstructionArea(String s) {
 		//instructionArea.setText(padRight(s, 280));
-		instructionArea.setText(s);
+		instructionArea.setText("Gameplay:\n\n" + s);
 	}
 	
 	public void printToPlayerArea(String s){
 		//playerArea.setText(padRight(s, 280));
-		playerArea.setText(s);
+		playerArea.setText("Player Information:\n\n" + s);
 	}
 	
 	public void actionPerformed(ActionEvent e) {

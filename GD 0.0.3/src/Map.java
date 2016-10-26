@@ -14,6 +14,8 @@ public class Map extends JLayeredPane implements MouseListener{
 	private Color labelBackgroundColor = new Color(4, 45, 45, 120);
 	public Boolean hovering = true;
 	
+	
+	
 	public Map(ClientController clientController){
 		control = clientController;
 		this.setLayout(null);
@@ -61,15 +63,16 @@ public class Map extends JLayeredPane implements MouseListener{
 		g.drawImage(bg, 0, 0, Globals.winSize, Globals.winSize, null);
 		//other
 		
-		/*g.setColor(control.AoIc);
+		g.setColor(control.AoIc);
 		g.drawOval(control.AoIx, control.AoIy, control.AoIs, control.AoIs);
-		*/
+		
 		
 		g.setColor(Color.BLACK);
 		for(int i = 0; i < 11; i++)
 			for(int j = 0; j < 11; j++)
 				g.drawRect(i*100, j*100, 100, 100);
 
+		
 		/* PRINT SECTOR COLORS
 		Color[] sectorCols = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW, Color.ORANGE, Color.MAGENTA};
 		for (int i = 0; i < 1000; i+=10) {
@@ -107,13 +110,12 @@ public class Map extends JLayeredPane implements MouseListener{
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+	
 	}
 
 }

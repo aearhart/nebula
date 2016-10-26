@@ -53,6 +53,7 @@ public class MenuTab extends JPanel implements ActionListener{
 		super.paintComponent(g);
 		g.drawImage(image,  0,  0, getWidth(), getHeight(), this);
 	}
+	
 	public void createTab(SoundTest st) {
 		music = st;
 
