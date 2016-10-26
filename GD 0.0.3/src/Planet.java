@@ -222,6 +222,7 @@ public class Planet extends Satellite implements MouseListener {
 	public void mouseEntered(MouseEvent e) {
 		switchColors();
 		repaint();
+		control.getMap().hoverBoxOn(name);
 		switch (control.getStatus()) {
 		case "Claiming": {
 			control.printToHoverArea(info());
@@ -254,6 +255,7 @@ public class Planet extends Satellite implements MouseListener {
 		/* switch back to original */
 		switchColors();
 		repaint();
+		control.getMap().hoverBoxOff();
 		switch (control.getStatus()) {
 		case "Claiming": {
 			control.printToHoverArea();

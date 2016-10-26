@@ -49,6 +49,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		hoverArea = new JTextArea(20, 3);
 		hoverArea.setPreferredSize(new Dimension(100, 300));
 		hoverArea.setFont(Globals.f);
+		hoverArea.setForeground(Globals.textColor);
 		hoverArea.setLineWrap(true);
 		hoverArea.setRows(1);
 		hoverArea.setWrapStyleWord(true);

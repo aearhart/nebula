@@ -676,6 +676,20 @@ public class ClientController {
 		createMenu();
 	}
 	
+	// for testing
+	public void testMap() {
+		satellites.add(new WaterPlanet(this, 250, 250, "s", "s01"));
+		satellites.add(new WaterPlanet(this, 250, 750, "m", "s02"));
+		satellites.add(new WaterPlanet(this, 750, 250, "l", "s03"));
+		satellites.add(new WaterPlanet(this, 750, 750, "s", "s04"));
+		for (Satellite sat: satellites) {
+			map.add(sat, 2); 
+			sat.setName(sat.num + " water planet");
+			sat.setBounds(sat.getLocX(), sat.getLocY(), sat.getBoundSize(), sat.getBoundSize());
+		}
+		updateMap();
+	}
+	
 	/* MAIN */
 	 
 	public static void main(String[] args) {
@@ -700,7 +714,10 @@ public class ClientController {
 		else {
 			control.testing  = true;
 			control.createComponents();
-			control.getMap().hover("This is just a test.");
+			//control.getMap().hoverBoxOn();
+			control.getMap().clear();
+			control.testMap();
+		//	control.getMap().hover("This is just a test.");
 		}
 	}
 
