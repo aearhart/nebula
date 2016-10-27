@@ -155,15 +155,13 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
 		
-		System.out.println("mouse moved: ");
 		int x = e.getX();
 		int y = e.getY();
 		if (x <= 120) x += 120;
 		if (y >= (Globals.winSize - 70)) y -= 70;
 		x += 20;
 		y -= 50;
-	
-		System.out.println(x + " " + y);
+
 
 		hoverBox.setLocation(x, y);
 	}
