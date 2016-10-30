@@ -136,7 +136,7 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("hello?");
+		//System.out.println("hello?");
 	}
 
 	@Override
@@ -148,7 +148,7 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
-		System.out.println("hey!");
+		//System.out.println("hey!");
 	}
 
 	@Override

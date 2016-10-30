@@ -183,6 +183,7 @@ public class MenuTab extends JPanel implements ActionListener{
 		c.gridx = 3; c.gridy = 2;
 		c.weightx = 1.0; c.weighty = 0.0;
 		c.gridheight = 1; c.gridwidth = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		//c.insets = new Insets(10, 10, 10, 10);
 		this.add(volumeControl, c);
 
@@ -195,11 +196,12 @@ public class MenuTab extends JPanel implements ActionListener{
 		chatButton.addActionListener(this);
 				
 		c.anchor = GridBagConstraints.NORTHWEST;
-		c.gridx = 0; c.gridy = 8;
-		c.weightx = 1.0; c.weighty = 0.0;
-		c.gridheight = 1; c.gridwidth = 1;
+		c.gridx = 2; c.gridy = 3;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1.0; c.weighty = 1.0;
+		c.gridheight = 1; c.gridwidth = 2;
 		//c.insets = new Insets(10, 10, 10, 10);
-		this.add(chatButton);
+		this.add(chatButton, c);
 				
 		/*
 		// Button QUIT
