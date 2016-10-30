@@ -38,6 +38,10 @@ public class ClientController {
 	private Player opponent = new Player(this);
 	private String clientPlayerNum = "P0";
 	private String status = "";
+	public Boolean chatEnabled = true;
+	
+	
+	private Boolean turn = false; // not current turn
 	
 	// AoI information
 	int AoIx = 0;
@@ -119,25 +123,37 @@ public class ClientController {
 		// s[1] = winner
 		// s[2] = player
 		switch(s[0]) {
-		case "turn": { // interpret client's turn and update components
-			System.out.println(player.getNum() + " is playing.");
-			
-			if (s[1].equals(opponent.getNum())) {
-				error("not current player's turn!");
-				// this should be done in validate
+		case "MESSAGE": {
+			if (chatEnabled && (! s[1].equals(clientPlayerNum))) { // a new message
+				getChatbox().updateHistory(s[2]);
 			}
+			return;
+		}
+
+		case "TURN": { // interpret client's turn and update components
+
+			if (s[1].equals(clientPlayerNum)) {
+				turn = true;
+				System.out.println(clientPlayerNum + " is playing.");
+				int i = updatePlayer(s, 2, 3);
+				i = updatePlayer(s, i, i+1);
+				int numOfSat = Integer.parseInt(s[i++]);
+				for (int j = 0; j < numOfSat; j++) {
+					i = getSat(s[i+2]).update(s, i);
+				}	
+				updateMap(); // update map
+				
+				// begin turn
+				status = "collectResources";
 			
-			int i = updatePlayer(s, 2, 3);
-			i = updatePlayer(s, i, i+1);
-			int numOfSat = Integer.parseInt(s[i++]);
-			for (int j = 0; j < numOfSat; j++) {
-				i = getSat(s[i+2]).update(s, i);
-			}	
-			updateMap(); // update map
-			
-			// begin turn
-			status = "collectResources";
-			turn();
+				collectResources();
+				event();
+				printToInstructionArea("Click on a planet or space station to upgrade.");
+			}
+			else {
+				turn = false;
+				waitTurn();
+			}
 			return;
 		}
 		case "WIN": { // there has been a winner
@@ -155,6 +171,7 @@ public class ClientController {
 			updateMap();
 			
 			setStatus("WIN");
+			win();
 			return;
 		}
 		} // end case
@@ -343,6 +360,7 @@ public class ClientController {
 				System.out.print("threading error"); }
 		
 		}
+		
 	}
 	
 	
@@ -390,6 +408,10 @@ public class ClientController {
 	
 	public void setStatus(String s) {
 		status = s;
+	}
+	
+	public ChatBox getChatbox() {
+		return infoPanel2.getChatbox();
 	}
 	
 	public String getCurrPlayer() { // return string num "P_" of current player
@@ -572,6 +594,9 @@ public class ClientController {
 		
 		getCurrentState("claim end");
 		sendMessage();
+		// turn on chat
+		if (chatEnabled)
+			getChatbox().turnOn();
 		
 	}
 	
@@ -625,14 +650,32 @@ public class ClientController {
 	}
 	
 	public void turn() {
-		collectResources();
-		event();
-		upgradeTime();
-		getCurrentState("turn");
-		sendMessage();
-		waitTurn();
-		gameplay();
+		getMessage();
+		read();
+		System.out.println("TURN MESSAGE: " + "msg:" + (!getChatbox().message.equals("")) + 
+				" endTurn: " + turn +  " " + (! status.equals("Upgrade")) + " other: " + status);
+		if (chatEnabled && (! getChatbox().message.equals(""))) {
+			currentState = "MESSAGE@@" + clientPlayerNum + "@@" + getChatbox().message; 
+			getChatbox().emptyMessage();
+			sendMessage();
+		}
+		else if (turn && ! status.equals("Upgrade")) {
+			getCurrentState("TURN");
+			sendMessage();
+			turn = false;
+		}
+		else if (status.equals("WIN")) {
+			// do nothing
+			return;
+		}
+		else { // no change
+			getCurrentState("NOCHANGE");
+			sendMessage();
+		}
+		turn();
+
 	}
+	
 	public void gameplay() {
 		getMessage();
 		validate(); // could be done in read()
@@ -707,8 +750,7 @@ public class ClientController {
 			control.startup(); // create the window
 
 			control.claimStation();
-			control.gameplay();
-			control.win();
+			control.turn();
 			//close();
 		}
 		else {

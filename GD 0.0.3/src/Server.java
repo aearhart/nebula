@@ -28,7 +28,7 @@ public class Server {
 	private Socket currentSocket;
 	private Socket opposingSocket;
 	
-	private Boolean switchSockets = true;
+
 	public Server() {
 	}
 	

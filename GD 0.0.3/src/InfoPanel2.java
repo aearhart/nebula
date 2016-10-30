@@ -110,6 +110,11 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 			}
 		}
 	}
+
+	public ChatBox getChatbox() {
+		// TODO Auto-generated method stub
+		return chatBox;
+	}
 	
 	/*
 	@Override

@@ -29,9 +29,12 @@ public class MenuTab extends JPanel implements ActionListener{
 
 	public JButton quitButton;
 	public JButton musicButton;
-	public JButton pauseButton;
+
 	public JLabel notificationLabel;
 	public JLabel creditsLabel;
+
+	public JButton chatButton;
+
 	public JLabel settingsLabel;
 	public JLabel welcomeLabel;
 	public JSlider volumeControl;
@@ -183,21 +186,22 @@ public class MenuTab extends JPanel implements ActionListener{
 		//c.insets = new Insets(10, 10, 10, 10);
 		this.add(volumeControl, c);
 
-		/* placement is NOT working >:(
-		// Button Pause (will have to implement other things / for online playing will not want this option
-		pauseButton = new JButton("Pause");
-		pauseButton.setFont(Globals.f);
-		pauseButton.setMnemonic('h');
-		pauseButton.setActionCommand("Pause");
-		pauseButton.addActionListener(this);
+		// placement is NOT working >:(
+		// Button Chat 
+		chatButton = new JButton("Turn chat off");
+		chatButton.setFont(Globals.f);
+		chatButton.setMnemonic('c');
+		chatButton.setActionCommand("Chat");
+		chatButton.addActionListener(this);
 				
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 0; c.gridy = 8;
 		c.weightx = 1.0; c.weighty = 0.0;
 		c.gridheight = 1; c.gridwidth = 1;
 		//c.insets = new Insets(10, 10, 10, 10);
-		this.add(pauseButton);
+		this.add(chatButton);
 				
+		/*
 		// Button QUIT
 		quitButton = new JButton("Quit Game");
 		quitButton.setActionCommand("Quit");
@@ -243,13 +247,16 @@ public class MenuTab extends JPanel implements ActionListener{
 		else if ("Quit".equals(e.getActionCommand())) {
 			control.close();
 		}
-		else if ("Pause".equals(e.getActionCommand())) {
-			Map m = control.getMap();
-			if (m.hovering) {
-				m.clear();
+		else if ("Chat".equals(e.getActionCommand())) {
+			if (control.chatEnabled) {
+				// turn chat off
+				chatButton.setText("Enable chat");
+				control.getChatbox().turnOff("Chat disabled. Go to settings to enable.");
 			}
-			else
-				m.hover("Hovering text");
+			else { // turn chat on
+				chatButton.setText("Disable chat");
+				control.getChatbox().turnOn();
+			}
 		}
 	}
 }
