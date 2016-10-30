@@ -55,7 +55,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		hoverArea.setWrapStyleWord(true);
 		hoverArea.setText(hoverText);
 		hoverArea.setEditable(false);
-		hoverArea.setOpaque(false);
+		//hoverArea.setOpaque(false);
 		this.add(hoverArea, c);
 		
 		// skip button

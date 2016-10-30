@@ -34,6 +34,7 @@ public class Station extends Satellite implements MouseListener {
 	private String positions = "";
 	double [] planetXs = {0, .382683, .707107, .92388, 1, .92388, .707107, .382683, 0, -.382683, -.707107, -.92388, -1, -.92388, -.707107, -.382683};
 	double [] planetYs = {1, .92388, .707107, .382683, 0, -.382683, -.707107, -.92388, -1, -.92388, -.707107, -.382683, 0, .382683, .707107, .92388};
+	private boolean isMalfunctioning = false;
 	
 	public Station(Integer locX, Integer locY, Integer sz, String n) {
 		super(locX, locY);
@@ -133,8 +134,18 @@ public class Station extends Satellite implements MouseListener {
 	public String info() {
 		String str = "";
 		str += "This " + name + " station is level " + level;
-		str += ".\nProduces: " + gasResource + "g " + mineralResource + "m " + waterResource + "w\n";
+		if (isMalfunctioning) {
+			str += "Warning! There is a malfunction... ";
+			str += "\nProduces: " + (int)(gasResource*gasInfluence) + "(-" + (gasResource - (int)(gasResource*gasInfluence)) + ") g "
+					+ (int)mineralResource*mineralInfluence + "(-" + (mineralResource - (int)(mineralResource*mineralInfluence)) + ") m"
+					+ (int)waterResource*waterInfluence + "(-" + (waterResource - (int)(waterResource*waterInfluence)) + ") w\n";
+
+		}
+		else { // base case
+			str += ".\nProduces: " + gasResource + "g " + mineralResource + "m " + waterResource + "w\n";
+		}
 		str += "Upgrade costs: " + costGas + "g " + mineralResource + "m " + waterResource + "w";
+		
 		return str;
 	}
 	
@@ -186,12 +197,15 @@ public class Station extends Satellite implements MouseListener {
 	}
 	
 	public void malfunction(char a) {
+		isMalfunctioning  = true;
 		if (a == 'g') {
 			gasInfluence = 0.5;
 		}
 	}
 	
 	public void fixMalfunction() {
+		// can only have 1 malfunction at a time
+		isMalfunctioning = false;
 		gasInfluence = 1;
 		mineralInfluence = 1;
 		waterInfluence = 1;
@@ -279,6 +293,10 @@ public class Station extends Satellite implements MouseListener {
 	
 	public String getPlanetsToCreate() {
 		return planetsToCreate;
+	}
+	
+	public Boolean isMalfunctioning() {
+		return isMalfunctioning;
 	}
 	
 	public void placePlanet(Satellite p, int planetPos) {
@@ -373,7 +391,7 @@ public class Station extends Satellite implements MouseListener {
 		case "Upgrade": { // Upgrading a station
 			if(this.owner == control.getPlayer()) { // draw AoI
 				select(); 
-				control.printToHoverArea("Your level " + level + " " + "station costs : " + costWater + " water, " + costMineral + " metal, and " + costGas + " gas.");
+				control.printToHoverArea(info());
 				}
 			else if (this.owner == control.getOpponent()) {
 				control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". ");

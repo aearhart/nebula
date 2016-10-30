@@ -73,9 +73,9 @@ public class InfoPanel extends JPanel implements ActionListener{
 		
 		
 		// BUTTON 1
-		JButton b1 = new JButton("?");
+		JButton b1 = new JButton("Fix!");
 		b1.setMnemonic('h');
-		b1.setActionCommand("help");
+		b1.setActionCommand("Fix");
 		b1.setFont(Globals.f);
 		b1.setForeground(Globals.textColor);
 		//b1.setOpaque(false);
@@ -141,8 +141,16 @@ public class InfoPanel extends JPanel implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		if ("help".equals(e.getActionCommand())) {
-			printToInstructionArea("Help coming your way?");
+		if ("Fix".equals(e.getActionCommand())) {
+			Player p = control.getPlayer();
+			Station base = p.getBase();
+			if (base.isMalfunctioning() && p.getGas() >2 && p.getMineral() >5 && p.getWater() > 3) {
+				p.subGas(2); p.subMineral(5); p.subWater(3);
+				base.fixMalfunction();
+			}
+			else {
+				control.printToHoverArea("You don't have enough materials to fix this station.");
+			}
 		}
 		else if ("done".equals(e.getActionCommand())) {
 			printToInstructionArea("I guess you're done.");
