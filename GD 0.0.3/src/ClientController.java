@@ -620,7 +620,7 @@ public class ClientController {
 		printToInstructionArea("It's " + opponent.getName() + "'s turn now. Please wait.");
 	}
 	
-	public void validate() {
+	public void validate() { 
 		// validate input 
 		return;
 	}
