@@ -25,7 +25,7 @@ public class ClientController {
 	private static String input;
 	public static String currentState = "";
 	
-	private String ipAddress = "localhost";//"2605:e000:1c02:8e:6d73:7e5:5e67:f8b5";
+	private String ipAddress = "2605:e000:1c02:8e:f488:15ec:3d84:ed6";//"localhost";//"2605:e000:1c02:8e:6d73:7e5:5e67:f8b5";
 	String winner = "";
 	
 	// components
