@@ -73,7 +73,6 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		this.add(b1, c);
 	
 		// done button
-		// skip button
 		c.gridx = 1; c.gridy = 1;
 		c.ipadx = 5; c.ipady = 10;
 		c.gridwidth = 1; c.gridheight = 1;
@@ -106,6 +105,82 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		hoverArea.setText(padRight(s, 280));
 	}
 
+	public void selectSatellite (Satellite sat) {
+		System.out.println("selectedSatellite  " + control.getStatus());
+		selectedSatellite = sat;
+	
+		switch (control.getStatus()) {
+		case "Claiming": {
+			// planet or station
+			if (sat.getType().equals("S")) {
+				// station, print something
+				if (sat.owner == control.getOpponent()) {
+					control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". 100% off limits."); }
+				else {  // not owned
+					control.printToHoverArea("You do not own this space station. But you could, for the price of a click of a button!" + ((Station) sat).info()); }
+				return;	
+			}
+			else if (! sat.getType().equals("O")) {
+				// planet, print something
+				control.printToHoverArea(((Planet) sat).info());
+			}
+			break;
+		}
+		case "Wait": {
+			// planet or station
+			if (sat.getType().equals("S")) {
+				// station, print something
+				String str = "";
+				if (sat.owner != null) {
+					str = " owned by " + sat.owner.getName();
+				}
+				control.printToHoverArea("A level " + sat.level + " space station");
+				return;
+			}
+			else if (! sat.getType().equals("O")) {
+				// planet, print something
+				control.printToHoverArea(((Station) sat).info());
+			}			
+			break;
+		}
+		case "Upgrade": {
+			// planet or station
+			if (sat.getType().equals("S")) {
+				// station, print something
+				if(sat.owner == control.getPlayer()) { // draw AoI
+					control.printToHoverArea(((Station) sat).info());
+					}
+				else if (sat.owner == control.getOpponent()) {
+					control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". ");
+				}
+				else {control.printToHoverArea("This space station is unmanned! Would you like to build here?" + ((Station) sat).info()); }
+				return;
+			}
+			else if (! sat.getType().equals("O")) {
+				// planet, print something
+				if (sat.owner == control.getOpponent()) { // owned by opponent
+					control.printToHoverArea("This planet is already owned by " + sat.owner.getName());
+				}
+				else if (((Planet) sat).planetWithinAoI() == false) { // outside AoI
+					control.printToHoverArea(((Planet) sat).info("This planet is too far away to build on."));
+				}
+				else if (sat.owner == null) { // not owned
+					control.printToHoverArea(((Planet) sat).info("Not currently owned! Invest away."));
+				}
+				else { // owned by current player
+					control.printToHoverArea(((Planet) sat).info("You own this planet!"));
+				}
+				return;
+			}
+			break;
+		}
+		default: {
+			control.printToHoverArea(sat.info());
+		}
+		}
+		
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -124,6 +199,32 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 				return;
 				}
 			}
+		}
+		if ("upgrade".equals(e.getActionCommand())) {
+			if (selectedSatellite != null) {
+				Boolean endTurn = false;
+				switch(control.getStatus()) {
+				case "Claiming":{
+					if (selectedSatellite.getType().equals("S")) // act only upon station claim
+						endTurn = ((Station) selectedSatellite).claimStation();
+					break;
+				}
+				case "Wait": {
+					break; // do nothing
+				}
+				case "Upgrade": {
+					endTurn = selectedSatellite.upgradeSatelliteToNextLevel();
+					break;
+				}
+				}
+				if (endTurn) {
+					control.setStatus("endTurn");
+				}
+			}
+			else {
+				printToHoverArea("Nothing selected. Select a satellite for more info.");
+			}
+
 		}
 		
 	}

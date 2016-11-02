@@ -154,6 +154,11 @@ public class Satellite extends JComponent {
 		
 	}
 	
+	public Boolean upgradeSatelliteToNextLevel() {
+		// do nothing, will be overrided by child classes
+		return false;
+	}
+	
 	protected void addSatelliteOwner() {
 		setOwner(control.getPlayer());
 		upgradeSatellite();
@@ -297,5 +302,10 @@ public class Satellite extends JComponent {
 		catch (IOException ex) {
 			// handle exception...
 			System.out.println("IO EXCEPTION: "+ ex); }
+	}
+
+	public String info() {
+		// TODO Auto-generated method stub
+		return "It's the sun. You can feel its blazing heat just looking at it.";
 	}
 }
