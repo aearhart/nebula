@@ -33,7 +33,7 @@ public class Spaceship extends JComponent {
 	
 	public void move (Satellite dest) {
 		// ASSUMED THAT WITHIN RANGE AND THAT YOU HAVE ENOUGH FUEL
-		setFuel(getFuel() - costFuel);
+		fuel -= costFuel;
 		currSat = dest;
 	}
 

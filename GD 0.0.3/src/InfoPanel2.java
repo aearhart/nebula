@@ -29,10 +29,11 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 	
 	private JTextArea hoverArea;
 	public ChatBox chatBox;
+	public Satellite selectedSatellite = null;
 	
 	public InfoPanel2(ClientController clientController) {
 		control = clientController;
-
+		
 		this.setPreferredSize(new Dimension (300,1000));
 		
 		this.setLayout(new GridBagLayout());
@@ -43,6 +44,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 0; c.gridy = 0;
 		c.fill = GridBagConstraints.BOTH;
+		c.gridwidth = 2; c.gridheight= 1;
 		c.weightx = 1.0; c.weighty = 1.0;
 		c.insets = new Insets(5, 5, 5, 5);
 		
@@ -60,8 +62,8 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		
 		// skip button
 		c.gridx = 0; c.gridy = 1;
-		//c.gridwidth =1; c.gridheight =1;
 		c.ipadx = 5; c.ipady = 10;
+		c.gridwidth = 1; c.gridheight = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		// testing with buttons
 		JButton b1 = new JButton("Wait turn.");
@@ -69,10 +71,24 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		b1.setActionCommand("wait");
 		b1.addActionListener(this);
 		this.add(b1, c);
+	
+		// done button
+		// skip button
+		c.gridx = 1; c.gridy = 1;
+		c.ipadx = 5; c.ipady = 10;
+		c.gridwidth = 1; c.gridheight = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		// testing with buttons
+		JButton b2 = new JButton("Upgrade selected sat.");
+		b2.setMnemonic('u');
+		b2.setActionCommand("upgrade");
+		b2.addActionListener(this);
+		this.add(b2, c);
 		
 		// chat box
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 0; c.gridy = 2;
+		c.gridwidth = 2; c.gridheight = 1;
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1.0; c.weighty = 1.0;
 		c.insets = new Insets(5, 5, 5, 5);
@@ -109,6 +125,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 				}
 			}
 		}
+		
 	}
 
 	public ChatBox getChatbox() {
