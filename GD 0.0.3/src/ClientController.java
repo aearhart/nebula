@@ -26,6 +26,7 @@ public class ClientController {
 	public static String currentState = "";
 	
 	private String ipAddress = "2605:e000:1c02:8e:7d37:b328:26b6:63ce";//"localhost";//"2605:e000:1c02:8e:6d73:7e5:5e67:f8b5";
+	//private String ipAddress = "2605:e000:1c02:8e:6d73:7e5:5e67:f8b5";
 	String winner = "";
 	
 	// components
@@ -103,10 +104,16 @@ public class ClientController {
 		System.out.println("Connecting to server...");
 		try {
 			socket = new Socket(ipAddress, 7777);
+			//socket = new Socket("localhost", 7777); // local server
+			//	socket = new Socket("70.95.122.247", 7777);
+			socket = new Socket(ipAddress, 7777); // computer server
+			//socket = new Socket("2001:0:9d38:90d7:3cea:1372:e88c:3a87", 7777);
 		} catch (IOException e) {
 			//error("Unable to connect to server.");
 			status = "test";
 			//e.printStackTrace();
+			//e.printStackTrace();			error("Unable to connect to server!");
+
 		}
 
 		System.out.println("Connection established.");
