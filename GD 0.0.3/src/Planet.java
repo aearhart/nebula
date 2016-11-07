@@ -99,6 +99,7 @@ public class Planet extends Satellite implements MouseListener {
 		return i;
 	}
 	
+	@Override
 	public String info() {
 		/* return info of planet */
 		String str = "";
@@ -170,52 +171,46 @@ public class Planet extends Satellite implements MouseListener {
 	}
 	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		switch (control.getStatus()) {
-		case "Claiming": { // Claiming a space station
-			control.printToHoverArea(info());
-			return;
+	public Boolean upgradeSatelliteToNextLevel() {
+		// check if within AoI
+		Boolean endTurn = false;
+		if (planetWithinAoI()) { // it's within current player's AoI
+			if (this.owner == control.getOpponent()) { // owned by opponent
+				control.printToHoverArea("This planet is owned by someone else. Don't throw resources at " + control.getOpponent().getName() + ".");
 			}
-		case "Wait": { // waiting for next turn
-			// do nothing on click
-			return;
+			else if (this.owner == null && canPurchase()) { // not owned, buying the planet
+				addSatelliteOwner();
+				endTurn = true;
+				control.printToHoverArea(info());
+				control.printToPlayerArea();
+			}
+			else if (level > maxLevel) {
+				control.printToHoverArea("This planet is at max level.");
+			}
+			else if (this.owner == control.getPlayer() && canPurchase()) { // owned, upgrading planet
+				upgradeSatellite();
+				endTurn = true;
+				control.printToHoverArea(info());
+				control.printToPlayerArea();
+			}
+			else { // couldn't afford it
+				control.printToHoverArea("You uh don't have enough resources to build on this planet.");
+				}
 		}
-		case "Upgrade": { // Upgrading a planet
-			// check if within AoI
-			if (planetWithinAoI()) { // it's within current player's AoI
-				if (this.owner == control.getOpponent()) { // owned by opponent
-					control.printToHoverArea("This planet is owned by someone else. Don't throw resources at " + control.getOpponent().getName() + ".");
-				}
-				if (this.owner == null && canPurchase()) { // not owned, buying the planet
-					addSatelliteOwner();
-					control.setStatus("EndTurn");
-					control.printToHoverArea(info());
-					control.printToPlayerArea();
-				}
-				else if (level > maxLevel) {
-					control.printToHoverArea("This planet is at max level.");
-				}
-				else if (this.owner == control.getPlayer() && canPurchase()) { // owned, upgrading planet
-					upgradeSatellite();
-					control.setStatus("EndTurn");
-					control.printToHoverArea(info());
-					control.printToPlayerArea();
-				}
-				else { // couldn't afford it
-					control.printToHoverArea("You uh don't have enough resources to build on this planet.");
-					}
+		else { // not within player's AoI
+			if (this.owner == control.getOpponent()) {
+				control.printToHoverArea("This planet is too far away to build on and it's owned by " + owner.getName() + " anyways.");
 			}
-			else { // not within player's AoI
-				if (this.owner == control.getOpponent()) {
-					control.printToHoverArea("This planet is too far away to build on and it's owned by " + owner.getName() + " anyways.");
-				}
-				else { // not owned
-					control.printToHoverArea("This planet is too far away! Upgrade your space stations to expand your reach.");
-				}
+			else { // not owned
+				control.printToHoverArea("This planet is too far away! Upgrade your space stations to expand your reach.");
 			}
-			return;
-		} // end case
-		} // end switch
+		}
+		return endTurn;
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		control.infoPanel2.selectSatellite(this);
 	}
 	
 	@Override
@@ -223,31 +218,6 @@ public class Planet extends Satellite implements MouseListener {
 		switchColors();
 		repaint();
 		control.getMap().hoverBoxOn(name);
-		switch (control.getStatus()) {
-		case "Claiming": {
-			control.printToHoverArea(info());
-			return;
-			}
-		case "Wait": {
-			control.printToHoverArea(info());
-			return;
-		}
-		case "Upgrade": { // Upgrading a planet
-			if (owner == control.getOpponent()) { // owned by opponent
-				control.printToHoverArea("This planet is already owned by " + owner.getName());
-			}
-			else if (planetWithinAoI() == false) { // outside AoI
-				control.printToHoverArea(info("This planet is too far away to build on."));
-			}
-			else if (owner == null) { // not owned
-				control.printToHoverArea(info("Not currently owned! Invest away."));
-			}
-			else { // owned by current player
-				control.printToHoverArea(info("You own this planet!"));
-			}
-			return;
-			}
-		}
 	}
 
 	@Override
@@ -256,20 +226,6 @@ public class Planet extends Satellite implements MouseListener {
 		switchColors();
 		repaint();
 		control.getMap().hoverBoxOff();
-		switch (control.getStatus()) {
-		case "Claiming": {
-			control.printToHoverArea();
-			return;
-			}
-		case "Wait": {
-			control.printToHoverArea();
-			return;
-		}
-		case "Upgrade": {
-			control.printToHoverArea();
-			return;
-			}
-		}
 	}
 	
 	@Override
