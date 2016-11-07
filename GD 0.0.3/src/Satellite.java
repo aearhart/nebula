@@ -18,9 +18,9 @@ public class Satellite extends JComponent {
 	protected String t = "O"; // O for sun
 	
 	// resources given out by satellite
-	protected int gasResource = 0;
-	protected int mineralResource = 0;
-	protected int waterResource = 0;
+	protected int outputGas = 0;
+	protected int outputMineral = 0;
+	protected int outputWater = 0;
 	
 	// cost of upgrading satellite
 	protected int costGas = 0;
@@ -28,9 +28,9 @@ public class Satellite extends JComponent {
 	protected int costWater = 0;
 	
 	// upgrading satellite leads to change in resources -> percentage (i.e. Resource += Resource*Upgrade)
-	protected double gasUpgrade = 1;
-	protected double mineralUpgrade = 1;
-	protected double waterUpgrade = 1;
+	protected double upgradePropGas = 1;
+	protected double upgradePropMineral = 1;
+	protected double upgradePropWater = 1;
 	protected double upgradeCost = 1;
 	
 	// location of satellite
@@ -75,9 +75,9 @@ public class Satellite extends JComponent {
 		aList.add(Integer.toString(x));
 		aList.add(Integer.toString(y));
 		aList.add(Integer.toString(s));
-		aList.add(Integer.toString(gasResource));
-		aList.add(Integer.toString(mineralResource));
-		aList.add(Integer.toString(waterResource));
+		aList.add(Integer.toString(outputGas));
+		aList.add(Integer.toString(outputMineral));
+		aList.add(Integer.toString(outputWater));
 		
 		return Globals.addDelims(aList);
 	}
@@ -93,9 +93,9 @@ public class Satellite extends JComponent {
 		x = Integer.parseInt(ary[i++]);
 		y = Integer.parseInt(ary[i++]);
 		s = Integer.parseInt(ary[i++]);
-		gasResource = Integer.parseInt(ary[i++]);
-		mineralResource = Integer.parseInt(ary[i++]);
-		waterResource = Integer.parseInt(ary[i++]);
+		outputGas = Integer.parseInt(ary[i++]);
+		outputMineral = Integer.parseInt(ary[i++]);
+		outputWater = Integer.parseInt(ary[i++]);
 		this.setBounds(x, y, s, s);
 		return i;
 	}
@@ -176,25 +176,25 @@ public class Satellite extends JComponent {
 	
 	protected void addResources() {
 		// upon upgrading, increase number of resources produced
-		gasResource += gasResource * gasUpgrade;
-		mineralResource += mineralResource * mineralUpgrade;
-		waterResource += waterResource * waterUpgrade;
+		outputGas += outputGas * upgradePropGas;
+		outputMineral += outputMineral * upgradePropMineral;
+		outputWater += outputWater * upgradePropWater;
 	}
 	
 	public String collectResources(Player p) {
-		p.addGas(gasResource);
-		p.addMineral(mineralResource);
-		p.addWater(waterResource);
+		p.addGas(outputGas);
+		p.addMineral(outputMineral);
+		p.addWater(outputWater);
 		String s = "Planet " + num;
-		System.out.println("collecting:" + this.name + ": " + gasResource + mineralResource + waterResource);
+		System.out.println("collecting:" + this.name + ": " + outputGas + outputMineral + outputWater);
 		if (t.equals("G")) {
-			s += " produced gas" + gasResource;
+			s += " produced gas" + outputGas;
 		}
 		else if (t.equals("M")) {
-			s += " produced " + mineralResource + " mineral";
+			s += " produced " + outputMineral + " mineral";
 		}
 		else {
-			s += " produced " + waterResource + " water";
+			s += " produced " + outputWater + " water";
 		}
 		return s;
 	}
