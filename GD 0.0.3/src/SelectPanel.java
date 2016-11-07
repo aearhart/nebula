@@ -144,14 +144,7 @@ public class SelectPanel extends JPanel implements ActionListener {
 		mainButton.setText("Claim Station");
 		
 		// buttons-- will eventually want to make it disappear
-		button1.setEnabled(false);
-		button1.setText(" ");
-		button2.setEnabled(false);
-		button2.setText(" ");
-		button3.setEnabled(false);
-		button3.setText(" ");
-		button4.setEnabled(false);
-		button4.setText(" ");
+		noButtons();
 	}
 	
 	public void mainPhase() {
@@ -159,15 +152,9 @@ public class SelectPanel extends JPanel implements ActionListener {
 		selectedSatellite = null;
 		// mainButton = wait turn
 		mainButton.setText("Pass");
+		mainButton.setEnabled(true);
 		
-		button1.setEnabled(false);
-		button1.setText(" ");
-		button2.setEnabled(false);
-		button2.setText(" ");
-		button3.setEnabled(false);
-		button3.setText(" ");
-		button4.setEnabled(false);
-		button4.setText(" ");
+		noButtons();
 	}
 	
 	public void waitPhase() {
@@ -179,21 +166,35 @@ public class SelectPanel extends JPanel implements ActionListener {
 		selectText.setText(s);
 	}
 
+	private void noButtons() {
+		button1.setEnabled(false);
+		button1.setText(" ");
+		button2.setEnabled(false);
+		button2.setText(" ");
+		button3.setEnabled(false);
+		button3.setText(" ");
+		button4.setEnabled(false);
+		button4.setText(" ");
+	}
+	
 	public void selectSatellite(Satellite sat) {
 		// depending on what is selected(and the phase), the buttons change
 		
 		System.out.println("selectedSatellite  " + control.getStatus());
 		selectedSatellite = sat;
-	
-		switch (control.getStatus()) {
-		case "Claiming": {
+
+		switch (phase) {
+		case "Claim": {
 			// planet or station
 			if (sat.getType().equals("S")) {
 				// station, print something
 				if (sat.owner == control.getOpponent()) {
 					printToSelectText("This station is owned by " + control.getOpponent().getName() + ". 100% off limits."); }
 				else {  // not owned
-					printToSelectText("You do not own this space station. But you could, for the price of a click of a button!" + ((Station) sat).info()); }
+					printToSelectText("You do not own this space station. But you could, for the price of a click of a button!" + ((Station) sat).info()); 
+					// enable button
+					mainButton.setEnabled(true);
+					}
 				return;	
 			}
 			else if (! sat.getType().equals("O")) {
@@ -201,16 +202,17 @@ public class SelectPanel extends JPanel implements ActionListener {
 				printToSelectText(((Planet) sat).info());
 			}
 			break;
-		}
+		} // end claim 
 		case "Wait": {
 			// planet or station
-			if (sat.getType().equals("S")) {
-				// station, print something
+			if (sat.getType().equals("S")) { // STATION
+				// select text output
 				String str = "";
 				if (sat.owner != null) {
 					str = " owned by " + sat.owner.getName();
 				}
 				printToSelectText("A level " + sat.level + " space station");
+
 				return;
 			}
 			else if (! sat.getType().equals("O")) {
@@ -219,12 +221,13 @@ public class SelectPanel extends JPanel implements ActionListener {
 			}			
 			break;
 		}
-		case "Upgrade": {
+		case "Main": {
 			// planet or station
-			if (sat.getType().equals("S")) {
-				// station, print something
-				if(sat.owner == control.getPlayer()) { // draw AoI
+			if (sat.getType().equals("S")) { // STATION
+
+				if(sat.owner == control.getPlayer()) {
 					printToSelectText(((Station) sat).info());
+					
 					}
 				else if (sat.owner == control.getOpponent()) {
 					printToSelectText("This station is owned by " + control.getOpponent().getName() + ". ");

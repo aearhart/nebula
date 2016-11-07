@@ -413,7 +413,7 @@ public class ClientController {
 		status = s;
 		if (status.equals("Claiming")) infoPanel2.getSelectPanel().claimPhase();
 		else if (status.equals("Upgrade")) infoPanel2.getSelectPanel().mainPhase();
-		
+		else if (status.equals("Wait")) infoPanel2.getSelectPanel().waitPhase();
 	}
 	
 	public ChatBox getChatbox() {
