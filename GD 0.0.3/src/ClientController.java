@@ -106,7 +106,7 @@ public class ClientController {
 			socket = new Socket(ipAddress, 7777);
 		} catch (IOException e) {
 			//error("Unable to connect to server.");
-			status = "test";
+			setStatus("test");
 			//e.printStackTrace();
 			//e.printStackTrace();			error("Unable to connect to server!");
 
@@ -147,7 +147,7 @@ public class ClientController {
 				updateMap(); // update map
 				
 				// begin turn
-				status = "collectResources";
+				setStatus("collectResources");
 			
 				collectResources();
 				event();
@@ -344,7 +344,7 @@ public class ClientController {
 			}
 		}
 		printToPlayerArea(player.info() + str);
-		status = "Upgrade";
+		setStatus("Upgrade");
 		//System.out.println("resources collected");
 		//done
 		
@@ -411,6 +411,9 @@ public class ClientController {
 	
 	public void setStatus(String s) {
 		status = s;
+		if (status.equals("Claiming")) infoPanel2.getSelectPanel().claimPhase();
+		else if (status.equals("Upgrade")) infoPanel2.getSelectPanel().mainPhase();
+		
 	}
 	
 	public ChatBox getChatbox() {
@@ -499,7 +502,7 @@ public class ClientController {
 	}
 	
 	public void createComponents() {
-		status = "StartUp";
+		setStatus("StartUp");
 		
 	
 		//tab Map
@@ -556,7 +559,7 @@ public class ClientController {
 			copy = getSat(s[copy+2]).update(s, copy);
 		}
 		updateMap();
-		status = "Wait";
+		setStatus("Wait");
 		printToPlayerArea();
 		if (! s[1].equals(clientPlayerNum)) {
 			printToInstructionArea(opponent.getName() + " goes first. Please wait.");
@@ -582,7 +585,7 @@ public class ClientController {
 		
 		
 		printToInstructionArea(player.getName() + ": Click on a space station to claim it");
-		status = "Claiming";
+		setStatus("Claiming");
 		while (status.equals("Claiming")) {
 			try {
 				Thread.sleep(500);
@@ -619,7 +622,7 @@ public class ClientController {
 	}
 	
 	public void waitTurn() {
-		status = "Wait";
+		setStatus("Wait");
 		printToInstructionArea("It's " + opponent.getName() + "'s turn now. Please wait.");
 	}
 	

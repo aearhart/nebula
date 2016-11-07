@@ -38,6 +38,8 @@ public class InfoPanel extends JPanel implements ActionListener{
 	private JTextArea instructionArea;
 	private JTextArea playerArea;
 	
+	private Boolean bool = true;
+	
 	public InfoPanel(ClientController clientController) {
 		control = clientController;
 		playerText = "Hello " + control.getPlayer().getName() + ", you can find your stats here.";
@@ -153,7 +155,15 @@ public class InfoPanel extends JPanel implements ActionListener{
 			}
 		}
 		else if ("done".equals(e.getActionCommand())) {
-			printToInstructionArea("I guess you're done.");
+			//printToInstructionArea("I guess you're done.");
+			if (bool) {
+				bool = false;
+				control.infoPanel2.getSelectPanel().mainPhase();
+			}
+			else {
+				bool = true;
+				control.infoPanel2.getSelectPanel().claimPhase();
+			}
 		}
 	}
 	

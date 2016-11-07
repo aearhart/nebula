@@ -24,10 +24,10 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 	private ClientController control; 
 	private Player player;
 	
-	private String hoverText = "Hover over a satellite for more info.";
+	//private String hoverText = "Hover over a satellite for more info.";
 	private char [] chars;
 	
-	private JTextArea hoverArea;
+	private SelectPanel selectPanel;
 	public ChatBox chatBox;
 	public Satellite selectedSatellite = null;
 	
@@ -48,7 +48,8 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		c.weightx = 1.0; c.weighty = 1.0;
 		c.insets = new Insets(5, 5, 5, 5);
 		
-		hoverArea = new JTextArea(20, 3);
+		selectPanel = new SelectPanel(control);
+		/*hoverArea = new JTextArea(20, 3);
 		hoverArea.setPreferredSize(new Dimension(100, 300));
 		hoverArea.setFont(Globals.f);
 		hoverArea.setForeground(Globals.textColor);
@@ -58,9 +59,10 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		hoverArea.setText(hoverText);
 		hoverArea.setEditable(false);
 		//hoverArea.setOpaque(false); 
-		this.add(hoverArea, c);
+		 */
+		this.add(selectPanel, c);
 		
-		// skip button
+		/*// skip button
 		c.gridx = 0; c.gridy = 1;
 		c.ipadx = 5; c.ipady = 10;
 		c.gridwidth = 1; c.gridheight = 1;
@@ -83,7 +85,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		b2.setActionCommand("upgrade");
 		b2.addActionListener(this);
 		this.add(b2, c);
-		
+		*/
 		// chat box
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 0; c.gridy = 2;
@@ -102,83 +104,19 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 	}
 	
 	public void printToHoverArea(String s) {
-		hoverArea.setText(padRight(s, 280));
+		selectPanel.printToSelectText(s);
 	}
 
 	public void selectSatellite (Satellite sat) {
-		System.out.println("selectedSatellite  " + control.getStatus());
-		selectedSatellite = sat;
+		selectPanel.selectSatellite(sat);
+	}
 	
-		switch (control.getStatus()) {
-		case "Claiming": {
-			// planet or station
-			if (sat.getType().equals("S")) {
-				// station, print something
-				if (sat.owner == control.getOpponent()) {
-					control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". 100% off limits."); }
-				else {  // not owned
-					control.printToHoverArea("You do not own this space station. But you could, for the price of a click of a button!" + ((Station) sat).info()); }
-				return;	
-			}
-			else if (! sat.getType().equals("O")) {
-				// planet, print something
-				control.printToHoverArea(((Planet) sat).info());
-			}
-			break;
-		}
-		case "Wait": {
-			// planet or station
-			if (sat.getType().equals("S")) {
-				// station, print something
-				String str = "";
-				if (sat.owner != null) {
-					str = " owned by " + sat.owner.getName();
-				}
-				control.printToHoverArea("A level " + sat.level + " space station");
-				return;
-			}
-			else if (! sat.getType().equals("O")) {
-				// planet, print something
-				control.printToHoverArea(((Station) sat).info());
-			}			
-			break;
-		}
-		case "Upgrade": {
-			// planet or station
-			if (sat.getType().equals("S")) {
-				// station, print something
-				if(sat.owner == control.getPlayer()) { // draw AoI
-					control.printToHoverArea(((Station) sat).info());
-					}
-				else if (sat.owner == control.getOpponent()) {
-					control.printToHoverArea("This station is owned by " + control.getOpponent().getName() + ". ");
-				}
-				else {control.printToHoverArea("This space station is unmanned! Would you like to build here?" + ((Station) sat).info()); }
-				return;
-			}
-			else if (! sat.getType().equals("O")) {
-				// planet, print something
-				if (sat.owner == control.getOpponent()) { // owned by opponent
-					control.printToHoverArea("This planet is already owned by " + sat.owner.getName());
-				}
-				else if (((Planet) sat).planetWithinAoI() == false) { // outside AoI
-					control.printToHoverArea(((Planet) sat).info("This planet is too far away to build on."));
-				}
-				else if (sat.owner == null) { // not owned
-					control.printToHoverArea(((Planet) sat).info("Not currently owned! Invest away."));
-				}
-				else { // owned by current player
-					control.printToHoverArea(((Planet) sat).info("You own this planet!"));
-				}
-				return;
-			}
-			break;
-		}
-		default: {
-			control.printToHoverArea(sat.info());
-		}
-		}
-		
+	public Satellite getSelectedSatellite() {
+		return selectedSatellite;
+	}
+	
+	public SelectPanel getSelectPanel() {
+		return selectPanel;
 	}
 	
 	@Override
