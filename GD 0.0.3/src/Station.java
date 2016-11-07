@@ -77,9 +77,9 @@ public class Station extends Satellite implements MouseListener {
 		aList.add(Integer.toString(costWater));
 		aList.add(Integer.toString(costGas));
 		aList.add(Integer.toString(costMineral));
-		aList.add(Integer.toString(gasResource));
-		aList.add(Integer.toString(mineralResource));
-		aList.add(Integer.toString(waterResource));
+		aList.add(Integer.toString(outputGas));
+		aList.add(Integer.toString(outputMineral));
+		aList.add(Integer.toString(outputWater));
 
 		aList.add(ownerNum);
 		aList.add(Integer.toString(level));
@@ -102,9 +102,9 @@ public class Station extends Satellite implements MouseListener {
 		costWater = Integer.parseInt(ary[i++]);
 		costGas = Integer.parseInt(ary[i++]);
 		costMineral = Integer.parseInt(ary[i++]);
-		gasResource = Integer.parseInt(ary[i++]);
-		mineralResource = Integer.parseInt(ary[i++]);
-		waterResource = Integer.parseInt(ary[i++]);
+		outputGas = Integer.parseInt(ary[i++]);
+		outputMineral = Integer.parseInt(ary[i++]);
+		outputWater = Integer.parseInt(ary[i++]);
 		ownerNum = ary[i++];
 		level = Integer.parseInt(ary[i++]);
 		if(owner == null)
@@ -137,15 +137,15 @@ public class Station extends Satellite implements MouseListener {
 		str += "This " + name + " station is level " + level;
 		if (isMalfunctioning) {
 			str += "Warning! There is a malfunction... ";
-			str += "\nProduces: " + (int)(gasResource*gasInfluence) + "(-" + (gasResource - (int)(gasResource*gasInfluence)) + ") g "
-					+ (int)mineralResource*mineralInfluence + "(-" + (mineralResource - (int)(mineralResource*mineralInfluence)) + ") m"
-					+ (int)waterResource*waterInfluence + "(-" + (waterResource - (int)(waterResource*waterInfluence)) + ") w\n";
+			str += "\nProduces: " + (int)(outputGas*gasInfluence) + "(-" + (outputGas - (int)(outputGas*gasInfluence)) + ") g "
+					+ (int)outputMineral*mineralInfluence + "(-" + (outputMineral - (int)(outputMineral*mineralInfluence)) + ") m"
+					+ (int)outputWater*waterInfluence + "(-" + (outputWater - (int)(outputWater*waterInfluence)) + ") w\n";
 
 		}
 		else { // base case
-			str += ".\nProduces: " + gasResource + "g " + mineralResource + "m " + waterResource + "w\n";
+			str += ".\nProduces: " + outputGas + "g " + outputMineral + "m " + outputWater + "w\n";
 		}
-		str += "Upgrade costs: " + costGas + "g " + mineralResource + "m " + waterResource + "w";
+		str += "Upgrade costs: " + costGas + "g " + outputMineral + "m " + outputWater + "w";
 		
 		return str;
 	}
@@ -172,13 +172,13 @@ public class Station extends Satellite implements MouseListener {
 		}
 		}
 		if (res == 'G') {
-			gasResource = resourceProduced;
+			outputGas = resourceProduced;
 		}
 		else if (res == 'M') {
-			mineralResource = resourceProduced;
+			outputMineral = resourceProduced;
 		}
 		else
-			waterResource = resourceProduced;
+			outputWater = resourceProduced;
 	}
 	
 	@Override
@@ -190,10 +190,10 @@ public class Station extends Satellite implements MouseListener {
 	
 	@Override
 	public String collectResources(Player p) {
-		p.addGas((int) (gasResource*gasInfluence));
-		p.addMineral((int) (mineralResource*mineralInfluence));
-		p.addWater((int) (waterResource*waterInfluence));
-		String s = "Station " + num + "produced " + gasResource + "g " + mineralResource + "m " + waterResource + "w.";
+		p.addGas((int) (outputGas*gasInfluence));
+		p.addMineral((int) (outputMineral*mineralInfluence));
+		p.addWater((int) (outputWater*waterInfluence));
+		String s = "Station " + num + "produced " + outputGas + "g " + outputMineral + "m " + outputWater + "w.";
 		return s;
 	}
 	

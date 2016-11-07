@@ -60,9 +60,9 @@ public class Planet extends Satellite implements MouseListener {
 		aList.add(Integer.toString(costWater));
 		aList.add(Integer.toString(costMineral));
 		aList.add(Integer.toString(costGas));
-		aList.add(Integer.toString(gasResource));
-		aList.add(Integer.toString(mineralResource));
-		aList.add(Integer.toString(waterResource));
+		aList.add(Integer.toString(outputGas));
+		aList.add(Integer.toString(outputMineral));
+		aList.add(Integer.toString(outputWater));
 		aList.add(ownerNum);
 		aList.add(Integer.toString(level));
 		aList.add(imageName);
@@ -84,9 +84,9 @@ public class Planet extends Satellite implements MouseListener {
 		costWater = Integer.parseInt(ary[i++]);
 		costMineral = Integer.parseInt(ary[i++]);
 		costGas = Integer.parseInt(ary[i++]);
-		gasResource = Integer.parseInt(ary[i++]);
-		mineralResource = Integer.parseInt(ary[i++]);
-		waterResource = Integer.parseInt(ary[i++]);
+		outputGas = Integer.parseInt(ary[i++]);
+		outputMineral = Integer.parseInt(ary[i++]);
+		outputWater = Integer.parseInt(ary[i++]);
 		ownerNum = ary[i++];
 		level = Integer.parseInt(ary[i++]);
 		imageName = ary[i++];
@@ -104,15 +104,15 @@ public class Planet extends Satellite implements MouseListener {
 		/* return info of planet */
 		String str = "";
 		if (t.equals("G")) {
-			str = "Gas planet " + getNum() + " (" + getName() + ") is level " + level + ".\nProduces: " + gasResource + " gas\nUpgrade cost: " + costGas + "g " + costMineral + "m " + costWater + "w";			
+			str = "Gas planet " + getNum() + " (" + getName() + ") is level " + level + ".\nProduces: " + outputGas + " gas\nUpgrade cost: " + costGas + "g " + costMineral + "m " + costWater + "w";			
 		}
 		else if (t.equals("M")) {
 
-			str = "Mineral planet " + getNum() + " (" + getName() + ") is level " + level + ".\nProduces: " + mineralResource + " mineral\nUpgrade cost: " + costGas + "g " + costMineral + "m " + costWater + "w";	
+			str = "Mineral planet " + getNum() + " (" + getName() + ") is level " + level + ".\nProduces: " + outputMineral + " mineral\nUpgrade cost: " + costGas + "g " + costMineral + "m " + costWater + "w";	
 		}
 		else {
 
-			str = "Water planet " + getNum() + " (" + getName() + ") is level " + level + ".\nProduces: " + waterResource + " water\nUpgrade cost: " + costGas + "g " + costMineral + "m " + costWater + "w";	
+			str = "Water planet " + getNum() + " (" + getName() + ") is level " + level + ".\nProduces: " + outputWater + " water\nUpgrade cost: " + costGas + "g " + costMineral + "m " + costWater + "w";	
 		}
 		return str;
 	}
@@ -151,12 +151,12 @@ public class Planet extends Satellite implements MouseListener {
 	
 	private void setResource(int r) {
 		if (t.equals("G"))
-			gasResource = r;
+			outputGas = r;
 		else if (t.equals("M")) {
-			mineralResource = r;
+			outputMineral = r;
 		}
 		else {
-			waterResource = r;
+			outputWater = r;
 		}
 	}
 	

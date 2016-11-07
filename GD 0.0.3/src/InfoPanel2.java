@@ -49,43 +49,50 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		c.insets = new Insets(5, 5, 5, 5);
 		
 		selectPanel = new SelectPanel(control);
-		/*hoverArea = new JTextArea(20, 3);
-		hoverArea.setPreferredSize(new Dimension(100, 300));
-		hoverArea.setFont(Globals.f);
-		hoverArea.setForeground(Globals.textColor);
-		hoverArea.setLineWrap(true);
-		hoverArea.setRows(1);
-		hoverArea.setWrapStyleWord(true);
-		hoverArea.setText(hoverText);
-		hoverArea.setEditable(false);
-		//hoverArea.setOpaque(false); 
-		 */
 		this.add(selectPanel, c);
 		
-		/*// skip button
+		// OurButton TEST
+		JPanel panel = new JPanel();
+		panel.setOpaque(false);
+		
+		GridBagConstraints pC = new GridBagConstraints();
+
+		pC.gridx = 0; pC.gridy = 0;
+		pC.gridwidth = 2; pC.gridheight = 1;
+		OurButton oB1 = new OurButton(control, 255, 75, "Test 1");
+		oB1.setPreferredSize(new Dimension(oB1.getWidth() + 1, oB1.getHeight() + 1));
+		panel.add(oB1, pC);
+
+		pC.gridx = 0; pC.gridy = 1;
+		pC.gridwidth = 1; pC.gridheight = 1;
+		OurButton oB2 = new OurButton(control, "Test 2");
+		oB2.setPreferredSize(new Dimension(oB2.getWidth() + 1, oB2.getHeight() + 1));
+		panel.add(oB2, pC);
+		
+		pC.gridx = 1; pC.gridy = 1;
+		pC.gridwidth = 1; pC.gridheight = 1;
+		OurButton oB3 = new OurButton(control, "Test 3");
+		oB3.setPreferredSize(new Dimension(oB3.getWidth() + 1, oB3.getHeight() + 1));
+		panel.add(oB3, pC);
+
+		pC.gridx = 0; pC.gridy = 2;
+		pC.gridwidth = 1; pC.gridheight = 1;
+		OurButton oB4 = new OurButton(control, "Test 4");
+		oB4.setPreferredSize(new Dimension(oB4.getWidth() + 1, oB4.getHeight() + 1));
+		panel.add(oB4, pC);
+		
+		pC.gridx = 1; pC.gridy = 2;
+		pC.gridwidth = 1; pC.gridheight = 1;
+		OurButton oB5 = new OurButton(control, "Test 5");
+		oB5.setPreferredSize(new Dimension(oB5.getWidth() + 1, oB5.getHeight() + 1));
+		panel.add(oB5, pC);
+
+		
 		c.gridx = 0; c.gridy = 1;
-		c.ipadx = 5; c.ipady = 10;
 		c.gridwidth = 1; c.gridheight = 1;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		// testing with buttons
-		JButton b1 = new JButton("Wait turn.");
-		b1.setMnemonic('w');
-		b1.setActionCommand("wait");
-		b1.addActionListener(this);
-		this.add(b1, c);
-	
-		// done button
-		c.gridx = 1; c.gridy = 1;
-		c.ipadx = 5; c.ipady = 10;
-		c.gridwidth = 1; c.gridheight = 1;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		// testing with buttons
-		JButton b2 = new JButton("Upgrade selected sat.");
-		b2.setMnemonic('u');
-		b2.setActionCommand("upgrade");
-		b2.addActionListener(this);
-		this.add(b2, c);
-		*/
+		c.fill = GridBagConstraints.BOTH;
+		this.add(panel, c);
+		
 		// chat box
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 0; c.gridy = 2;
