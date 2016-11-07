@@ -170,6 +170,21 @@ public class Planet extends Satellite implements MouseListener {
 		return false;
 	}
 	
+	public Boolean buyPlanet() {
+		Boolean endTurn;
+		if (canPurchase()) {
+			addSatelliteOwner();
+			endTurn = true;
+			control.printToHoverArea(info());
+			control.printToPlayerArea();
+		}
+		else {
+			endTurn = false;
+			control.printToHoverArea("You don't have enough resources to buy this planet");
+		}
+		return endTurn;
+	}
+	
 	@Override
 	public Boolean upgradeSatelliteToNextLevel() {
 		// check if within AoI
@@ -177,12 +192,6 @@ public class Planet extends Satellite implements MouseListener {
 		if (planetWithinAoI()) { // it's within current player's AoI
 			if (this.owner == control.getOpponent()) { // owned by opponent
 				control.printToHoverArea("This planet is owned by someone else. Don't throw resources at " + control.getOpponent().getName() + ".");
-			}
-			else if (this.owner == null && canPurchase()) { // not owned, buying the planet
-				addSatelliteOwner();
-				endTurn = true;
-				control.printToHoverArea(info());
-				control.printToPlayerArea();
 			}
 			else if (level > maxLevel) {
 				control.printToHoverArea("This planet is at max level.");

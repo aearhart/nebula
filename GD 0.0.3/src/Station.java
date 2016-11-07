@@ -204,12 +204,13 @@ public class Station extends Satellite implements MouseListener {
 		}
 	}
 	
-	public void fixMalfunction() {
+	public Boolean fixMalfunction() {
 		// can only have 1 malfunction at a time
 		isMalfunctioning = false;
 		gasInfluence = 1;
 		mineralInfluence = 1;
 		waterInfluence = 1;
+		return true;
 	}
 	
 	public int getAoI() {

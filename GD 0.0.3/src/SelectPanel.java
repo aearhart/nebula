@@ -89,7 +89,7 @@ public class SelectPanel extends JPanel implements ActionListener {
 		// button 2
 		button2 = new JButton();
 		button2.setMnemonic('o');
-		button2.setActionCommand("b1");
+		button2.setActionCommand("b2");
 		button2.setFont(Globals.f);
 		button2.setText(" ");
 		button2.addActionListener(this);
@@ -104,7 +104,7 @@ public class SelectPanel extends JPanel implements ActionListener {
 		// button 3
 		button3 = new JButton();
 		button3.setMnemonic('o');
-		button3.setActionCommand("b1");
+		button3.setActionCommand("b3");
 		button3.setFont(Globals.f);
 		button3.setText(" ");
 		button3.addActionListener(this);
@@ -119,7 +119,7 @@ public class SelectPanel extends JPanel implements ActionListener {
 		// button 4
 		button4 = new JButton();
 		button4.setMnemonic('o');
-		button4.setActionCommand("b1");
+		button4.setActionCommand("b4");
 		button4.setFont(Globals.f);
 		button4.setText(" ");
 		button4.addActionListener(this);
@@ -139,6 +139,7 @@ public class SelectPanel extends JPanel implements ActionListener {
 	public void claimPhase() {
 		phase = "Claim";
 		selectedSatellite = null;
+		printToSelectText(defaultSelectText);
 		// mainButton = claim station
 		mainButton.setEnabled(false);
 		mainButton.setText("Claim Station");
@@ -150,6 +151,7 @@ public class SelectPanel extends JPanel implements ActionListener {
 	public void mainPhase() {
 		phase = "Main";
 		selectedSatellite = null;
+		printToSelectText(defaultSelectText);
 		// mainButton = wait turn
 		mainButton.setText("Pass");
 		mainButton.setEnabled(true);
@@ -160,6 +162,7 @@ public class SelectPanel extends JPanel implements ActionListener {
 	public void waitPhase() {
 		phase = "Wait";
 		selectedSatellite = null;
+		printToSelectText(defaultSelectText);
 		
 	}
 	public void printToSelectText(String s) {
@@ -177,12 +180,30 @@ public class SelectPanel extends JPanel implements ActionListener {
 		button4.setText(" ");
 	}
 	
+	private void stationButtons(Boolean b1, Boolean b2) {
+		// Station buttons in main phase:
+		//button 1
+		button1.setText("Upgrade");
+		button1.setEnabled(b1);
+		button2.setText("Fix");
+		button2.setEnabled(b2);
+	}
+	
+	private void planetButtons(Boolean b1, Boolean b2) {
+		// Planet buttons in main phase:
+		button1.setText("Upgrade");
+		button1.setEnabled(b1);
+		button2.setText("Buy");
+		button2.setEnabled(b2);
+	}
+	
 	public void selectSatellite(Satellite sat) {
 		// depending on what is selected(and the phase), the buttons change
 		
 		System.out.println("selectedSatellite  " + control.getStatus());
 		selectedSatellite = sat;
 
+		noButtons();
 		switch (phase) {
 		case "Claim": {
 			// planet or station
@@ -227,27 +248,34 @@ public class SelectPanel extends JPanel implements ActionListener {
 
 				if(sat.owner == control.getPlayer()) {
 					printToSelectText(((Station) sat).info());
-					
+					stationButtons(true, ((Station)sat).isMalfunctioning());
 					}
 				else if (sat.owner == control.getOpponent()) {
 					printToSelectText("This station is owned by " + control.getOpponent().getName() + ". ");
+					stationButtons(false, false);
 				}
-				else {printToSelectText("This space station is unmanned! Would you like to build here?" + ((Station) sat).info()); }
+				else {printToSelectText("This space station is unmanned! Would you like to build here?" + ((Station) sat).info()); 
+					stationButtons(false, false);
+				}
 				return;
 			}
 			else if (! sat.getType().equals("O")) {
 				// planet, print something
 				if (sat.owner == control.getOpponent()) { // owned by opponent
 					printToSelectText("This planet is already owned by " + sat.owner.getName());
+					planetButtons(false, false);
 				}
 				else if (((Planet) sat).planetWithinAoI() == false) { // outside AoI
 					printToSelectText(((Planet) sat).info("This planet is too far away to build on."));
+					planetButtons(false, false);
 				}
 				else if (sat.owner == null) { // not owned
 					printToSelectText(((Planet) sat).info("Not currently owned! Invest away."));
+					planetButtons(false, true);
 				}
 				else { // owned by current player
 					printToSelectText(((Planet) sat).info("You own this planet!"));
+					planetButtons(true, false);
 				}
 				return;
 			}
@@ -290,15 +318,38 @@ public class SelectPanel extends JPanel implements ActionListener {
 				printToSelectText("Skipping turn.");
 				control.printToPlayerArea();
 			} // end button main
-			
-			/*// for next buttons:
-			if (selectedSatellite != null) { // we have a satellite
-				endTurn = selectedSatellite.upgradeSatelliteToNextLevel();
-			}
-			else {
-				// no selected satellite
-				printToSelectText("Please select a satellite that you would like to upgrade");
-			}*/
+			if (e.getActionCommand().equals("b1")) {
+				// upgrade
+				if (selectedSatellite != null && (! selectedSatellite.getType().equals("O"))) { // we have a station or planet
+					printToSelectText("The satellite has been upgraded");
+					endTurn = selectedSatellite.upgradeSatelliteToNextLevel();
+				}
+				else {
+					// no selected satellite
+					printToSelectText("Please select a satellite that you would like to upgrade");
+				}
+			} // end b1
+			if (e.getActionCommand().equals("b2")) {
+				if (selectedSatellite != null) {
+					if (selectedSatellite.getType().equals("S")) { // STATION --> fix
+						Player p = control.getPlayer();
+						Station base = p.getBase();
+						if (base.isMalfunctioning() && p.getGas() >2 && p.getMineral() >5 && p.getWater() > 3) {
+							p.subGas(2); p.subMineral(5); p.subWater(3);
+							endTurn = base.fixMalfunction();
+						}
+						else {
+							printToSelectText("You don't have enough materials to fix this station.");
+						}
+					}
+					else if (! selectedSatellite.getType().equals("O")) { // PLANET --> buy
+						endTurn = ((Planet) selectedSatellite).buyPlanet();
+					}
+				}
+				else {
+					printToSelectText("Please select a satellite in order .."); // this shouldn't be an issue
+				}
+			} // end b2
 			break;
 		} // end case main
 		} // end switch
