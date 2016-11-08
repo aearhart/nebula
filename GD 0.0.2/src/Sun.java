@@ -52,7 +52,7 @@ public class Sun extends Satellite implements MouseListener{
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+	
 		switch (control.getStatus()) {
 		case "Claiming": {
 			// do nothing
@@ -69,7 +69,7 @@ public class Sun extends Satellite implements MouseListener{
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		switch (control.getStatus()) {
 		case "Claiming": {
 			// do nothing
@@ -90,11 +90,11 @@ public class Sun extends Satellite implements MouseListener{
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 	}
 }

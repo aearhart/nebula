@@ -31,7 +31,7 @@ public class ServerController {
 	*/
 	
 	public ServerController() {
-		// TODO Auto-generated constructor stub
+
 	}
 	
 	private void error() {

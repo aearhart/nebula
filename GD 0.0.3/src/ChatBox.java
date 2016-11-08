@@ -45,7 +45,6 @@ public class ChatBox extends JPanel implements ActionListener{
 	public String message = "";
 	
 	public ChatBox(ClientController clientController) {
-		// TODO Auto-generated constructor stub
 		control = clientController;
 		this.setPreferredSize(new Dimension (100, 300));
 		this.setLayout(new BorderLayout());
@@ -107,7 +106,6 @@ public class ChatBox extends JPanel implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
 		
 		String text = inputField.getText();
 		if (illegal(text)) {

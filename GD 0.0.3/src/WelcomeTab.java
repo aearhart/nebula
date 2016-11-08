@@ -94,7 +94,6 @@ public class WelcomeTab extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		//System.out.println("event");
 		if ("Done".equals(e.getActionCommand())) {
 			if (textField.getText().equals(fieldText)) {

@@ -360,7 +360,6 @@ public class ClientController {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				//e.printStackTrace();
 				System.out.print("threading error"); }
 		
@@ -496,7 +495,6 @@ public class ClientController {
 		try {
 			st = new SoundTest();
 		} catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		menuTab.createTab(st);
@@ -592,7 +590,6 @@ public class ClientController {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				//e.printStackTrace();
 				System.out.print("threading error");
 			}
@@ -718,7 +715,6 @@ public class ClientController {
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				//e.printStackTrace();
 				System.out.print("threading error");
 			}

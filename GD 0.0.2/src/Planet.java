@@ -156,13 +156,13 @@ public class Planet extends Satellite implements MouseListener {
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		
 	}
 }

@@ -31,6 +31,7 @@ public class Planet extends Satellite implements MouseListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		//TODO cutting off the bottom right sides of planets (inc. sun), player screens don't match either
 		
 		if (image == null) {
 			g.setColor(fillCol);
@@ -239,13 +240,13 @@ public class Planet extends Satellite implements MouseListener {
 	
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		
 	}
 }

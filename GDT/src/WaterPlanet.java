@@ -7,14 +7,14 @@ public class WaterPlanet extends Planet {
 
 	public WaterPlanet(Controller ctrl) {
 		super(ctrl, 400, 400, 100);
-		// TODO Auto-generated constructor stub
+	
 		this.setColors(Color.CYAN, Color.BLACK, Color.BLUE);
 		this.defineType("water");
 	}
 
 	public WaterPlanet(Controller ctrl, Integer locX, Integer locY, Integer sz, Integer numResources) {
 		super(ctrl, locX, locY, sz, numResources);
-		// TODO Auto-generated constructor stub
+	
 		this.setColors(Color.CYAN, Color.BLACK, Color.BLUE);
 		this.defineType("water");
 	}

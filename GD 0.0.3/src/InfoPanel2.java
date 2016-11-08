@@ -130,7 +130,6 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if("wait".equals(e.getActionCommand())) {
 			switch (control.getStatus()) {
 			case "Claiming": {
@@ -177,7 +176,6 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 	}
 
 	public ChatBox getChatbox() {
-		// TODO Auto-generated method stub
 		return chatBox;
 	}
 	

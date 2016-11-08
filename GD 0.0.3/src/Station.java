@@ -260,6 +260,9 @@ public class Station extends Satellite implements MouseListener {
 	}
 	
 	public void createPlanets() {
+		// TODO planet sizes should be smaller, make sure neighboring planets don't overlap ever
+		// TODO if the planets are small enough sometimes they are outside the AoI
+		
 		planetsToCreate += dividePlanets("G", gasAccess);
 		planetsToCreate += dividePlanets("M", mineralAccess);
 		planetsToCreate += dividePlanets("W", waterAccess);
@@ -347,7 +350,7 @@ public class Station extends Satellite implements MouseListener {
 	
 	public void placePlanet(Satellite p, int planetPos) {
 		// change x/y coordinates to place planet correctly w/in AoI
-		//TODO  
+		  
 		Random rand = new Random();
 		
 		int planetSize = p.getSz();
@@ -386,13 +389,13 @@ public class Station extends Satellite implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+
 		
 	}
 

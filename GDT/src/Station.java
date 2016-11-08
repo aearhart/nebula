@@ -21,9 +21,6 @@ public class Station extends Satellite implements MouseListener {
 	
 	public Station(Controller ctrl, Integer locX, Integer locY, Integer sz) {
 		super(ctrl, locX, locY, sz);
-		// TODO Auto-generated constructor stub
-		
-		
 		
 		this.setColors(Color.GREEN, Color.BLACK, Color.RED);
 		addMouseListener(this);
@@ -112,7 +109,6 @@ public class Station extends Satellite implements MouseListener {
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		switch (control.getStatus()) {
 		case "Claiming": {
 			if(this.owner == null) {
@@ -143,7 +139,6 @@ public class Station extends Satellite implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		// TODO Auto-generated method stub
 		switch (control.getStatus()) {
 		case "Claiming": {
 				if(this.owner == null) {
@@ -172,13 +167,13 @@ public class Station extends Satellite implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
+
 		
 	}
 

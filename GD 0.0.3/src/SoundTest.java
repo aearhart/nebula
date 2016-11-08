@@ -20,7 +20,7 @@ public class SoundTest {
 	public Float currentVolume = 0f; // max: 6.0206f;
 	
 	public SoundTest() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
-		// TODO Auto-generated constructor stub
+	
 
 	clip = AudioSystem.getClip();
 	ais = AudioSystem.getAudioInputStream(f);

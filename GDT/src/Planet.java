@@ -17,7 +17,7 @@ public class Planet extends Satellite implements MouseListener {
 	
 	public Planet(Controller ctrl, Integer locX, Integer locY, Integer sz) {
 		super(ctrl, locX, locY, sz);
-		// TODO Auto-generated constructor stub
+	
 		numOfResources = 1;
 		control = ctrl;
 		addMouseListener(this);
@@ -91,7 +91,7 @@ public class Planet extends Satellite implements MouseListener {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		switch (control.getStatus()) {
 		case "Claiming": {
 			control.printToHoverArea(info());
@@ -150,19 +150,19 @@ public class Planet extends Satellite implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		
 	}
 	
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		switchColors();
 		repaint();
 		switch (control.getStatus()) {
@@ -191,7 +191,6 @@ public class Planet extends Satellite implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 		switchColors();
 		repaint();
 		switch (control.getStatus()) {

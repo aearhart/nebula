@@ -305,7 +305,6 @@ public class Satellite extends JComponent {
 	}
 
 	public String info() {
-		// TODO Auto-generated method stub
 		return "It's the sun. You can feel its blazing heat just looking at it.";
 	}
 }

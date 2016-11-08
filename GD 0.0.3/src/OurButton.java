@@ -111,7 +111,7 @@ public class OurButton extends JComponent implements MouseListener{
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		System.out.println(str + " Button Clicked");
 		//sPanel.clicked(buttonNum);
 	}
@@ -119,26 +119,24 @@ public class OurButton extends JComponent implements MouseListener{
 	
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		highlight();
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
+
 		unhighlight();
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 		//System.out.println(str + " Button Pressed");
 		
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
 		//System.out.println(str + " Button Released");
 		
 	}

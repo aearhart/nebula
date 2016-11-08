@@ -24,7 +24,6 @@ public class MapTab extends JPanel{
 		try {
 			img = ImageIO.read(getClass().getResourceAsStream("menuBackground.jpg"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

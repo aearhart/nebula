@@ -47,7 +47,6 @@ public class MenuTab extends JPanel implements ActionListener{
 		try {
 			image = ImageIO.read(getClass().getResource("menuBackground.jpg"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.setPreferredSize(new Dimension(Globals.winSize, Globals.winSize));
@@ -233,7 +232,6 @@ public class MenuTab extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		if ("Music".equals(e.getActionCommand())) {
 			if (music.playing) {
 				// stop playing
