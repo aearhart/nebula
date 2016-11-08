@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -52,15 +53,54 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 		c.anchor = GridBagConstraints.NORTH;
 		c.gridx = 0; c.gridy = 0;
 		c.fill = GridBagConstraints.BOTH;
-		c.gridwidth = 2; c.gridheight= 6;
+		c.gridwidth = 1; c.gridheight= 1;
 		c.weightx = 1.0; c.weighty = 1.0;
 		c.insets = new Insets(5, 5, 5, 5);
 		this.add(selectText, c);
 		
-		// Main button
-		mainButton = new OurButton(this, 155, 50, "Main");
-		mainButton.setBounds(0, 0, mainButton.getWidth() + 1, mainButton.getHeight() + 1);
+		
+		JPanel panel = new JPanel();
+		panel.setOpaque(false);
+		
+		GridBagConstraints pC = new GridBagConstraints();
 
+		pC.gridx = 0; pC.gridy = 0;
+		pC.gridwidth = 2; pC.gridheight = 1;
+		mainButton = new OurButton(this, 0, 255, 50);
+		mainButton.setPreferredSize(new Dimension(mainButton.getWidth() + 1, mainButton.getHeight() + 1));
+		panel.add(mainButton, pC);
+ 
+		pC.gridx = 0; pC.gridy = 1;
+		pC.gridwidth = 1; pC.gridheight = 1;
+		OurButton button1 = new OurButton(this, 1);
+		button1.setPreferredSize(new Dimension(button1.getWidth() + 1, button1.getHeight() + 1));
+		panel.add(button1, pC);
+		
+		pC.gridx = 1; pC.gridy = 1;
+		pC.gridwidth = 1; pC.gridheight = 1;
+		OurButton button2 = new OurButton(this, 2);
+		button2.setPreferredSize(new Dimension(button2.getWidth() + 1, button2.getHeight() + 1));
+		panel.add(button2, pC);
+
+		pC.gridx = 0; pC.gridy = 2;
+		pC.gridwidth = 1; pC.gridheight = 1;
+		OurButton button3 = new OurButton(this, 3);
+		button3.setPreferredSize(new Dimension(button3.getWidth() + 1, button3.getHeight() + 1));
+		panel.add(button3, pC);
+		
+		pC.gridx = 1; pC.gridy = 2;
+		pC.gridwidth = 1; pC.gridheight = 1;
+		OurButton button4 = new OurButton(this, 4);
+		button4.setPreferredSize(new Dimension(button4.getWidth() + 1, button4.getHeight() + 1));
+		panel.add(button4, pC);
+		
+		c.gridx = 0; c.gridy = 1;
+		c.gridwidth = 1; c.gridheight = 1;
+		c.fill = GridBagConstraints.BOTH;
+		this.add(panel, c);
+		
+		// Main button
+ /*
 		c.anchor = GridBagConstraints.NORTH;
 		c.gridx = 0; c.gridy = 7;
 		c.gridwidth = 2; c.gridheight = 1; 
@@ -69,7 +109,7 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 		this.add(mainButton, c); 
 		
 		// Other buttons
-		button1 = new OurButton(this, 75, 50, "Button 1");
+		button1 = new OurButton(this, 1, 75, 50);
 		c.anchor = GridBagConstraints.SOUTHWEST;
 		c.gridx = 0; c.gridy = 8;
 		c.gridwidth = 1; c.gridheight = 1; 
@@ -77,7 +117,7 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 		c.fill = GridBagConstraints.BOTH;
 		this.add(button1, c); 
 		
-		button2 = new OurButton(this, 75, 50, "Button 2");
+		button2 = new OurButton(this, 2, 75, 50);
 		c.anchor = GridBagConstraints.SOUTHEAST;
 		c.gridx = 1; c.gridy = 8;
 		c.gridwidth = 1; c.gridheight = 1; 
@@ -85,7 +125,8 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 		c.fill = GridBagConstraints.BOTH;
 		this.add(button2, c); 
 		
-		button3 = new OurButton(this, 75, 50, "Button 3");
+		button3 = new OurButton(this, 3, 75, 50);
+		button3.remove();
 		c.anchor = GridBagConstraints.SOUTHWEST;
 		c.gridx = 0; c.gridy = 9;
 		c.gridwidth = 1; c.gridheight = 1; 
@@ -93,76 +134,16 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 		c.fill = GridBagConstraints.BOTH;
 		this.add(button3, c); 
 		
-		button4 = new OurButton(this, 75, 50, "Button 4");
+		button4 = new OurButton(this, 4, 75, 50);
+		button4.disable();
 		c.anchor = GridBagConstraints.SOUTHEAST;
 		c.gridx = 1; c.gridy = 9;
 		c.gridwidth = 1; c.gridheight = 1; 
 		c.weightx = 1.0; c.weighty = 0.5;
 		c.fill = GridBagConstraints.BOTH;
 		this.add(button4, c);
-		
-		/*
-		// button 1
-		button1 = new OurButton();
-		button1.setMnemonic('o');
-		button1.setActionCommand("b1");
-		button1.setFont(Globals.f);
-		button1.setText(" ");
-		button1.addActionListener(this);
-		button1.setPreferredSize(new Dimension(40, 100));
-		
-		c.anchor = GridBagConstraints.NORTHWEST;
-		c.gridx = 0; c.gridy = 2;
-		c.gridwidth = 1; c.gridheight = 1; 
-		c.weightx = 1.0; c.weighty = 0.0;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		this.add(button1, c); 
-		
-		// button 2
-		button2 = new JButton();
-		button2.setMnemonic('o');
-		button2.setActionCommand("b2");
-		button2.setFont(Globals.f);
-		button2.setText(" ");
-		button2.addActionListener(this);
-		
-		c.anchor = GridBagConstraints.NORTHWEST;
-		c.gridx = 1; c.gridy = 2;
-		c.gridwidth = 1; c.gridheight = 1; 
-		c.weightx = 1.0; c.weighty = 0.0;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		this.add(button2, c); 
-		
-		// button 3
-		button3 = new JButton();
-		button3.setMnemonic('o');
-		button3.setActionCommand("b3");
-		button3.setFont(Globals.f);
-		button3.setText(" ");
-		button3.addActionListener(this);
-		
-		c.anchor = GridBagConstraints.NORTHWEST;
-		c.gridx = 0; c.gridy = 3;
-		c.gridwidth = 1; c.gridheight = 1; 
-		c.weightx = 1.0; c.weighty = 0.0;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		this.add(button3, c); 
-		
-		// button 4
-		button4 = new JButton();
-		button4.setMnemonic('o');
-		button4.setActionCommand("b4");
-		button4.setFont(Globals.f);
-		button4.setText(" ");
-		button4.addActionListener(this);
-		
-		c.anchor = GridBagConstraints.NORTHWEST;
-		c.gridx = 1; c.gridy = 3;
-		c.gridwidth = 1; c.gridheight = 1; 
-		c.weightx = 1.0; c.weighty = 0.0;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		this.add(button4, c); 
 		*/
+		
 		
 		claimPhase();
 	}
