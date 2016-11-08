@@ -9,28 +9,28 @@ public class OurButton extends JComponent implements MouseListener{
 	int width = 125;
 	int height = 75;
 	String str;
-	ClientController control; 
+	SelectPanel2 sPanel; 
 	
 	Color fill;
 	Color border = Color.BLUE;
 	Color highlight = Color.CYAN;
 	Color base = Color.LIGHT_GRAY;
 	
-	public OurButton(ClientController clientControl, int w, int h, String s) {
+	public OurButton(SelectPanel2 panel, int w, int h, String s) {
 		fill = base;
 		
 		width = w;
 		height = h;
 		str = s;
-		control = clientControl;
+		sPanel = panel;
 		addMouseListener(this);
 	}
 
-	public OurButton(ClientController clientControl, String s) {
+	public OurButton(SelectPanel2 panel, String s) {
 		fill = base;
 		
 		str = s;
-		control = clientControl;
+		sPanel = panel;
 		addMouseListener(this);
 	}
 	

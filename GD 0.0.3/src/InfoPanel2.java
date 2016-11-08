@@ -27,7 +27,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 	//private String hoverText = "Hover over a satellite for more info.";
 	private char [] chars;
 	
-	private SelectPanel selectPanel;
+	private SelectPanel2 selectPanel;
 	public ChatBox chatBox;
 	public Satellite selectedSatellite = null;
 	
@@ -48,10 +48,11 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		c.weightx = 1.0; c.weighty = 1.0;
 		c.insets = new Insets(5, 5, 5, 5);
 		
-		selectPanel = new SelectPanel(control);
+		selectPanel = new SelectPanel2(control);
 		this.add(selectPanel, c);
 		
 		// OurButton TEST
+		/*
 		JPanel panel = new JPanel();
 		panel.setOpaque(false);
 		
@@ -93,6 +94,8 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		c.fill = GridBagConstraints.BOTH;
 		this.add(panel, c);
 		
+		*/
+		
 		// chat box
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 0; c.gridy = 2;
@@ -122,7 +125,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		return selectedSatellite;
 	}
 	
-	public SelectPanel getSelectPanel() {
+	public SelectPanel2 getSelectPanel() {
 		return selectPanel;
 	}
 	
