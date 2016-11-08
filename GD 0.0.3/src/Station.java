@@ -257,7 +257,7 @@ public class Station extends Satellite implements MouseListener {
 			return "";
 		}
 		
-	}
+	} 
 	
 	public void createPlanets() {
 		// TODO planet sizes should be smaller, make sure neighboring planets don't overlap ever
