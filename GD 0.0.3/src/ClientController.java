@@ -107,7 +107,7 @@ public class ClientController {
 		try {
 			socket = new Socket(ipAddress, 7777);
 		} catch (IOException e) {
-			//error("Unable to connect to server.");
+			//error("Unable  to connect to server.");
 			setStatus("test");
 			//e.printStackTrace();
 			//e.printStackTrace();			error("Unable to connect to server!");
