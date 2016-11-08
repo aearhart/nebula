@@ -32,10 +32,11 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 		
 		this.setPreferredSize(new Dimension(300, 500));
 		
-		this.setLayout(new GridBagLayout());
+		this.setLayout(new GridBagLayout()); 
 		this.setBackground(new Color(0, 128, 128, 255));
 		
 		GridBagConstraints c = new GridBagConstraints();
+		
 		
 		// select text area
 		selectText = new JTextArea(20, 3);

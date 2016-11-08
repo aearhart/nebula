@@ -46,7 +46,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 2; c.gridheight= 1;
 		c.weightx = 1.0; c.weighty = 1.0;
-		c.insets = new Insets(5, 5, 5, 5);
+		c.insets = new Insets(5, 5, 5, 5); 
 		
 		selectPanel = new SelectPanel2(control);
 		this.add(selectPanel, c);
@@ -63,7 +63,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		OurButton oB1 = new OurButton(control, 255, 75, "Test 1");
 		oB1.setPreferredSize(new Dimension(oB1.getWidth() + 1, oB1.getHeight() + 1));
 		panel.add(oB1, pC);
-
+ 
 		pC.gridx = 0; pC.gridy = 1;
 		pC.gridwidth = 1; pC.gridheight = 1;
 		OurButton oB2 = new OurButton(control, "Test 2");
