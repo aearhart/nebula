@@ -332,6 +332,8 @@ public class ClientController {
 	
 	public void collectResources() {
 		/* current player collects resources in AoI */
+		
+		//TODO: take care of overlapping instances: or if planet has been upgraded... CONFLICT!
 		String str = "";
 		// for each station
 		str += "\nResources collected:";

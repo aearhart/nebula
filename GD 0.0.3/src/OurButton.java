@@ -12,7 +12,7 @@ public class OurButton extends JComponent implements MouseListener{
 	private int width = 125;
 	private int height = 50;
 	private String str = "";
-	private SelectPanel2 sPanel; 
+	private SelectPanel sPanel; 
 	
 	private int buttonNum;
 
@@ -29,7 +29,7 @@ public class OurButton extends JComponent implements MouseListener{
 	private Boolean isVisible = true;
 	private Boolean isActive = true;
 	
-	public OurButton(SelectPanel2 panel, int num, int w, int h) {
+	public OurButton(SelectPanel panel, int num, int w, int h) {
 		getImages();
 		
 		buttonNum = num;
@@ -40,7 +40,7 @@ public class OurButton extends JComponent implements MouseListener{
 		addMouseListener(this);
 	}
 
-	public OurButton(SelectPanel2 panel, int num) {
+	public OurButton(SelectPanel panel, int num) {
 		getImages();
 		
 		buttonNum = num;
@@ -114,6 +114,9 @@ public class OurButton extends JComponent implements MouseListener{
 
 		if (isActive)
 			sPanel.clicked(buttonNum);
+		else if (isVisible) { // disabled
+			sPanel.buttonInfo(buttonNum);
+		}
 	}
 
 	

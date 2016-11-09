@@ -27,7 +27,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 	//private String hoverText = "Hover over a satellite for more info.";
 	private char [] chars;
 	
-	private SelectPanel2 selectPanel;
+	private SelectPanel selectPanel;
 	public ChatBox chatBox;
 	public Satellite selectedSatellite = null;
 	
@@ -48,7 +48,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		c.weightx = 1.0; c.weighty = 1.0;
 		c.insets = new Insets(5, 5, 5, 5); 
 		
-		selectPanel = new SelectPanel2(control);
+		selectPanel = new SelectPanel(control);
 		this.add(selectPanel, c);
 		
 		// OurButton TEST
@@ -124,7 +124,7 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 		return selectedSatellite;
 	}
 	
-	public SelectPanel2 getSelectPanel() {
+	public SelectPanel getSelectPanel() {
 		return selectPanel;
 	}
 	
