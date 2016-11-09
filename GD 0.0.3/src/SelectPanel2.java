@@ -11,7 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-public class SelectPanel2 extends JPanel implements ActionListener {
+
+public class SelectPanel2 extends JPanel{
 	private ClientController control;
 	
 	private String phase;
@@ -27,6 +28,12 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 	private OurButton button2;
 	private OurButton button3;
 	private OurButton button4;
+	
+	int MAIN = 0;
+	int B1 = 1;
+	int B2 = 2;
+	int B3 = 3;
+	int B4 = 4;
 	
 	public SelectPanel2(ClientController clientController) {
 		control = clientController;
@@ -64,85 +71,46 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 		
 		GridBagConstraints pC = new GridBagConstraints();
 
+		// Main Button
 		pC.gridx = 0; pC.gridy = 0;
 		pC.gridwidth = 2; pC.gridheight = 1;
 		mainButton = new OurButton(this, 0, 255, 50);
 		mainButton.setPreferredSize(new Dimension(mainButton.getWidth() + 1, mainButton.getHeight() + 1));
 		panel.add(mainButton, pC);
  
+		// Button 1
 		pC.gridx = 0; pC.gridy = 1;
 		pC.gridwidth = 1; pC.gridheight = 1;
-		OurButton button1 = new OurButton(this, 1);
+		button1 = new OurButton(this, 1);
 		button1.setPreferredSize(new Dimension(button1.getWidth() + 1, button1.getHeight() + 1));
 		panel.add(button1, pC);
 		
+		// Button 2
 		pC.gridx = 1; pC.gridy = 1;
 		pC.gridwidth = 1; pC.gridheight = 1;
-		OurButton button2 = new OurButton(this, 2);
+		button2 = new OurButton(this, 2);
 		button2.setPreferredSize(new Dimension(button2.getWidth() + 1, button2.getHeight() + 1));
 		panel.add(button2, pC);
 
+		// Button 3
 		pC.gridx = 0; pC.gridy = 2;
 		pC.gridwidth = 1; pC.gridheight = 1;
-		OurButton button3 = new OurButton(this, 3);
+		button3 = new OurButton(this, 3);
 		button3.setPreferredSize(new Dimension(button3.getWidth() + 1, button3.getHeight() + 1));
 		panel.add(button3, pC);
 		
+		// Button 4
 		pC.gridx = 1; pC.gridy = 2;
 		pC.gridwidth = 1; pC.gridheight = 1;
-		OurButton button4 = new OurButton(this, 4);
+		button4 = new OurButton(this, 4);
 		button4.setPreferredSize(new Dimension(button4.getWidth() + 1, button4.getHeight() + 1));
 		panel.add(button4, pC);
 		
+		// Button Panel
 		c.gridx = 0; c.gridy = 1;
 		c.gridwidth = 1; c.gridheight = 1;
 		c.fill = GridBagConstraints.BOTH;
 		this.add(panel, c);
-		
-		// Main button
- /*
-		c.anchor = GridBagConstraints.NORTH;
-		c.gridx = 0; c.gridy = 7;
-		c.gridwidth = 2; c.gridheight = 1; 
-		c.weightx = 1.0; c.weighty = 0.5;
-		c.fill = GridBagConstraints.BOTH;
-		this.add(mainButton, c); 
-		
-		// Other buttons
-		button1 = new OurButton(this, 1, 75, 50);
-		c.anchor = GridBagConstraints.SOUTHWEST;
-		c.gridx = 0; c.gridy = 8;
-		c.gridwidth = 1; c.gridheight = 1; 
-		c.weightx = 1.0; c.weighty = 0.5;
-		c.fill = GridBagConstraints.BOTH;
-		this.add(button1, c); 
-		
-		button2 = new OurButton(this, 2, 75, 50);
-		c.anchor = GridBagConstraints.SOUTHEAST;
-		c.gridx = 1; c.gridy = 8;
-		c.gridwidth = 1; c.gridheight = 1; 
-		c.weightx = 1.0; c.weighty = 0.5;
-		c.fill = GridBagConstraints.BOTH;
-		this.add(button2, c); 
-		
-		button3 = new OurButton(this, 3, 75, 50);
-		button3.remove();
-		c.anchor = GridBagConstraints.SOUTHWEST;
-		c.gridx = 0; c.gridy = 9;
-		c.gridwidth = 1; c.gridheight = 1; 
-		c.weightx = 1.0; c.weighty = 0.5;
-		c.fill = GridBagConstraints.BOTH;
-		this.add(button3, c); 
-		
-		button4 = new OurButton(this, 4, 75, 50);
-		button4.disable();
-		c.anchor = GridBagConstraints.SOUTHEAST;
-		c.gridx = 1; c.gridy = 9;
-		c.gridwidth = 1; c.gridheight = 1; 
-		c.weightx = 1.0; c.weighty = 0.5;
-		c.fill = GridBagConstraints.BOTH;
-		this.add(button4, c);
-		*/
 		
 		
 		claimPhase();
@@ -155,11 +123,10 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 		selectedSatellite = null;
 		printToSelectText(defaultSelectText);
 		// mainButton = claim station
-		mainButton.setEnabled(false);
 		mainButton.setText("Claim Station");
-		
-		// buttons-- will eventually want to make it disappear
-		//noButtons();
+		mainButton.disable();
+		// remove buttons
+		noButtons();
 	}
 	
 	public void mainPhase() {
@@ -168,47 +135,48 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 		printToSelectText(defaultSelectText);
 		// mainButton = wait turn
 		mainButton.setText("Pass");
-		mainButton.setEnabled(true);
+		mainButton.enable();
 		
-		//noButtons();
+		noButtons();
 	}
 	
 	public void waitPhase() {
 		phase = "Wait";
 		selectedSatellite = null;
 		printToSelectText(defaultSelectText);
-		
+		mainButton.remove();
+		noButtons();
 	}
 	public void printToSelectText(String s) {
 		selectText.setText(s);
 	}
 
 	private void noButtons() {
-		button1.setEnabled(false);
-		button1.setText(" ");
-		button2.setEnabled(false);
-		button2.setText(" ");
-		button3.setEnabled(false);
-		button3.setText(" ");
-		button4.setEnabled(false);
-		button4.setText(" ");
+		button1.remove();
+		button2.remove();
+		button3.remove();
+		button4.remove();
 	}
 	
 	private void stationButtons(Boolean b1, Boolean b2) {
 		// Station buttons in main phase:
 		//button 1
 		button1.setText("Upgrade");
-		button1.setEnabled(b1);
+		if (b1) button1.enable();
+		else button1.disable();
 		button2.setText("Fix");
-		button2.setEnabled(b2);
+		if (b2)	button2.enable();
+		else button2.disable();
 	}
 	
 	private void planetButtons(Boolean b1, Boolean b2) {
 		// Planet buttons in main phase:
 		button1.setText("Upgrade");
-		button1.setEnabled(b1);
+		if (b1) button1.enable();
+		else button1.disable();
 		button2.setText("Buy");
-		button2.setEnabled(b2);
+		if (b2)	button2.enable();
+		else button2.disable();
 	}
 	
 	public void selectSatellite(Satellite sat) {
@@ -216,11 +184,11 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 		
 		System.out.println("selectedSatellite  " + control.getStatus());
 		selectedSatellite = sat;
-
 		noButtons();
 		switch (phase) {
 		case "Claim": {
 			// planet or station
+			mainButton.disable();
 			if (sat.getType().equals("S")) {
 				// station, print something
 				if (sat.owner == control.getOpponent()) {
@@ -228,7 +196,7 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 				else {  // not owned
 					printToSelectText("You do not own this space station. But you could, for the price of a click of a button!" + ((Station) sat).info()); 
 					// enable button
-					mainButton.setEnabled(true);
+					mainButton.enable();
 					}
 				return;	
 			}
@@ -250,10 +218,10 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 
 				return;
 			}
-			else if (! sat.getType().equals("O")) {
-				// planet, print something
+			else {
+				// planet/sun, print something
 				printToSelectText(sat.info());
-			}			
+			}
 			break;
 		}
 		case "Main": {
@@ -293,6 +261,9 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 				}
 				return;
 			}
+			else { //sun
+				printToSelectText(sat.info());
+			}
 			break;
 		}
 		default: {
@@ -302,14 +273,13 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 		
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void clicked(int command) {
 		// Conduct activity based on the button clicked and the phase
-		
+		// mainButton = 0, button 1 = 1, button 2 = 2, button 3 = 3, button 4 = 4
 		Boolean endTurn = false;
 		switch (phase) {
 		case "Claim": {
-			if (e.getActionCommand().equals("main")) {
+			if (command == MAIN) {
 				// mainButton
 				if (selectedSatellite != null) {
 					if (selectedSatellite.getType().equals("S")) {
@@ -326,13 +296,13 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 			break;
 		} // end case claim station
 		case "Main": {
-			if (e.getActionCommand().equals("main")) {
+			if (command == MAIN) {
 				control.getPlayer().addEventChance(0.25);
 				control.setStatus("collectResources");
 				printToSelectText("Skipping turn.");
 				control.printToPlayerArea();
 			} // end button main
-			if (e.getActionCommand().equals("b1")) {
+			if (command == B1) {
 				// upgrade
 				if (selectedSatellite != null && (! selectedSatellite.getType().equals("O"))) { // we have a station or planet
 					printToSelectText("The satellite has been upgraded");
@@ -343,7 +313,7 @@ public class SelectPanel2 extends JPanel implements ActionListener {
 					printToSelectText("Please select a satellite that you would like to upgrade");
 				}
 			} // end b1
-			if (e.getActionCommand().equals("b2")) {
+			if (command == B2) {
 				if (selectedSatellite != null) {
 					if (selectedSatellite.getType().equals("S")) { // STATION --> fix
 						Player p = control.getPlayer();

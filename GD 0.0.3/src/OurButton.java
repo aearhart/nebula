@@ -112,8 +112,8 @@ public class OurButton extends JComponent implements MouseListener{
 	@Override
 	public void mouseClicked(MouseEvent e) {
 
-		System.out.println(str + " Button Clicked");
-		//sPanel.clicked(buttonNum);
+		if (isActive)
+			sPanel.clicked(buttonNum);
 	}
 
 	
