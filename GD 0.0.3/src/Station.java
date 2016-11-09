@@ -384,7 +384,6 @@ public class Station extends Satellite implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
-		deselect();
 	}
 
 	@Override
