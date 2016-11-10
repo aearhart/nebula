@@ -324,8 +324,6 @@ public class ClientController {
 			}
 		return 7;
 	}
-	
-
 	/* GAME TURN */
 	
 
@@ -709,8 +707,8 @@ public class ClientController {
 	
 	public void playerTab() {
 		window.removeAtab(0);
-
-		
+		String tempStatus = status;
+		setStatus("Welcome");
 		WelcomeTab welcome = new WelcomeTab(this);
 		window.addTab(welcome, "Connection successful");
 		while (welcome.notFinished()) {
@@ -723,6 +721,7 @@ public class ClientController {
 		} 
 		window.removeAtab(0);
 		createMenu();
+		setStatus(tempStatus);
 	}
 	
 	// for testing

@@ -25,6 +25,9 @@ import javax.swing.event.ChangeListener;
 public class MenuTab extends JPanel implements ActionListener{
 	private ClientController control;
 	public String name = "MenuTab";
+	
+	private int index = 0;
+	
 	public SoundTest music;
 
 	public JButton quitButton;

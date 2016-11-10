@@ -1,14 +1,20 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
-public class OurButton extends JComponent implements MouseListener{
+public class OurButton extends JComponent implements MouseListener {
 	private int width = 125;
 	private int height = 50;
 	private String str = "";
@@ -17,6 +23,7 @@ public class OurButton extends JComponent implements MouseListener{
 	private int buttonNum;
 
 	private int imageNum = 0;
+	private KeyStroke key; 
 	
 	//                                     active inactive highlighted, invisible
 	private BufferedImage[] buttonImages = {null,   null,     null,       null};
@@ -29,10 +36,12 @@ public class OurButton extends JComponent implements MouseListener{
 	private Boolean isVisible = true;
 	private Boolean isActive = true;
 	
-	public OurButton(SelectPanel panel, int num, int w, int h) {
+	public OurButton(SelectPanel panel, int num, KeyStroke keyStroke, int w, int h) {
 		getImages();
 		
 		buttonNum = num;
+		key = keyStroke;
+
 		
 		width = w;
 		height = h;
@@ -40,11 +49,11 @@ public class OurButton extends JComponent implements MouseListener{
 		addMouseListener(this);
 	}
 
-	public OurButton(SelectPanel panel, int num) {
+	public OurButton(SelectPanel panel, int num, KeyStroke k) {
 		getImages();
 		
 		buttonNum = num;
-
+		key = k;
 		sPanel = panel;
 		addMouseListener(this);
 	}
@@ -90,6 +99,7 @@ public class OurButton extends JComponent implements MouseListener{
 		
 	}
 
+	
 	public void setText(String s) {
 		str = s;
 	}
@@ -108,15 +118,21 @@ public class OurButton extends JComponent implements MouseListener{
 		}
 	}
 	
+	public void action() {
+		// The button activates: it completes its command
+		if (! (sPanel == null)) {
+			if (isActive) // enabled
+				sPanel.clicked(buttonNum);
+			else if (isVisible) { // disabled
+				sPanel.buttonInfo(buttonNum); // display button info
+			}
+		}
+	}
+	
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-
-		if (isActive)
-			sPanel.clicked(buttonNum);
-		else if (isVisible) { // disabled
-			sPanel.buttonInfo(buttonNum);
-		}
+		action();
 	}
 
 	
@@ -144,6 +160,10 @@ public class OurButton extends JComponent implements MouseListener{
 		
 	}
 
+	public KeyStroke getKey() {
+		return key;
+	}
+	
 	public int getWidth() {
 		return width;
 	}

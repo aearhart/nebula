@@ -7,9 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 
 
 public class SelectPanel extends JPanel{
@@ -20,7 +24,7 @@ public class SelectPanel extends JPanel{
 	
 	private JTextArea selectText;
 	private String defaultSelectText = "Select an item for more information.";
-	
+	private static final int IFW  = JComponent.WHEN_IN_FOCUSED_WINDOW;
 	
 	private OurButton mainButton;
 	
@@ -74,35 +78,36 @@ public class SelectPanel extends JPanel{
 		// Main Button
 		pC.gridx = 0; pC.gridy = 0;
 		pC.gridwidth = 2; pC.gridheight = 1;
-		mainButton = new OurButton(this, 0, 255, 50);
+		mainButton = new OurButton(this, 0, KeyStroke.getKeyStroke(' '), 255, 50);
 		mainButton.setPreferredSize(new Dimension(mainButton.getWidth() + 1, mainButton.getHeight() + 1));
+		
 		panel.add(mainButton, pC);
  
 		// Button 1
 		pC.gridx = 0; pC.gridy = 1;
 		pC.gridwidth = 1; pC.gridheight = 1;
-		button1 = new OurButton(this, 1);
+		button1 = new OurButton(this, 1, KeyStroke.getKeyStroke('1'));
 		button1.setPreferredSize(new Dimension(button1.getWidth() + 1, button1.getHeight() + 1));
 		panel.add(button1, pC);
 		
 		// Button 2
 		pC.gridx = 1; pC.gridy = 1;
 		pC.gridwidth = 1; pC.gridheight = 1;
-		button2 = new OurButton(this, 2);
+		button2 = new OurButton(this, 2, KeyStroke.getKeyStroke('2'));
 		button2.setPreferredSize(new Dimension(button2.getWidth() + 1, button2.getHeight() + 1));
 		panel.add(button2, pC);
 
 		// Button 3
 		pC.gridx = 0; pC.gridy = 2;
 		pC.gridwidth = 1; pC.gridheight = 1;
-		button3 = new OurButton(this, 3);
+		button3 = new OurButton(this, 3, KeyStroke.getKeyStroke('3'));
 		button3.setPreferredSize(new Dimension(button3.getWidth() + 1, button3.getHeight() + 1));
 		panel.add(button3, pC);
 		
 		// Button 4
 		pC.gridx = 1; pC.gridy = 2;
 		pC.gridwidth = 1; pC.gridheight = 1;
-		button4 = new OurButton(this, 4);
+		button4 = new OurButton(this, 4, KeyStroke.getKeyStroke('4'));
 		button4.setPreferredSize(new Dimension(button4.getWidth() + 1, button4.getHeight() + 1));
 		panel.add(button4, pC);
 		
@@ -113,10 +118,51 @@ public class SelectPanel extends JPanel{
 		this.add(panel, c);
 		
 		
+		// keyBindings
+
+		mainButton.getInputMap(IFW).put(mainButton.getKey(), "keyMAIN");
+		Action keyMAIN = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("key typed MAIN");
+				mainButton.action();
+			}};
+		mainButton.getActionMap().put("keyMAIN", keyMAIN);
+
+		button1.getInputMap(IFW).put(button1.getKey(), "keyB1");
+		Action keyB1 = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("key typed B1");
+				button1.action();
+			}};
+		button1.getActionMap().put("keyB1", keyB1);
+		
+		button2.getInputMap(IFW).put(button2.getKey(), "keyB2");
+		Action keyB2 = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("key typed B2");
+				button2.action();
+			}};
+		button2.getActionMap().put("keyB2", keyB2);
+		
+		button3.getInputMap(IFW).put(button3.getKey(), "keyB3");
+		Action keyB3 = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("key typed B3");
+				button3.action();
+			}};
+		button3.getActionMap().put("keyB3", keyB3);
+		
+		button4.getInputMap(IFW).put(button4.getKey(), "keyB4");
+		Action keyB4 = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("key typed B4");
+				button4.action();
+			}};
+		button4.getActionMap().put("keyB4", keyB4);
+		
+		//set phase
 		claimPhase();
 	}
-	
-	
 	
 	public void claimPhase() {
 		phase = "Claim";
@@ -147,6 +193,8 @@ public class SelectPanel extends JPanel{
 		mainButton.remove();
 		noButtons();
 	}
+	
+	
 	public void printToSelectText(String s) {
 		selectText.setText(s);
 	}

@@ -1,8 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.*;
 
-public class Window extends JFrame {
+public class Window extends JFrame{
 	
 //	private Map map;
 	private ClientController control;
@@ -32,6 +34,7 @@ public class Window extends JFrame {
 		this.pack();
 
 		this.setVisible(true);
+		setFocusable(true);
 	}
 	
 	public void addTab(JPanel tab, String tabName) {
@@ -53,6 +56,10 @@ public class Window extends JFrame {
 		tabbedPane.remove(tabPosition);
 		this.pack();
 		update();
+	}
+	
+	public int getActiveTab() {
+		return tabbedPane.getSelectedIndex();
 	}
 	/*
 	public void add(Map m) {

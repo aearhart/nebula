@@ -2,6 +2,8 @@
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -10,12 +12,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class MapTab extends JPanel{
+public class MapTab extends JPanel {
 	private ClientController control;
 	public String name = "MapTab";
 	
 	protected BufferedImage img = null;
-	
+	private int index = 1;
 
 	
 	public MapTab(ClientController clientController) {
@@ -26,6 +28,7 @@ public class MapTab extends JPanel{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	@Override
