@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.*;
 
-public class Window extends JFrame{
+public class Window extends JFrame implements KeyListener{
 	
 //	private Map map;
 	private ClientController control;
@@ -13,6 +13,12 @@ public class Window extends JFrame{
 	private String[] tabNames = {"Map"};
 	private Color[] tabColors = {Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.BLUE, Color.MAGENTA};
 	
+	// selected indexes
+	private static final int MENU = 0;
+	private static final int MAP = 1;
+	
+	private static final char MENUkey = '-';
+	private static final char MAPkey = '=';
 	
 	public Window(ClientController clientController, String playerName) {
 		super("Welcome to Game Demo 0.0.3");
@@ -77,4 +83,36 @@ public class Window extends JFrame{
 		this.setVisible(true);
 	}
 
+	public void setMapFront() {
+		tabbedPane.setSelectedIndex(MAP);
+	}
+	
+	public void setMenuFront() {
+		tabbedPane.setSelectedIndex(MENU);
+	}
+
+	@Override
+	public void keyPressed(KeyEvent arg0) {
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// change selected tabbedpane
+		//TODO: changing selected tab: cycle or specific key? ALSO this isn't working at all
+		System.out.println("KEY TYPED!!!");
+		if (! control.getStatus().equals("Welcome")) {
+			System.out.println("changing tabs");
+			if (e.getKeyChar() == MENUkey)
+				setMenuFront();
+			else if (e.getKeyChar() == MAPkey)
+				setMapFront();
+		}
+	}
 }

@@ -10,10 +10,13 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -26,7 +29,7 @@ import javax.swing.border.MatteBorder;
 //   Player Text Area
 
 
-public class InfoPanel extends JPanel implements ActionListener{
+public class InfoPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	private ClientController control; 
 	private Player player;
@@ -37,8 +40,13 @@ public class InfoPanel extends JPanel implements ActionListener{
 	
 	private JTextArea instructionArea;
 	private JTextArea playerArea;
+	private OurButton b0;
+	private OurButton b1;
 	
 	private Boolean bool = true;
+	
+	int B0 = 0;
+	int B1 = 1;
 	
 	public InfoPanel(ClientController clientController) {
 		control = clientController;
@@ -75,38 +83,27 @@ public class InfoPanel extends JPanel implements ActionListener{
 		
 		
 		// BUTTON 1
-		JButton b1 = new JButton("Fix!");
-		b1.setMnemonic('h');
-		b1.setActionCommand("Fix");
-		b1.setFont(Globals.f);
-		b1.setForeground(Globals.textColor);
-		//b1.setOpaque(false);
-		b1.setContentAreaFilled(false);
-		b1.setBorder(new EtchedBorder(new Color(45, 126, 255, 70), new Color(45, 126, 255, 30)));
-		b1.addActionListener(this);
+		b0 = new OurButton(this, B0, KeyStroke.getKeyStroke('a'));
+		b0.setText("Test1");
+		b0.setPreferredSize(new Dimension(b0.getWidth() + 1, b0.getHeight() + 1));
 		
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 0; c.gridy = 1;
 		c.gridheight = 1; c.gridwidth = 1; 
 		c.weightx = 1.0; c.weighty = 0.0;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		this.add(b1, c);
+		this.add(b0, c);
 		
 		// BUTTON 2
-		JButton b2 = new JButton("Done");
-		b2.setMnemonic('d');
-		b2.setActionCommand("done");
-		b2.setFont(Globals.f);
-		b2.setForeground(Globals.textColor);
-		b2.setContentAreaFilled(false);
-		b2.setBorder(new EtchedBorder(new Color(45, 126, 255, 70), new Color(45, 126, 255, 30)));
-		b2.addActionListener(this);
-
+		b1 = new OurButton(this, B1, KeyStroke.getKeyStroke('s'));
+		b1.setText("Test2");
+		b1.setPreferredSize(new Dimension(b1.getWidth() + 1, b1.getHeight() + 1));
+		
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 1; c.gridy = 1;
 		c.gridheight = 1; c.gridwidth = 1; 
 		c.weightx = 1.0; c.weighty = 0.0;
-		c.fill = GridBagConstraints.HORIZONTAL;this.add(b2, c);
+		c.fill = GridBagConstraints.HORIZONTAL;this.add(b1, c);
 		
 		// PANEL 2
 		playerArea = new JTextArea();
@@ -126,6 +123,24 @@ public class InfoPanel extends JPanel implements ActionListener{
 		c.weightx = 1.0; c.weighty = 1.0;
 		c.fill = GridBagConstraints.BOTH;
 		this.add(playerArea, c);
+		
+		// key bindings
+		b0.getInputMap(Globals.IFW).put(b0.getKey(), "keyB0");
+		Action keyB0 = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("key typed Test 1");
+				b0.action();
+			}};
+		b0.getActionMap().put("keyB0", keyB0);
+		
+		b1.getInputMap(Globals.IFW).put(b1.getKey(), "keyB1");
+		Action keyB1 = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("key typed Test 2");
+				b1.action();
+			}};
+		b1.getActionMap().put("keyB1", keyB1);
+		
 	}
 	
 	public static String padRight(String s, int n) {
@@ -142,19 +157,12 @@ public class InfoPanel extends JPanel implements ActionListener{
 		playerArea.setText("Player Information:\n\n" + s);
 	}
 	
-	public void actionPerformed(ActionEvent e) {
-		if ("Fix".equals(e.getActionCommand())) {
-			Player p = control.getPlayer();
-			Station base = p.getBase();
-			if (base.isMalfunctioning() && p.getGas() >2 && p.getMineral() >5 && p.getWater() > 3) {
-				p.subGas(2); p.subMineral(5); p.subWater(3);
-				base.fixMalfunction();
+	
+	public void clicked(int command) {
+		if (command == B0) {
+
 			}
-			else {
-				control.printToHoverArea("You don't have enough materials to fix this station.");
-			}
-		}
-		else if ("done".equals(e.getActionCommand())) {
+		else if (command == B1) {
 			//printToInstructionArea("I guess you're done.");
 			if (bool) {
 				bool = false;
@@ -166,28 +174,5 @@ public class InfoPanel extends JPanel implements ActionListener{
 			}
 		}
 	}
-	
-	/* 
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		
-		Font f1 = new Font("Arial", Font.PLAIN, 10);
-		g.setFont(f1);
-		
-		/*FontMetrics fm = g.getFontMetrics();
-
-		int msgWidth = fm.stringWidth(string1);
-		int msgAscent = fm.getAscent();
-
-		int msgX = getWidth() / 2 - msgWidth / 2;
-		int msgY = getHeight() / 2 + msgAscent / 2;
-		g.drawString(string1, msgX, msgY);*/
-		
-		//g.drawString(string1, 20, 55);
-		/*
-		
-	}*/
-
 	
 }

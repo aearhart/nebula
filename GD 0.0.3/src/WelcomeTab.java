@@ -6,12 +6,16 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Random;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 
 public class WelcomeTab extends JPanel implements ActionListener{
 	private ClientController control;
@@ -22,8 +26,11 @@ public class WelcomeTab extends JPanel implements ActionListener{
 	private String areaText = "Welcome to GD 0.0.3!\n\nPlease enter your name in the text field above to play. \n\n";
 	private String fieldText = "What is your name? (hit enter to select)";
 	private Player p;
+	private OurButton enterButton;
+	
 	Boolean finished = false;
 
+	int ENTER = 0;
 	
 	public WelcomeTab(ClientController clientController) {
 		super(new GridBagLayout());
@@ -44,13 +51,11 @@ public class WelcomeTab extends JPanel implements ActionListener{
 		textArea.setText(areaText);
 		 
 		//JScrollPane scrollPane = new JScrollPane(textArea);
-		
-		JButton b1 = new JButton("Yes");
-		b1.setMnemonic('h');
-		b1.setActionCommand("Done");
-		b1.setFont(f1);
-		b1.addActionListener(this);
-		
+		//TODO: create Enter button for WelcomeTab visuals
+		enterButton = new OurButton(this, ENTER, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
+		enterButton.setPreferredSize(new Dimension(enterButton.getWidth() + 1, enterButton.getHeight() + 1));
+		enterButton.setText("Yes this is my name!");
+				
 		GridBagConstraints c= new GridBagConstraints();
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		
@@ -70,7 +75,16 @@ public class WelcomeTab extends JPanel implements ActionListener{
 		c1.insets = new Insets(5, 5, 5, 5);
 		// testing with buttons
 
-		this.add(b1, c1);
+		this.add(enterButton, c1);
+		
+		// KEYBINDINGS
+		enterButton.getInputMap(Globals.IFW).put(enterButton.getKey(), "keyENTER");
+		Action keyENTER = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("key typed ENTER");
+				enterButton.action();
+			}};
+		enterButton.getActionMap().put("keyENTER", keyENTER);
 	}
 	
 	public Boolean notFinished() {
@@ -91,11 +105,8 @@ public class WelcomeTab extends JPanel implements ActionListener{
 		return name;
 	}
 
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		//System.out.println("event");
-		if ("Done".equals(e.getActionCommand())) {
+	public void clicked(int command) {
+		if (command == ENTER) {
 			if (textField.getText().equals(fieldText)) {
 				Random rand = new Random();
 				int r = rand.nextInt(5);
@@ -108,6 +119,11 @@ public class WelcomeTab extends JPanel implements ActionListener{
 			//System.out.println("done -- " + p.getName() + "   " + notFinished());
 			return;
 		}
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		//System.out.println("event");
 		
 		String text = textField.getText();
 		if (illegal(text)) {

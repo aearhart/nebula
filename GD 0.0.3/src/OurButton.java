@@ -18,7 +18,10 @@ public class OurButton extends JComponent implements MouseListener {
 	private int width = 125;
 	private int height = 50;
 	private String str = "";
-	private SelectPanel sPanel; 
+	private SelectPanel sPanel = null; 
+	private InfoPanel iPanel = null;
+	private MenuTab mPanel = null;
+	private WelcomeTab wPanel = null;
 	
 	private int buttonNum;
 
@@ -42,7 +45,6 @@ public class OurButton extends JComponent implements MouseListener {
 		buttonNum = num;
 		key = keyStroke;
 
-		
 		width = w;
 		height = h;
 		sPanel = panel;
@@ -55,6 +57,36 @@ public class OurButton extends JComponent implements MouseListener {
 		buttonNum = num;
 		key = k;
 		sPanel = panel;
+		addMouseListener(this);
+	}
+	
+	public OurButton(InfoPanel panel, int num, KeyStroke k) {
+		// OurButton for the infoPanel screen
+		getImages();
+		
+		buttonNum = num;
+		key = k;
+		iPanel = panel;
+		addMouseListener(this);
+	}
+	
+	public OurButton(MenuTab panel, int num, KeyStroke k) {
+		// OurButton for the infoPanel screen
+		getImages();
+		
+		buttonNum = num;
+		key = k;
+		mPanel = panel;
+		addMouseListener(this);
+	}
+	
+	public OurButton(WelcomeTab panel, int num, KeyStroke k) {
+		// OurButton for the infoPanel screen
+		getImages();
+		
+		buttonNum = num;
+		key = k;
+		wPanel = panel;
 		addMouseListener(this);
 	}
 	
@@ -126,6 +158,21 @@ public class OurButton extends JComponent implements MouseListener {
 			else if (isVisible) { // disabled
 				sPanel.buttonInfo(buttonNum); // display button info
 			}
+		}
+		else if (! (iPanel == null)) {
+			if (isActive)
+				iPanel.clicked(buttonNum);
+			//else if (isVisible) {
+			//	iPanel.buttonInfo(buttonNum);
+			//}
+		}
+		else if (! (mPanel == null)) {
+			if (isActive)
+				mPanel.clicked(buttonNum);
+		}
+		else if (! (wPanel == null)) {
+			if (isActive)
+				wPanel.clicked(buttonNum);
 		}
 	}
 	

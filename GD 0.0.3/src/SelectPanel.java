@@ -24,7 +24,7 @@ public class SelectPanel extends JPanel{
 	
 	private JTextArea selectText;
 	private String defaultSelectText = "Select an item for more information.";
-	private static final int IFW  = JComponent.WHEN_IN_FOCUSED_WINDOW;
+
 	
 	private OurButton mainButton;
 	
@@ -120,7 +120,7 @@ public class SelectPanel extends JPanel{
 		
 		// keyBindings
 
-		mainButton.getInputMap(IFW).put(mainButton.getKey(), "keyMAIN");
+		mainButton.getInputMap(Globals.IFW).put(mainButton.getKey(), "keyMAIN");
 		Action keyMAIN = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("key typed MAIN");
@@ -128,7 +128,7 @@ public class SelectPanel extends JPanel{
 			}};
 		mainButton.getActionMap().put("keyMAIN", keyMAIN);
 
-		button1.getInputMap(IFW).put(button1.getKey(), "keyB1");
+		button1.getInputMap(Globals.IFW).put(button1.getKey(), "keyB1");
 		Action keyB1 = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("key typed B1");
@@ -136,7 +136,7 @@ public class SelectPanel extends JPanel{
 			}};
 		button1.getActionMap().put("keyB1", keyB1);
 		
-		button2.getInputMap(IFW).put(button2.getKey(), "keyB2");
+		button2.getInputMap(Globals.IFW).put(button2.getKey(), "keyB2");
 		Action keyB2 = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("key typed B2");
@@ -144,7 +144,7 @@ public class SelectPanel extends JPanel{
 			}};
 		button2.getActionMap().put("keyB2", keyB2);
 		
-		button3.getInputMap(IFW).put(button3.getKey(), "keyB3");
+		button3.getInputMap(Globals.IFW).put(button3.getKey(), "keyB3");
 		Action keyB3 = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("key typed B3");
@@ -152,7 +152,7 @@ public class SelectPanel extends JPanel{
 			}};
 		button3.getActionMap().put("keyB3", keyB3);
 		
-		button4.getInputMap(IFW).put(button4.getKey(), "keyB4");
+		button4.getInputMap(Globals.IFW).put(button4.getKey(), "keyB4");
 		Action keyB4 = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("key typed B4");

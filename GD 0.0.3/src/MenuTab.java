@@ -12,17 +12,21 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class MenuTab extends JPanel implements ActionListener{
+public class MenuTab extends JPanel{
+
 	private ClientController control;
 	public String name = "MenuTab";
 	
@@ -30,13 +34,13 @@ public class MenuTab extends JPanel implements ActionListener{
 	
 	public SoundTest music;
 
-	public JButton quitButton;
-	public JButton musicButton;
+	public OurButton quitButton;
+	public OurButton musicButton;
 
 	public JLabel notificationLabel;
 	public JLabel creditsLabel;
 
-	public JButton chatButton;
+	public OurButton chatButton;
 
 	public JLabel settingsLabel;
 	public JLabel welcomeLabel;
@@ -44,6 +48,10 @@ public class MenuTab extends JPanel implements ActionListener{
 	
 	//https://pixabay.com/en/nebula-space-stars-galaxy-668783/
 	protected BufferedImage image = null;
+	
+	private static final int MUSIC = 0;
+	private static final int CHAT = 1;
+	private static final int QUIT = 0;
 	
 	public MenuTab(ClientController clientController) {
 		control = clientController;
@@ -140,16 +148,10 @@ public class MenuTab extends JPanel implements ActionListener{
 		
 		
 		// Button MUSIC
-		musicButton = new JButton("Start music");
-		musicButton.setMnemonic('m');
-		musicButton.setActionCommand("Music");
-		musicButton.setFont(Globals.f);
-		musicButton.setForeground(Globals.textColor);
-		musicButton.setContentAreaFilled(false);
-		musicButton.setBorder(new EtchedBorder(new Color(45, 126, 255, 70), new Color(45, 126, 255, 30)));
-		
-		
-		musicButton.addActionListener(this);
+		//TODO: text won't change until mouse enter/exit, music to click ratio seems slow, same may apply to chatbutton
+		musicButton = new OurButton(this, MUSIC, KeyStroke.getKeyStroke('m'));
+		musicButton.setPreferredSize(new Dimension(musicButton.getWidth() + 1, musicButton.getHeight() + 1));
+		musicButton.setText("Start music");
 		
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 2; c.gridy = 2;
@@ -189,13 +191,10 @@ public class MenuTab extends JPanel implements ActionListener{
 		//c.insets = new Insets(10, 10, 10, 10);
 		this.add(volumeControl, c);
 
-		// placement is NOT working >:(
 		// Button Chat 
-		chatButton = new JButton("Turn chat off");
-		chatButton.setFont(Globals.f);
-		chatButton.setMnemonic('c');
-		chatButton.setActionCommand("Chat");
-		chatButton.addActionListener(this);
+		chatButton = new OurButton(this, CHAT, KeyStroke.getKeyStroke('c'));
+		chatButton.setText("Turn chat off");
+		chatButton.setPreferredSize(new Dimension(chatButton.getWidth() + 1, chatButton.getHeight() + 1));
 				
 		c.anchor = GridBagConstraints.NORTHWEST;
 		c.gridx = 2; c.gridy = 3;
@@ -222,6 +221,24 @@ public class MenuTab extends JPanel implements ActionListener{
 		*/
 
 		
+		// KEYBINDINGS
+		// TODO: make all keybindings changeable
+		musicButton.getInputMap(Globals.IFW).put(musicButton.getKey(), "keyMUSIC");
+		Action keyMUSIC = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("key typed MUSIC");
+				musicButton.action();
+			}};
+		musicButton.getActionMap().put("keyMUSIC", keyMUSIC);
+		
+		chatButton.getInputMap(Globals.IFW).put(chatButton.getKey(), "keyCHAT");
+		Action keyCHAT = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("key typed CHAT");
+				chatButton.action();
+			}};
+		chatButton.getActionMap().put("keyCHAT", keyCHAT);
+		
 
 	}
 	
@@ -233,9 +250,8 @@ public class MenuTab extends JPanel implements ActionListener{
 		return name;
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if ("Music".equals(e.getActionCommand())) {
+	public void clicked(int command) {
+		if (command==MUSIC) {
 			if (music.playing) {
 				// stop playing
 				musicButton.setText("Play music");
@@ -247,10 +263,10 @@ public class MenuTab extends JPanel implements ActionListener{
 				music.startPlaying();
 			}
 		}
-		else if ("Quit".equals(e.getActionCommand())) {
+		else if (command == QUIT) {
 			control.close();
 		}
-		else if ("Chat".equals(e.getActionCommand())) {
+		else if (command == CHAT) {
 			if (control.chatEnabled) {
 				// turn chat off
 				chatButton.setText("Enable chat");

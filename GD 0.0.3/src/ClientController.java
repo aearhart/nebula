@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.event.ActionEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,6 +12,8 @@ import java.util.Random;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -517,7 +520,8 @@ public class ClientController {
 		window.addTabs(tabs);
 		setStatus("pause");
 		map.hover("Please wait while we are setting up the game.");
-
+		window.setMapFront();
+		
 	}
 	
 	public int updatePlayer(String s[], int i, int p) {
