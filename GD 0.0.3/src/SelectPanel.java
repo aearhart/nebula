@@ -186,6 +186,16 @@ public class SelectPanel extends JPanel{
 		noButtons();
 	}
 	
+	public void spaceshipPhase() {
+		phase = "Spaceship";
+		selectedSatellite = null;
+		printToSelectText(defaultSelectText);
+		mainButton.setText("Wait and get more fuel");
+		mainButton.enable();
+		
+		noButtons();
+	}
+	
 	public void waitPhase() {
 		phase = "Wait";
 		selectedSatellite = null;
@@ -227,6 +237,19 @@ public class SelectPanel extends JPanel{
 		else button2.disable();
 	}
 	
+	private void spaceshipButtons(Boolean b1, Boolean b2, Boolean b3, Boolean b4) {
+		button1.setText("Move");
+		if (b1) button1.enable();
+		else button1.disable();
+		button2.setText("Help the sat");
+		if (b2)	button2.enable();
+		else button2.disable();
+		button3.setText("Steal from sat");
+		if (b3) button3.enable(); else button3.disable();
+		button4.setText("Sabotage sat");
+		if (b4) button4.enable(); else button4.disable();
+	}
+	
 	public void selectSatellite(Satellite sat) {
 		// depending on what is selected(and the phase), the buttons change
 		
@@ -248,9 +271,10 @@ public class SelectPanel extends JPanel{
 					}
 				return;	
 			}
+	
 			else if (! sat.getType().equals("O")) {
 				// planet, print something
-				printToSelectText(((Planet) sat).info());
+				printToSelectText(sat.info());
 			}
 			break;
 		} // end claim 
@@ -267,7 +291,7 @@ public class SelectPanel extends JPanel{
 				return;
 			}
 			else {
-				// planet/sun, print something
+				// planet/sun/spaceship, print something
 				printToSelectText(sat.info());
 			}
 			break;
@@ -288,6 +312,17 @@ public class SelectPanel extends JPanel{
 					stationButtons(false, false);
 				}
 				return;
+			}
+			else if (sat.getType().equals("SS")) { // SPACESHIP
+				Spaceship ship = (Spaceship) sat;
+				if (ship.getController() == control.getPlayer()) {
+					printToSelectText(ship.info());
+					spaceshipButtons(false, false, false, false);
+				}
+				else { // opponent's ship
+					printToSelectText("This ship is owned by " + control.getOpponent().getName() + ". Let's hope it's not planning anything nefarious.");
+					spaceshipButtons(false, false, false ,false);
+				}
 			}
 			else if (! sat.getType().equals("O")) {
 				// planet, print something
@@ -313,6 +348,22 @@ public class SelectPanel extends JPanel{
 				printToSelectText(sat.info());
 			}
 			break;
+		}
+		case "Spaceship": {
+			if (sat.getType().equals("SS")) {
+				Spaceship ship = (Spaceship) sat;
+				if (ship.getController() == control.getPlayer()) {
+					printToSelectText(ship.info() + "\n What do you want to do?");
+					spaceshipButtons(true, false, false, false);
+				}
+				else { // opponent's ship
+					printToSelectText(ship.getController().getName() + "'s spaceship. What is it planning?? Better keep an eye.");
+					spaceshipButtons(false, false, false, false);
+				}
+			}
+			else {
+				printToSelectText(sat.info());
+			}
 		}
 		default: {
 			printToSelectText(sat.info());

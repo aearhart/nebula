@@ -42,7 +42,7 @@ public class ClientController {
 	private List<Satellite> satellites = new ArrayList<Satellite>();
 	private Player player;
 	private Player opponent = new Player(this);
-	private String clientPlayerNum = "P0";
+	public String clientPlayerNum = "P0";
 	private String status = "";
 	public Boolean chatEnabled = true;
 	
@@ -193,7 +193,10 @@ public class ClientController {
 			if (sat.getNum().equals(str))
 				return sat;
 		}
-		return null;
+		// it's a new satellite
+		Satellite sat = new Spaceship(null, null, null, "x");
+		satellites.add(sat);
+		return sat;
 	}
 	
 	public Station getStation(String str) {
@@ -599,6 +602,13 @@ public class ClientController {
 			}
 		}
 		
+		// add spaceship to the player's station
+		Spaceship ship = new Spaceship(this, player, player.getBase(), Integer.toString(satellites.size()));
+		satellites.add((Satellite)ship);
+		map.add(ship,3);
+		placeShip(ship);
+		updateMap();
+		
 		waitTurn();
 		
 		getCurrentState("claim end");
@@ -739,7 +749,7 @@ public class ClientController {
 			sat.setName(sat.num + " water planet");
 			sat.setBounds(sat.getLocX(), sat.getLocY(), sat.getBoundSize(), sat.getBoundSize());
 		}
-		Spaceship testShip = new Spaceship(this, player, satellites.get(0));
+		Spaceship testShip = new Spaceship(this, player, satellites.get(0), "6");
 		map.add(testShip,3);
 		placeShip(testShip);
 		updateMap();

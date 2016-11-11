@@ -10,6 +10,7 @@ public class Player {
 	public int numStations = 0;
 	public ArrayList<String> stationList = new ArrayList<String>();
 	public List<Station> stations = new ArrayList<Station>();
+	public Spaceship spaceship = null;
 	
 	public int numPlanets = 0;
 	public int gas = 0;
@@ -218,6 +219,14 @@ public class Player {
 	
 	public void subGas(int gas) {
 		this.gas -= gas;
+	}
+	
+	public Spaceship getSpaceship() {
+		return spaceship;
+	}
+	
+	public void setSpaceship(Satellite ship) {
+		spaceship = (Spaceship)ship;
 	}
 	
 	public void addEventChance(double d) {

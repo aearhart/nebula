@@ -149,7 +149,10 @@ public class ServerController {
 			if (sat.getNum().equals(str))
 				return sat;
 		}
-		return null;
+		// didn't find it: then add it! (it's a spaceship
+		Satellite sat = new Spaceship(null, null, null, "x");
+		satellites.add(sat);
+		return sat;
 	}
 	
 	public int updatePlayer(String s[], int i, int p) {
