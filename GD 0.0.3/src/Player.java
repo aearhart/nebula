@@ -9,7 +9,7 @@ public class Player {
 
 	public int numStations = 0;
 	public ArrayList<String> stationList = new ArrayList<String>();
-	public List<Station> stations = new ArrayList<Station>();
+	public Station base = null;
 	public Spaceship spaceship = null;
 	
 	public int numPlanets = 0;
@@ -52,7 +52,7 @@ public class Player {
 		aList.add(Integer.toString(G));
 		aList.add(Integer.toString(B));
 		aList.add(Integer.toString(numStations));
-		aList.add(Globals.addDelims(stationList));
+		if (! (base == null)) aList.add(base.getNum());
 		aList.add(Integer.toString(numPlanets));
 		aList.add(Integer.toString(gas));
 		aList.add(Integer.toString(water));
@@ -73,12 +73,8 @@ public class Player {
 		B = Integer.parseInt(ary[i++]);
 		col = new Color(R, G, B);
 		numStations = Integer.parseInt(ary[i++]);
-		for (int j = 0; j < numStations; j++) {
-			updateStations(ary[i++]);
-		}
-		if (numStations == 0) // skip empty section
-			i++;
-		
+		if (! (numStations == 0)) // skip empty section
+			updateStation(ary[i++]);
 
 		numPlanets = Integer.parseInt(ary[i++]);
 		//i++; // skipping this step because updating the planets does this already. TODO I think I'd rather this handle it than planet but this will do for now.
@@ -92,15 +88,20 @@ public class Player {
 	}
 	
 	
-	public void updateStations(String sat) {
-		if (! stationList.contains(sat)) {
-			stationList.add(sat);
+	public void updateStation(String sat) {
+		if (base == null) {
 			if (control == null) {
-				stations.add(server.getStation(sat));
+				base = server.getStation(sat);
 				return;
 			}
-			stations.add(control.getStation(sat));
+			base = control.getStation(sat);
 		}
+		// else base already set
+	}
+	
+	public void addStation(Satellite satellite) {
+		base = (Station) satellite;
+		numStations = 1;
 	}
 	
 	public String getNum() {
@@ -119,7 +120,7 @@ public class Player {
 
 	
 	public void addStationToList(Satellite satellite) {
-		stationList.add("s" + satellite.getNum());
+		stationList.add(satellite.getNum());
 	}
 	
 	public void setColor(Color c) {
@@ -145,22 +146,10 @@ public class Player {
 		return numStations;
 	}
 	
-	public void addStation(Satellite satellite) {
-		if (! stationList.contains("s" + satellite.getNum())) {
-			stations.add((Station) satellite);
-			addStationToList(satellite);
-			numStations++;
-		}
-	}
-	
 	public Station getBase() {
-		if (stations == null) return null;
-		return stations.get(0);
+		return base;
 	}
-	public List<Station> getStations() {
-		return stations;
-	}
-	
+
 	public String getName() {
 		return name;
 	}

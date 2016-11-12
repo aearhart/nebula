@@ -56,42 +56,14 @@ public class Sun extends Satellite implements MouseListener{
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-	
-		switch (control.getStatus()) {
-		case "Claiming": {
-			// do nothing
-			return;
-			}
-		case "Wait": {
-			return;
-		}
-		case "Upgrade": {
-			// 
-			switchColors();
-			control.printToHoverArea("Click to skip turn");
-			return;
-			}
-		}
+		switchColors();
+		repaint();
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		switch (control.getStatus()) {
-		case "Claiming": {
-			// do nothing
-			return;
-			}
-		case "Wait": {
-			// do nothing
-			return;
-			}
-		case "Upgrade": {
-			// within AoI
-			switchColors();
-			control.printToHoverArea();
-				return;
-			}
-		}
+		switchColors();
+		repaint();
 	}
 	
 	@Override

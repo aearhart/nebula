@@ -1,10 +1,38 @@
+/*   ClientController.java
+ * 	   11/11/2016
+ * 				Controls the client end of the game
+ * 					1. Create a welcome window until able to connect to server: welcome()
+ * 					2. Connect to server
+ * 					3. Create the player: playerTab()
+ * 					4. If connection not successful, go to the test GUI
+ * 					5. Otherwise, start the game:
+ * 						a. firstContact(): get client num, send player info to server
+ * 						b. startup(): create the components and map satellite objects 
+ * 						c. claimStation(): claim a station, claim a spaceship
+ * 					6.	turn(): enter the turn cycle of the game
+ * 						a. waitPhase: no available options, but can gather information
+ * 						b. turnPhase: it's the client's turn
+ * 							i. mainPhase
+ * 							ii. spaceshipPhase
+ * 							iii. collectResources
+ * 						c. Will continually communicate with server
+ * 							i. Sending out information:
+ * 								1. MESSAGE
+ * 								2. TURN
+ * 								3. WIN
+ * 								4. NOCHANGE
+ * 							ii. read():
+ * 								1. MESSAGE
+ * 								2. TURN
+ * 								3. WIN
+ * 								4. (no need to include): NOCHANGE
+ * 					7. Upon receiving WIN state, end the game on click
+ */
+
 import java.awt.Color;
-import java.awt.event.ActionEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +40,9 @@ import java.util.Random;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import java.io.BufferedReader;
+
 
 public class ClientController {
 
@@ -28,13 +53,10 @@ public class ClientController {
 	private static String input;
 	public static String currentState = "";
 	
-
-	private String ipAddress = "localhost";//"2605:e000:1c02:8e:6d73:7e5:5e67:f8b5";
-
-	//private String ipAddress = "2605:e000:1c02:8e:6d73:7e5:5e67:f8b5";
+	private String ipAddress = "localhost";
 	String winner = "";
 	
-	// components
+	// Gameplay Components
 	private Window window;
 	private Map map;
 	private InfoPanel infoPanel;
@@ -46,21 +68,22 @@ public class ClientController {
 	private String status = "";
 	public Boolean chatEnabled = true;
 	
-	
+	// Current turn and testing values
 	private Boolean turn = false; // not current turn
-	
+	public boolean testing = false;
+
 	// AoI information
 	int AoIx = 0;
 	int AoIy = 0;
 	int AoIs = 0;
 	Color AoIc;
 	
-	public boolean testing = false;
-	
+
 	public ClientController() {
  
 	}
 
+	
 	/* SERVER METHODS */
 
 	private void error(IOException e) {
@@ -69,54 +92,37 @@ public class ClientController {
 		System.exit(1);
 	}
 	
-	private void error(String s) {
+	private void error(IOException e, String s) {
 		System.out.println("Error: " + s);
 		System.exit(1);
 	}
 	
 	public void getMessage()  {
 		/* reads input from server into variable input */
-		try {
-			in = new DataInputStream(socket.getInputStream());
-		} catch (IOException e) {
-			error(e);
-		}
-		try {
-			input = in.readUTF();
-		} catch (IOException e) {
-			error(e);
-		}
+		try { in = new DataInputStream(socket.getInputStream()); } 
+		catch (IOException e) { error(e); }
+		try { input = in.readUTF(); } 
+		catch (IOException e) { error(e); }
 		System.out.println("Receiving information...  " + input);
 	}
 	
 	public void sendMessage() {
 		/* sends currentState to server */
-		try {
-			out = new DataOutputStream(socket.getOutputStream());
-		} catch (IOException e) {
-			error(e);
-		}
-		try {
-			out.writeUTF(currentState);
-		} catch (IOException e) {
-			error(e);
-		}
+		try { out = new DataOutputStream(socket.getOutputStream()); }
+		catch (IOException e) { error(e); }
+		try { out.writeUTF(currentState); }
+		catch (IOException e) { error(e); }
 		System.out.println("Message sent: " + currentState);
-		} 
+	} 
 	
 	public void connectToServer() {
-		/* connects to server */
+		/* connect to server */
 		System.out.println("Connecting to server...");
-		try {
-			socket = new Socket(ipAddress, 7777);
-		} catch (IOException e) {
+		try { socket = new Socket(ipAddress, 7777); }
+		catch (IOException e) { // set to TEST GUI
 			//error("Unable to connect to server.");
 			setStatus("test");
-			//e.printStackTrace();
-			//e.printStackTrace();			error("Unable to connect to server!");
-
 		}
-
 		System.out.println("Connection established.");
 	}
 	
@@ -127,65 +133,50 @@ public class ClientController {
 		/* default read of state  input from server */
 		
 		String[] s = input.split(Globals.delim);
-		// s[0] = win
-		// s[1] = winner
-		// s[2] = player
+		// s[0] = state,  s[1] = currentPlayer, s[2] = player
 		switch(s[0]) {
-		case "MESSAGE": {
+		case "MESSAGE": { // MESSAGE@@FROM_PLAYER@@TEXT
 			if (chatEnabled && (! s[1].equals(clientPlayerNum))) { // a new message
 				getChatbox().updateHistory(s[2]);
 			}
 			return;
 		}
-
 		case "TURN": { // interpret client's turn and update components
-
-			if (s[1].equals(clientPlayerNum)) {
+			if (s[1].equals(clientPlayerNum)) { // does current turn match client
 				turn = true;
-				System.out.println(clientPlayerNum + " is playing.");
-				int i = updatePlayer(s, 2, 3);
-				i = updatePlayer(s, i, i+1);
-				int numOfSat = Integer.parseInt(s[i++]);
-				for (int j = 0; j < numOfSat; j++) {
-					i = getSat(s[i+2]).update(s, i);
-				}	
-				updateMap(); // update map
-				
+				updateSatObjects(s);
 				// begin turn
 				setStatus("collectResources");
-			
-				collectResources();
+				collectResources(); //TODO: collect resources should be somewhere else, rearrange order
 				event();
 				printToInstructionArea("Click on a planet or space station to upgrade.");
 			}
-			else {
+			else { // turn does not match client, it is opponent's turn
 				turn = false;
 				waitTurn();
 			}
 			return;
-		}
+		} // end case TURN
 		case "WIN": { // there has been a winner
-
 			winner = s[1];
-			System.out.println(winner + " just won.");
-			
-			int i = updatePlayer(s, 2, 3); 
-			i = updatePlayer(s, i, i+1);
-			int numOfSat = Integer.parseInt(s[i++]);
-			for (int j = 0; j < numOfSat; j++) {
-				//System.out.println(i + " " + s[i]);
-				i = getSat(s[i+2]).update(s, i);
-			}
-			updateMap();
-			
-			setStatus("WIN");
+			updateSatObjects(s);
 			win();
 			return;
-		}
-		} // end case
+		} // end case WIN
+		} // end switch
 	}
 	
-
+	public void updateSatObjects(String[] s) {
+		/* Given string array s, update the players and objects on the map */
+		int i = updatePlayer(s, 2, 3); 
+		i = updatePlayer(s, i, i+1);
+		int numOfSat = Integer.parseInt(s[i++]);
+		for (int j = 0; j < numOfSat; j++) {
+			//System.out.println(i + " " + s[i]);
+			i = getSat(s[i+2]).update(s, i);
+		}
+		updateMap();
+	}
 	
 	public Satellite getSat(String str) {
 		/* given str name, find the satellite matching that name */
@@ -193,10 +184,8 @@ public class ClientController {
 			if (sat.getNum().equals(str))
 				return sat;
 		}
-		// it's a new satellite
-		Satellite sat = new Spaceship(null, null, null, "x");
-		satellites.add(sat);
-		return sat;
+		error(null, "Unable to find satellite " + str);
+		return null;
 	}
 	
 	public Station getStation(String str) {
@@ -205,6 +194,7 @@ public class ClientController {
 			if ((sat.getNum()).equals(str))
 				return (Station) sat;
 		}
+		error(null, "Unable to find station " + str);
 		return null;
 	}
 	
@@ -212,7 +202,6 @@ public class ClientController {
 		/* given string s info, create a satellite and add it to the satellite list */
 		
 		Satellite sat;
-		
 		// determine type
 		if (s[i+1].equals("W")) { // water planet
 			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
@@ -227,7 +216,7 @@ public class ClientController {
 			i+=16;
 		}
 		else if (s[i+1].equals("M")){ // mineral planet
-			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
+		//	System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12]);
 			sat = new MineralPlanet(this, Integer.parseInt(s[i+4]), Integer.parseInt(s[i+5]), s[i+6], s[i+2]);
 			//sat = new MineralPlanet(this, s, i);
 			i+=16;
@@ -236,6 +225,12 @@ public class ClientController {
 			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6]);
 			sat = new Sun(this);
 			i+=10;
+		}
+		else if (s[i+1].equals("SS")) {
+			//{"spaceship", "SS", num, name, currSatNum, size, currFuel, maxFuel, ownerNum
+			//System.out.println(s[i] + ", " + s[i+1] + ", " + s[i+2] + ", " + s[i+3] + ", " + s[i+4] + ", " + s[i+5] + ", " + s[i+6] + ", " + s[i+7] + ", " + s[i+8]);
+			sat = new Spaceship(this, s[i+8], s[i+2]);
+			i+=9;
 		}
 		else { // space station
 			//System.out.println(s[i] + " " + s[i+1] + " " + s[i+2] + " " + s[i+3] + " " + s[i+4] + " " + s[i+5] + " " + s[i+6] + " " + s[i+7] + " " + s[i+8] + " " + s[i+9] + " " + s[i+10] + " " + s[i+11] + " " + s[i+12] + " " + s[i+13] + " " + s[i+14] + " " + s[i+15]);
@@ -249,8 +244,7 @@ public class ClientController {
 	}
 	
 	public void updateMap() {
-		// update the visuals on the map: have to repaint each satellite in order
-		// for changes to take effect
+		/* update the visuals on the map: repaint each satellite */
 		for (Satellite sat: satellites) {
 			if (sat instanceof WaterPlanet) {
 				((WaterPlanet)sat).repaint();
@@ -264,10 +258,14 @@ public class ClientController {
 			else if (sat instanceof Station) {
 				((Station)sat).repaint();
 			}
+			else if (sat instanceof Spaceship) { //TODO: placeShip() may already account for this
+				((Spaceship)sat).repaint();
+			}
 		}
 	}
 	
 	public Boolean withinSector (double x, double y, int sector) {
+		/* return true if x and y values are within sector*/
 		double D = .5*Globals.winSize;
 		double root3 = Math.pow(3, .5);
 		if (x < 0 || x > Globals.winSize || y < 0 || y > Globals.winSize)
@@ -323,6 +321,7 @@ public class ClientController {
 	}
 
 	public int findSector (double x, double y) {
+		/* Given x and y, determine which sector the location resides in */
 		for (int i = 1; i <= 6; i++)
 			if(withinSector(x, y, i)) {
 				//System.out.println(i);
@@ -330,74 +329,75 @@ public class ClientController {
 			}
 		return 7;
 	}
-	/* GAME TURN */
 	
-
+	
+	/* GAME TURN */
 	
 	public void collectResources() {
 		/* current player collects resources in AoI */
-		
 		//TODO: take care of overlapping instances: or if planet has been upgraded... CONFLICT!
+	
 		String str = "";
 		// for each station
 		str += "\nResources collected:";
-		for (Station stat: player.getStations()) {
-			str += stat.collectResources(player);
-			for (Satellite sat: satellites) {
-				if (!(sat instanceof Sun) && withinDistance(stat, sat)) {
-					str += sat.collectResources(player);
-					//System.out.println("planet: " + all[p].getMidX() + " " + all[p].getMidY());
-					//System.out.println("Matched with " + all[p].getName() + ", getting " + ((Planet) all[p]).getResources() + ".");
-				}
+		//for (Station stat: player.getStations()) { //TODO: will player ever have more than one station?
+		Station stat = player.getBase();
+		str += stat.collectResources(player);
+		for (Satellite sat: satellites) {
+			if (!(sat instanceof Sun) && !(sat instanceof Spaceship) && withinDistance(stat, sat)) {
+				str += sat.collectResources(player);
 			}
 		}
 		printToPlayerArea(player.info() + str);
-		setStatus("Upgrade");
-		//System.out.println("resources collected");
-		//done
-		
+		setStatus("Upgrade"); // TODO: will eventually have to change this in reordering collectResources phase
 	}
 	
-	public void upgradeTime() {
-		/* upgrade or buy a space station/planet */
+	public void upgradeTime() { //TODO: change name to mainPhase() or something
+		/* main phase: upgrade or buy a planet or station */
 		printToInstructionArea("Click on a planet or space station to upgrade.");
 	
-		while (status.equals("Upgrade")) {
+		while (status.equals("Upgrade")) { //TODO: change "Upgrade" to something else
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				//e.printStackTrace();
 				System.out.print("threading error"); }
-		
 		}
-		
 	}
-	
 	
 	/* DRAWING AOI */
 	
-	public void drawAoI(Station s) {
-		//print("drawing AoI");
+	public void drawAoI(Station s) { 
+		/* print AOI on map */
 		AoIx = s.getMidX() - s.getAoI();
 		AoIy = s.getMidY() - s.getAoI();
 		AoIs = s.getAoI()*2;
-		AoIc = new Color(100, 100, 100, 255);
+		AoIc = new Color(100, 100, 0, 255);
+		map.repaint();
+		window.update();
+	}
+	
+	public void drawAoI(Spaceship s) { //TODO: location is off (at 0, 0)
+		/* print AOI on map */
+		AoIx = s.getMidX() - s.getRange();
+		AoIy = s.getMidY() - s.getRange();
+		AoIs = s.getRange()*2;
+		AoIc = new Color(0, 100, 100, 255);
 		map.repaint();
 		window.update();
 	}
 	
 	public void removeAoI() {
-		//print("removing AoI");
+		/* remove AOI on map */
 		AoIc = new Color(88, 232, 232, 0);
 		map.repaint();
 		window.update();
 	}
 	
 	public Boolean withinDistance(Station s, Satellite p) {
-		// calculate distance
+		/* calculate distance from station s to satellite p */
 		Integer distance = (int) Math.sqrt(Math.pow(Math.abs(s.getMidX() - p.getMidX()), 2) + 
 				Math.pow(Math.abs(s.getMidY() - p.getMidY()), 2));
-		//System.out.println("distance: " + distance);
 		if (distance < (s.getAoI() + p.getSz())) {
 			return true;
 		}
@@ -417,10 +417,12 @@ public class ClientController {
 	}
 	
 	public void setStatus(String s) {
+		/* set the status to s and change selectPanel to correct phase */
 		status = s;
 		if (status.equals("Claiming")) infoPanel2.getSelectPanel().claimPhase();
 		else if (status.equals("Upgrade")) infoPanel2.getSelectPanel().mainPhase();
 		else if (status.equals("Wait")) infoPanel2.getSelectPanel().waitPhase();
+		else if (status.equals("Spaceship")) infoPanel2.getSelectPanel().spaceshipPhase();
 	}
 	
 	public ChatBox getChatbox() {
@@ -459,7 +461,7 @@ public class ClientController {
 		infoPanel.printToPlayerArea(s);
 	}
 	
-	public void printToHoverArea(String s) {
+	public void printToHoverArea(String s) { //TODO: change to selectarea
 		infoPanel2.printToHoverArea(s);
 	}
 	
@@ -471,10 +473,10 @@ public class ClientController {
 	/* Main functions */
 	
 	public int firstContact() {
-		// First contact with server, occurs when second player has been found
+		/* First contact with server, get clientNum and share player info */
 		getMessage();
 		String s[] = input.split(Globals.delim);
-		// validate:
+		// TODO: validate
 		if (! s[0].equals("firstContact"))
 			return -1;
 		clientPlayerNum = s[1];
@@ -488,29 +490,23 @@ public class ClientController {
 		
 		sendMessage();
 		
-		// visuals:
-
-		
 		return 0;
 	}
 	
 	public void createMenu() {
-		//tab Menu
+		/* Create the Menu tab */
 		MenuTab menuTab = new MenuTab(this);
 		SoundTest st = null;
-		try {
-			st = new SoundTest();
-		} catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		}
+		try { st = new SoundTest(); } // TODO: don't name it soundtest
+		catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) { error((IOException) e); }
 		menuTab.createTab(st);
 		window.addTab(menuTab, "Menu");
 	}
 	
-	public void createComponents() {
+	public void createComponents() { //TODO: maybe call this createMapTab or something
+		/* create the components for the GUI for mainPhase*/
 		setStatus("StartUp");
-		
-	
+
 		//tab Map
 		MapTab mapTab = new MapTab(this);
 		infoPanel = new InfoPanel(this);
@@ -524,7 +520,6 @@ public class ClientController {
 		setStatus("pause");
 		map.hover("Please wait while we are setting up the game.");
 		window.setMapFront();
-		
 	}
 	
 	public int updatePlayer(String s[], int i, int p) {
@@ -537,7 +532,8 @@ public class ClientController {
 		return i;
 	}
 	
-	public void startup() { // create components
+	public void startup() { 
+		/* create GUI components and populate map*/
 		createComponents();
 		map.clear();
 		getMessage();
@@ -552,11 +548,9 @@ public class ClientController {
 		int numOfSat = Integer.parseInt(s[i++]);
 		int copy = i;
 		for (int j = 0; j < numOfSat; j++) {
-			//i = getSat(s[i+1]).update(s, i);
 			i = addSat(s, i);
-			//getSat(s[copy+1]).update(s, copy);
 		}
-		// add satellites in list to map 
+		// add satellites in list to map
 		for (Satellite sat: satellites) {
 			map.add(sat, 2); 
 			sat.setBounds(sat.getLocX(), sat.getLocY(), sat.getBoundSize(), sat.getBoundSize());
@@ -571,25 +565,13 @@ public class ClientController {
 		if (! s[1].equals(clientPlayerNum)) {
 			printToInstructionArea(opponent.getName() + " goes first. Please wait.");
 		}
-		
 	}
 	
 	public void claimStation() {
-
+		/* Update map and allow client to enter the claim phase */
 		getMessage();
 		String s[] = input.split(Globals.delim);
-		
-		// s[0] = claim station
-		// s[1] = currentPlayer
-		// s[2] = player
-		int i = updatePlayer(s, 2, 3);
-		i = updatePlayer(s, i, i+1);	
-		int numOfSat = Integer.parseInt(s[i++]);
-		for (int j = 0; j < numOfSat; j++) {
-			i = getSat(s[i+2]).update(s, i);
-		}
-		updateMap();
-		
+		updateSatObjects(s);		
 		
 		printToInstructionArea(player.getName() + ": Click on a space station to claim it");
 		setStatus("Claiming");
@@ -602,11 +584,9 @@ public class ClientController {
 			}
 		}
 		
-		// add spaceship to the player's station
-		Spaceship ship = new Spaceship(this, player, player.getBase(), Integer.toString(satellites.size()));
-		satellites.add((Satellite)ship);
-		map.add(ship,3);
-		placeShip(ship);
+		// TODO: add spaceship to the player's station
+		getPlayer().getSpaceship().setCurrSat(getPlayer().getBase());
+		placeShip(getPlayer().getSpaceship());
 		updateMap();
 		
 		waitTurn();
@@ -620,6 +600,8 @@ public class ClientController {
 	}
 	
 	public void getCurrentState(String state) {
+		/* set currentState to the state of the client's game */
+		
 		ArrayList<String> aList = new ArrayList<String>();
 		aList.add(state);
 		aList.add(clientPlayerNum);
@@ -635,17 +617,19 @@ public class ClientController {
 	}
 	
 	public void waitTurn() {
+		/* place client in to wait phase */
 		setStatus("Wait");
 		printToInstructionArea("It's " + opponent.getName() + "'s turn now. Please wait.");
 	}
 	
 	public void validate() { 
-		// validate input 
+		/* validate input */
 		return;
 	}
 	
 	public void event() {
-		
+		/* enact a random event on the player */ 
+		//TODO: events
 		Random ran = new Random();
 		double e = ran.nextInt(20) * player.eventChance;
 		System.out.println("event: " + e);
@@ -669,6 +653,7 @@ public class ClientController {
 	}
 	
 	public void turn() {
+		/* one turn for a client. continually contacts server */
 		getMessage();
 		read();
 		System.out.println("TURN MESSAGE: " + "msg:" + (!getChatbox().message.equals("")) + 
@@ -679,7 +664,7 @@ public class ClientController {
 			sendMessage();
 		}
 		else if (turn && ! status.equals("Upgrade")) {
-			getCurrentState("TURN");
+			getCurrentState("TURN"); //TODO: this is where spaceship phase would start
 			sendMessage();
 			turn = false;
 		}
@@ -695,13 +680,9 @@ public class ClientController {
 
 	}
 	
-	public void gameplay() {
-		getMessage();
-		validate(); // could be done in read()
-		read();
-	}
-	
 	public void win() {
+		/* client enters win phase */
+		setStatus("WIN");
 		if (winner.equals(clientPlayerNum)) {
 		printToInstructionArea("You won! Congratulations " + player.getName() + ". Thank you for playing. I'm sure your momma is as proud as can be. Click anywhere to close.");
 		}
@@ -711,6 +692,8 @@ public class ClientController {
 	}
 	
 	public void welcome() {
+		/* welcome the player before they have been able to connect to the server */
+		// TODO: I don't think this really does much in terms of visuals
 		window = new Window(this, "player");
 		JPanel waiting = new JPanel();
 		waiting.add(new JTextField("Waiting to connect to server....", 100));
@@ -720,6 +703,7 @@ public class ClientController {
 	}
 	
 	public void playerTab() {
+		/* Connection successful tab: allow player to choose their name */
 		window.removeAtab(0);
 		String tempStatus = status;
 		setStatus("Welcome");
@@ -738,8 +722,8 @@ public class ClientController {
 		setStatus(tempStatus);
 	}
 	
-	// for testing
 	public void testMap() {
+		/* for testing purposes only */
 		satellites.add(new WaterPlanet(this, 250, 250, "s", "s01"));
 		satellites.add(new WaterPlanet(this, 250, 750, "m", "s02"));
 		satellites.add(new WaterPlanet(this, 750, 250, "l", "s03"));
@@ -749,7 +733,8 @@ public class ClientController {
 			sat.setName(sat.num + " water planet");
 			sat.setBounds(sat.getLocX(), sat.getLocY(), sat.getBoundSize(), sat.getBoundSize());
 		}
-		Spaceship testShip = new Spaceship(this, player, satellites.get(0), "6");
+		Station sat = new DefaultStation(this, 780, 690, 50, "s5");
+		Spaceship testShip = new Spaceship(this, clientPlayerNum, "s6");
 		map.add(testShip,3);
 		placeShip(testShip);
 		updateMap();
@@ -757,7 +742,10 @@ public class ClientController {
 	}
 	
 	public void placeShip(Spaceship ship) {
+		/* place the ship at it's current sat */
 		Satellite sat = ship.getCurrSat();
+		System.out.println("Placing ship at " + sat.getType() + " " + sat.getNum());
+		
 		ship.setBounds(sat.getMidX()-ship.getHalfSize(), sat.getMidY()-ship.getHalfSize(), ship.getFullSize(), ship.getFullSize());
 		updateMap();
 	}
@@ -772,7 +760,6 @@ public class ClientController {
 		control.connectToServer();	
 		
 		control.playerTab();
-		System.out.println("PLAYER!!!!!!!" + control.getPlayer().getName());
 		if (! control.getStatus().equals("test")) {
 
 			control.firstContact();
