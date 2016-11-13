@@ -252,7 +252,7 @@ public class SelectPanel extends JPanel{
 	
 	public void selectSatellite(Satellite sat) {
 		// depending on what is selected(and the phase), the buttons change
-		
+		//TODO: this whole thing should be simplified
 		System.out.println("selectedSatellite  " + control.getStatus());
 		selectedSatellite = sat;
 		noButtons();
@@ -397,9 +397,9 @@ public class SelectPanel extends JPanel{
 		case "Main": {
 			if (command == MAIN) {
 				control.getPlayer().addEventChance(0.25);
-				control.setStatus("collectResources");
 				printToSelectText("Skipping turn.");
 				control.printToPlayerArea();
+				endTurn = true;
 			} // end button main
 			if (command == B1) {
 				// upgrade
@@ -435,9 +435,28 @@ public class SelectPanel extends JPanel{
 			} // end b2
 			break;
 		} // end case main
+		case "Spaceship": {
+			if (command == MAIN) {
+				control.setStatus("End Turn"); //TODO: I don't think this is how it needs to end, combine with that if statement in clientcontroller can jump straight to spaceshipphase
+				printToSelectText("Collecting fuel");
+				control.getPlayer().getSpaceship().waiting();
+			} // end button main
+			else if (command == B1) {
+				// 
+			} // end b1
+			else if (command == B2) {
+			} // end b2
+			else if (command == B3) {
+				
+			} // end b3
+			else { // command == B4
+				
+			} // end b4
+			break;
+		} // end case spaceship
 		} // end switch
 		
-		if (endTurn) control.setStatus("endTurn");
+		if (endTurn) control.setStatus("endMain");
 	}
 
 

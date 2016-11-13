@@ -422,7 +422,7 @@ public class ClientController {
 		if (status.equals("Claiming")) infoPanel2.getSelectPanel().claimPhase();
 		else if (status.equals("Upgrade")) infoPanel2.getSelectPanel().mainPhase();
 		else if (status.equals("Wait")) infoPanel2.getSelectPanel().waitPhase();
-		else if (status.equals("Spaceship")) infoPanel2.getSelectPanel().spaceshipPhase();
+		else if (status.equals("Spaceship_Phase")) infoPanel2.getSelectPanel().spaceshipPhase();
 	}
 	
 	public ChatBox getChatbox() {
@@ -658,13 +658,18 @@ public class ClientController {
 		read();
 		System.out.println("TURN MESSAGE: " + "msg:" + (!getChatbox().message.equals("")) + 
 				" endTurn: " + turn +  " " + (! status.equals("Upgrade")) + " other: " + status);
+		// check to see if switch to spaceship mode TODO: I don't like how this is being done here
+		if (turn && status.equals("endMain")) { // end of upgrade phase, change to spaceship phase
+			setStatus("Spaceship_Phase");
+			printToInstructionArea("What do you want to do with your spaceship?");
+		}
 		if (chatEnabled && (! getChatbox().message.equals(""))) {
 			currentState = "MESSAGE@@" + clientPlayerNum + "@@" + getChatbox().message; 
 			getChatbox().emptyMessage();
 			sendMessage();
 		}
-		else if (turn && ! status.equals("Upgrade")) {
-			getCurrentState("TURN"); //TODO: this is where spaceship phase would start
+		else if (turn && status.equals("End Turn")) {
+			getCurrentState("TURN");
 			sendMessage();
 			turn = false;
 		}

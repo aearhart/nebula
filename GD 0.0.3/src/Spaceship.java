@@ -138,6 +138,12 @@ public class Spaceship extends Satellite implements MouseListener {
 			System.out.println("IO EXCEPTION: "+ ex); }
 	}
 	
+	public void waiting() {
+		// spaceship waits, collects fuel
+		currFuel += 1;
+		if (currFuel > maxFuel) currFuel = maxFuel;
+	}
+	
 	public int getFullSize() { //TODO: fully integrate spaceship as a subset of satellite 
 		return size;
 	}
