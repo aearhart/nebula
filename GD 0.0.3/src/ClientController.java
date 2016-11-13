@@ -648,7 +648,7 @@ public class ClientController {
 			printToPlayerArea(player.info() + "\nYou're under attack!! Pirates have attacked the base!");
 		
 			//player.getBase().pirateAttack();
-		}
+		} 
 		
 	}
 	

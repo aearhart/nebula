@@ -156,7 +156,10 @@ public class Spaceship extends Satellite implements MouseListener {
 		return currFuel;
 	}
 
-
+	public int costFuel() {
+		return costFuel;
+	}
+	
 	public void setFuel(int fuel) {
 		this.currFuel = fuel;
 	}

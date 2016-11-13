@@ -205,6 +205,10 @@ public class Satellite extends JComponent {
 	
 	/* basic get/set/add methods */
 	
+	public String getOwner() {
+		return ownerNum;
+	}
+	
 	public Integer getLocX() {
 		return x;
 	}
