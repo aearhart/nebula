@@ -57,6 +57,7 @@ public class ClientController {
 	String winner = "";
 	
 	// Gameplay Components
+	private WelcomeTab welcome;
 	private Window window;
 	private Map map;
 	private InfoPanel infoPanel;
@@ -584,7 +585,9 @@ public class ClientController {
 		
 		printToInstructionArea(player.getName() + ": Click on a space station to claim it");
 		setStatus("Claiming");
+		System.out.println("Before waiting");
 		while (status.equals("Claiming")) {
+			System.out.println("Waiting..");
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
@@ -707,9 +710,12 @@ public class ClientController {
 	
 	public void beginGame() {
 		System.out.println("beginning game");
+		
 		window.removeAtab(0);
-		System.out.println("remove tab 0");
+		//System.out.println("remove tab 0");	
+
 		createMenu();
+		
 		connectAndPlay();
 		//TODO: server must be connected to both before screen pops up correctly... ??
 	}
@@ -720,8 +726,18 @@ public class ClientController {
 		window = new Window(this, "player");
 		player = new Player(this, "");
 		setStatus("Welcome");
-		WelcomeTab welcome = new WelcomeTab(this);
+		welcome = new WelcomeTab(this);
 		window.addTab(welcome, "Welcome");
+		
+		while (welcome.notFinished()) {
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				//e.printStackTrace();
+				System.out.print("threading error");
+			}
+		}
+		beginGame();
 	}
 	
 	public void testMap() {
@@ -774,6 +790,7 @@ public class ClientController {
 		ClientController control = new ClientController();
 		//Globals.setWinSize();
 		control.welcome();
+		
 	}
 
 }

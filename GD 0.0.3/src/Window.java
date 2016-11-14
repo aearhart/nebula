@@ -45,6 +45,7 @@ public class Window extends JFrame implements KeyListener{
 	
 	public void addTab(JPanel tab, String tabName) {
 		tabbedPane.addTab(tabName, tab);
+		//this.add(tabbedPane, BorderLayout.CENTER);
 		this.pack();
 		update();
 	}
@@ -52,7 +53,7 @@ public class Window extends JFrame implements KeyListener{
 	public void addTabs(JPanel[] tabs) {
 		for (int i = 0; i < tabNames.length; i++)
 			tabbedPane.addTab(tabNames[i], tabs[i]);
-		this.add(tabbedPane, BorderLayout.CENTER);
+		//this.add(tabbedPane, BorderLayout.CENTER);
 		
 		this.pack();
 		update();

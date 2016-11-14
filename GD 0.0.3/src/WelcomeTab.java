@@ -38,6 +38,7 @@ public class WelcomeTab extends JPanel implements ActionListener{
 	private Player p;
 	private OurButton connectButton;
 	
+	private Boolean finished = false;
 
 	int ENTER = 0;
 	
@@ -82,8 +83,7 @@ public class WelcomeTab extends JPanel implements ActionListener{
 
 		// Connect to server button
 		//TODO: create Enter button for WelcomeTab visuals
-		//connectButton = new OurButton(this, ENTER, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
-		connectButton = new OurButton(this, ENTER, KeyStroke.getKeyStroke(' '));
+		connectButton = new OurButton(this, ENTER, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
 		connectButton.setPreferredSize(new Dimension(connectButton.getWidth() + 1, connectButton.getHeight() + 1));
 		connectButton.setText("Join Game");
 				
@@ -117,19 +117,15 @@ public class WelcomeTab extends JPanel implements ActionListener{
 				connectButton.action();
 			}};
 		connectButton.getActionMap().put("keyENTER", keyENTER);
-		
-		textField.getInputMap(Globals.IFW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "inputENTER");
-		Action inputENTER = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("key typed input field");
-				selectAll();
-		}};
-		textField.getActionMap().put("inputENTER", inputENTER);
 	}
 	
 	public Boolean illegal(String t) {
 		if (t.contains("@@")) return true;
 		return false;
+	}
+	
+	public Boolean notFinished() {
+		return (! finished);
 	}
 	
 	public void update() {
@@ -152,14 +148,8 @@ public class WelcomeTab extends JPanel implements ActionListener{
 			// set player name
 			p.setName(textField.getText());
 			control.getWindow().rename(p.getName());
-			control.beginGame();
+			finished = true;
 		}
-	}
-	
-	public void selectAll() {
-		System.out.println("hey");
-		textField.selectAll();
-		textField.setCaretPosition(textField.getDocument().getLength());
 	}
 	
 	@Override

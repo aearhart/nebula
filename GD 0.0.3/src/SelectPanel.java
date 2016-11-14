@@ -194,6 +194,7 @@ public class SelectPanel extends JPanel{
 		mainButton.enable();
 		
 		noButtons();
+		selectSatellite(control.getPlayer().getBase());
 	}
 	
 	public void waitPhase() {
