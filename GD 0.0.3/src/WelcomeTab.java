@@ -1,4 +1,11 @@
-
+/*   WelcomeTab.java
+ *     11/13/2016
+ *          The title screen
+ * 				1. Title
+ * 				2. Player name
+ * 				3. Join a game by connecting to the server
+ */
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -12,8 +19,8 @@ import java.util.Random;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
@@ -22,13 +29,15 @@ public class WelcomeTab extends JPanel implements ActionListener{
 	public String name = "WelcomeTab";
 	
 	protected JTextField textField;
-	protected JTextArea textArea;
-	private String areaText = "Welcome to GD 0.0.3!\n\nPlease enter your name in the text field above to play. \n\n";
-	private String fieldText = "What is your name? (hit enter to select)";
-	private Player p;
-	private OurButton enterButton;
+	private JLabel infoLabel;
+	private JLabel title;
 	
-	Boolean finished = false;
+	private String infoText = "Welcome to GD 0.0.3!";
+	private String fieldText = "What is your name? (hit enter to select)";
+
+	private Player p;
+	private OurButton connectButton;
+	
 
 	int ENTER = 0;
 	
@@ -36,66 +45,92 @@ public class WelcomeTab extends JPanel implements ActionListener{
 		super(new GridBagLayout());
 		control = clientController;
 		p = control.getPlayer();
-		this.setPreferredSize(new Dimension(800, 500));
-		Font f1 = new Font("Consolas", Font.PLAIN, 30);
+		this.setPreferredSize(new Dimension(Globals.winSize, Globals.winSize));
 		
+		GridBagConstraints c= new GridBagConstraints();
+		
+		// Title
+		title = new JLabel("Nebula9000");
+		title.setFont(Globals.f);
+		title.setLocation(0, 0);
+		title.setOpaque(true);
+		title.setForeground(Globals.textColor);
+		title.setBackground(new Color(6, 159, 70, 120));
+		title.setBounds(0, 0, Globals.winSize, Globals.winSize / 3);
+		
+		
+		c.anchor = GridBagConstraints.NORTH;
+		c.gridx = 0; c.gridy = 0;
+		c.gridwidth = 10; c.gridheight = 1;
+		c.fill = GridBagConstraints.REMAINDER;
+		c.weightx = 1.0; c.weighty = 1.0;
+		add(title, c);
+		
+		// Text field
 		textField = new JTextField(20);
 		textField.addActionListener(this);
 		textField.setText(fieldText);
-		textField.setFont(f1);
+		textField.setFont(Globals.f);
 		
-		textArea = new JTextArea(5, 20);
-		textArea.setEditable(false);
-		textArea.setLineWrap(true);
-		textArea.setFont(f1);
-		textArea.setText(areaText);
-		 
-		//JScrollPane scrollPane = new JScrollPane(textArea);
-		//TODO: create Enter button for WelcomeTab visuals
-		enterButton = new OurButton(this, ENTER, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
-		enterButton.setPreferredSize(new Dimension(enterButton.getWidth() + 1, enterButton.getHeight() + 1));
-		enterButton.setText("Yes this is my name!");
-				
-		GridBagConstraints c= new GridBagConstraints();
-		c.gridwidth = GridBagConstraints.REMAINDER;
-		
+		c.anchor = GridBagConstraints.NORTHEAST;
+		c.gridx = 3; c.gridy = 1;
+		c.gridwidth = 7; c.gridheight = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1.0; c.weighty = 0.5;
 		add(textField, c);
 		
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1.0;
-		c.weighty = 1.0;
-		//add(scrollPane, c);
-		add(textArea, c);
-		GridBagConstraints c1 = new GridBagConstraints();
-		c1.anchor = GridBagConstraints.SOUTH;
-		//c.gridwidth =1; c.gridheight =1;
-		c1.ipadx = 5; c1.ipady = 10;
-		c1.fill = GridBagConstraints.HORIZONTAL;
-		c1.insets = new Insets(5, 5, 5, 5);
-		// testing with buttons
 
-		this.add(enterButton, c1);
+		// Connect to server button
+		//TODO: create Enter button for WelcomeTab visuals
+		//connectButton = new OurButton(this, ENTER, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0));
+		connectButton = new OurButton(this, ENTER, KeyStroke.getKeyStroke(' '));
+		connectButton.setPreferredSize(new Dimension(connectButton.getWidth() + 1, connectButton.getHeight() + 1));
+		connectButton.setText("Join Game");
+				
+		c.anchor = GridBagConstraints.NORTHEAST;
+		c.gridx = 4; c.gridy = 2;
+		c.gridwidth = 2; c.gridheight = 1;
+		c.ipadx = 10; c.ipady = 10;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(5, 5, 5, 5);
+		c.weightx = 1.0; c.weighty = 0.5;
+		this.add(connectButton, c);
+
+		// info label
+		infoLabel = new JLabel();
+		infoLabel.setFont(Globals.f);
+		infoLabel.setText(infoText);
+		 
+		c.anchor = GridBagConstraints.NORTHEAST;
+		c.fill = GridBagConstraints.BOTH;
+		c.gridx = 3; c.gridy = 3;
+		c.weightx = 1.0; c.weighty = 1.0;
+		c.gridwidth = 4; c.gridheight = 1;
+		add(infoLabel, c);
 		
+				
 		// KEYBINDINGS
-		enterButton.getInputMap(Globals.IFW).put(enterButton.getKey(), "keyENTER");
+		connectButton.getInputMap(Globals.IFW).put(connectButton.getKey(), "keyENTER");
 		Action keyENTER = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("key typed ENTER");
-				enterButton.action();
+				connectButton.action();
 			}};
-		enterButton.getActionMap().put("keyENTER", keyENTER);
-	}
-	
-	public Boolean notFinished() {
-		 return (! finished);
+		connectButton.getActionMap().put("keyENTER", keyENTER);
+		
+		textField.getInputMap(Globals.IFW).put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "inputENTER");
+		Action inputENTER = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("key typed input field");
+				selectAll();
+		}};
+		textField.getActionMap().put("inputENTER", inputENTER);
 	}
 	
 	public Boolean illegal(String t) {
 		if (t.contains("@@")) return true;
 		return false;
 	}
-	
 	
 	public void update() {
 		this.setVisible(true);
@@ -107,18 +142,24 @@ public class WelcomeTab extends JPanel implements ActionListener{
 
 	public void clicked(int command) {
 		if (command == ENTER) {
-			if (textField.getText().equals(fieldText)) {
+			if (textField.getText().equals(fieldText) || textField.getText().equals("")) {
+				// player did not choose a name, give random one
 				Random rand = new Random();
 				int r = rand.nextInt(5);
-				String[] names = {"What's your name again?", "Anonymous", "Me who shall not be named", "[insert name here]", "Lazy the Nameless"};
+				String[] names = {"Nincompoop", "Anonymous", "Me who shall not be named", "[insert name here]", "Lazy the Nameless", "Captain Somebody"};
 				textField.setText(names[r]);
 			}
+			// set player name
 			p.setName(textField.getText());
 			control.getWindow().rename(p.getName());
-			finished = true;
-			//System.out.println("done -- " + p.getName() + "   " + notFinished());
-			return;
+			control.beginGame();
 		}
+	}
+	
+	public void selectAll() {
+		System.out.println("hey");
+		textField.selectAll();
+		textField.setCaretPosition(textField.getDocument().getLength());
 	}
 	
 	@Override
@@ -127,17 +168,17 @@ public class WelcomeTab extends JPanel implements ActionListener{
 		
 		String text = textField.getText();
 		if (illegal(text)) {
-			textArea.setText(areaText + "That's an illegal name. A name can't have two @@ symbols.");
+			infoLabel.setText(infoText + "That's an illegal name. A name can't have two @@ symbols.");
 			textField.setText(fieldText);
 		}
 		else if (text.equals(fieldText)){
 		}
 		else {
-			textArea.setText(areaText + "\nYour name:\n" + text+ "\n\nIs this okay?\n");
+			infoLabel.setText(infoText + "\nYour name:\n" + text + "\n");
 		}
 		textField.selectAll();
 		
-		textArea.setCaretPosition(textArea.getDocument().getLength());
+		textField.setCaretPosition(textField.getDocument().getLength());
 		
 	}
 	

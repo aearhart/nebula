@@ -404,6 +404,14 @@ public class ClientController {
 		return false;
 	}
 	
+	public void placeShip(Spaceship ship) {
+		/* place the ship at it's current sat */
+		Satellite sat = ship.getCurrSat();
+		System.out.println("Placing ship at " + sat.getType() + " " + sat.getNum());
+		
+		ship.setBounds(sat.getMidX()-ship.getHalfSize(), sat.getMidY()-ship.getHalfSize(), ship.getFullSize(), ship.getFullSize());
+		updateMap();
+	}
 	
 	/* BASIC METHODS */
 	
@@ -501,6 +509,7 @@ public class ClientController {
 		catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) { error((IOException) e); }
 		menuTab.createTab(st);
 		window.addTab(menuTab, "Menu");
+		System.out.println("added menu tab");
 	}
 	
 	public void createComponents() { //TODO: maybe call this createMapTab or something
@@ -696,35 +705,23 @@ public class ClientController {
 		
 	}
 	
+	public void beginGame() {
+		System.out.println("beginning game");
+		window.removeAtab(0);
+		System.out.println("remove tab 0");
+		createMenu();
+		connectAndPlay();
+		//TODO: server must be connected to both before screen pops up correctly... ??
+	}
+	
 	public void welcome() {
 		/* welcome the player before they have been able to connect to the server */
 		// TODO: I don't think this really does much in terms of visuals
 		window = new Window(this, "player");
-		JPanel waiting = new JPanel();
-		waiting.add(new JTextField("Waiting to connect to server....", 100));
-		window.addTab(waiting, "Waiting to connect...");
 		player = new Player(this, "");
-		
-	}
-	
-	public void playerTab() {
-		/* Connection successful tab: allow player to choose their name */
-		window.removeAtab(0);
-		String tempStatus = status;
 		setStatus("Welcome");
 		WelcomeTab welcome = new WelcomeTab(this);
-		window.addTab(welcome, "Connection successful");
-		while (welcome.notFinished()) {
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				//e.printStackTrace();
-				System.out.print("threading error");
-			}
-		} 
-		window.removeAtab(0);
-		createMenu();
-		setStatus(tempStatus);
+		window.addTab(welcome, "Welcome");
 	}
 	
 	public void testMap() {
@@ -740,19 +737,34 @@ public class ClientController {
 		}
 		Station sat = new DefaultStation(this, 780, 690, 50, "s5");
 		Spaceship testShip = new Spaceship(this, clientPlayerNum, "s6");
+		map.add(sat, 5);
 		map.add(testShip,3);
+		testShip.setCurrSat(sat);
 		placeShip(testShip);
 		updateMap();
 		
 	}
 	
-	public void placeShip(Spaceship ship) {
-		/* place the ship at it's current sat */
-		Satellite sat = ship.getCurrSat();
-		System.out.println("Placing ship at " + sat.getType() + " " + sat.getNum());
-		
-		ship.setBounds(sat.getMidX()-ship.getHalfSize(), sat.getMidY()-ship.getHalfSize(), ship.getFullSize(), ship.getFullSize());
-		updateMap();
+	public void connectAndPlay() {
+		connectToServer();	
+		if (! getStatus().equals("test")) {
+
+			firstContact();
+			
+			startup(); // create the window
+
+			claimStation();
+			turn();
+			//close();
+		}
+		else {
+			testing  = true;
+			createComponents();
+			getMap().hoverBoxOn("This is just a test");
+			//control.getMap().clear();
+			testMap();
+			getMap().hover("This is just a test.");
+		}
 	}
 	
 	/* MAIN */
@@ -762,27 +774,6 @@ public class ClientController {
 		ClientController control = new ClientController();
 		//Globals.setWinSize();
 		control.welcome();
-		control.connectToServer();	
-		
-		control.playerTab();
-		if (! control.getStatus().equals("test")) {
-
-			control.firstContact();
-			
-			control.startup(); // create the window
-
-			control.claimStation();
-			control.turn();
-			//close();
-		}
-		else {
-			control.testing  = true;
-			control.createComponents();
-			control.getMap().hoverBoxOn("This is just a test");
-			//control.getMap().clear();
-			control.testMap();
-		//	control.getMap().hover("This is just a test.");
-		}
 	}
 
 }

@@ -126,8 +126,7 @@ public class Spaceship extends Satellite implements MouseListener {
 	public void move (Satellite dest) {
 		// ASSUMED THAT WITHIN RANGE AND THAT YOU HAVE ENOUGH FUEL
 		currFuel -= costFuel;
-		currSat = dest;
-		control.placeShip(this);
+		setCurrSat(dest);
 	}
 
 	protected void setImage(String i) {

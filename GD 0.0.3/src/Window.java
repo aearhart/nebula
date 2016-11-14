@@ -90,7 +90,7 @@ public class Window extends JFrame implements KeyListener{
 	public void setMenuFront() {
 		tabbedPane.setSelectedIndex(MENU);
 	}
-
+	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		
@@ -99,7 +99,6 @@ public class Window extends JFrame implements KeyListener{
 	@Override
 	public void keyReleased(KeyEvent arg0) {
 
-		
 	}
 
 	@Override
