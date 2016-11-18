@@ -389,6 +389,8 @@ public class Station extends Satellite implements MouseListener {
 		double root2 = Math.pow(2, .5);
 		int maxDelta = (int) ((double) p.getSz()/root2) - 1;
 		
+		// TODO lower maxDelta and/or weigh it less
+		
 		// Placing x randomly
 		int delta = rand.nextInt(maxDelta);
 		int sign = rand.nextInt(2);

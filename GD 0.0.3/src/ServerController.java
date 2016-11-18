@@ -394,6 +394,8 @@ public class ServerController {
 				int r = ran.nextInt(positions.size());
 				int pos = positions.remove(r);
 				
+				// TODO lower maxDelta and/or weigh it less
+				
 				// x coordinate
 				int planetX = (int) emptySectorPlanetX[sect*numPositions+pos];
 				int delta = ran.nextInt(emptySectorMaxDelta);
@@ -523,6 +525,8 @@ public class ServerController {
 		claimStation();
 		switchCurrPlayer();
 		claimStation(); // keep on player 2
+		
+		// TODO Remove unclaimed stations
 	}
 	
 	public Boolean gameEnd() {

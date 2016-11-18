@@ -46,7 +46,7 @@ public class WelcomeTab extends JPanel implements ActionListener{
 		super(new GridBagLayout());
 		control = clientController;
 		p = control.getPlayer();
-		this.setPreferredSize(new Dimension(Globals.winSize, Globals.winSize));
+		this.setPreferredSize(new Dimension(Globals.mapSize, Globals.mapSize));
 		
 		GridBagConstraints c= new GridBagConstraints();
 		
@@ -57,7 +57,7 @@ public class WelcomeTab extends JPanel implements ActionListener{
 		title.setOpaque(true);
 		title.setForeground(Globals.textColor);
 		title.setBackground(new Color(6, 159, 70, 120));
-		title.setBounds(0, 0, Globals.winSize, Globals.winSize / 3);
+		title.setBounds(0, 0, Globals.mapSize, Globals.mapSize / 3);
 		
 		
 		c.anchor = GridBagConstraints.NORTH;
