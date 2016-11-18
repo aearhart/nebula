@@ -265,8 +265,9 @@ public class Station extends Satellite implements MouseListener {
 	} 
 	
 	public void createPlanets() {
-		// TODO planet sizes should be smaller, make sure neighboring planets don't overlap ever
-		// TODO if the planets are small enough sometimes they are outside the AoI
+		// TODO make sure neighboring planets don't overlap ever
+		// TODO force smaller sizes on planets closer to station?
+		
 		
 		planetsToCreate += dividePlanets("G", gasAccess);
 		planetsToCreate += dividePlanets("M", mineralAccess);

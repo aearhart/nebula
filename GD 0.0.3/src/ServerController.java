@@ -249,7 +249,7 @@ public class ServerController {
 		
 		Random ran = new Random();
 		
-		int ws = Globals.winSize;
+		int ws = Globals.mapSize;
 		
 		int lPlanetChance = 15;
 		int mPlanetChance = 35;
@@ -379,8 +379,7 @@ public class ServerController {
 					else size = "s";
 					
 					
-					// TODO Make this intelligently choose a planet type
-					// TODO Also randomize the placement
+					// TODO Make this intelligently choose a planet type 	
 					int type = ran.nextInt(3); // 3 types of planets
 					switch (type) {
 					case 0: {p = new GasPlanet(planetX, planetY, size, "s" + Integer.toString(key++)); break;}

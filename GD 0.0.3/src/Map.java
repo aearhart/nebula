@@ -22,7 +22,7 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 	public Map(ClientController clientController){
 		control = clientController;
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension (Globals.winSize, Globals.winSize));
+		this.setPreferredSize(new Dimension (Globals.mapSize, Globals.mapSize));
 		
 		// text label
 		Font f = new Font("Consolas", Font.PLAIN, 30);
@@ -31,7 +31,7 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 		l.setOpaque(true);
 		l.setBackground(labelBackgroundColor);
 		l.setLocation(0, 0);
-		l.setBounds(0, 0, Globals.winSize, Globals.winSize);
+		l.setBounds(0, 0, Globals.mapSize, Globals.mapSize);
 		this.add(l, 5);
 		
 		
@@ -86,7 +86,7 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		g.drawImage(bg, 0, 0, Globals.winSize, Globals.winSize, null);
+		g.drawImage(bg, 0, 0, Globals.mapSize, Globals.mapSize, null);
 		//other
 		
 		g.setColor(control.AoIc);
@@ -152,7 +152,7 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 		int x = e.getX();
 		int y = e.getY();
 		if (x <= 120) x += 120;
-		if (y >= (Globals.winSize - 70)) y -= 70;
+		if (y >= (Globals.mapSize - 70)) y -= 70;
 		x += 20;
 		y -= 50;
 

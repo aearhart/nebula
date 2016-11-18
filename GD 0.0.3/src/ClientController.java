@@ -265,9 +265,9 @@ public class ClientController {
 	}
 	
 	public Boolean withinSector (double x, double y, int sector) {
-		double D = .5*Globals.winSize;
+		double D = .5*Globals.mapSize;
 		double root3 = Math.pow(3, .5);
-		if (x < 0 || x > Globals.winSize || y < 0 || y > Globals.winSize)
+		if (x < 0 || x > Globals.mapSize || y < 0 || y > Globals.mapSize)
 			return false;
 		switch(sector) {
 			case 1: {

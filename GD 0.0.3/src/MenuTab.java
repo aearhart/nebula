@@ -60,7 +60,7 @@ public class MenuTab extends JPanel{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.setPreferredSize(new Dimension(Globals.winSize, Globals.winSize));
+		this.setPreferredSize(new Dimension(Globals.mapSize, Globals.mapSize));
 		this.setLayout(new GridBagLayout());
 		
 	}

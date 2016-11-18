@@ -8,9 +8,9 @@ import java.util.Random;
 
 public class Planet extends Satellite implements MouseListener {
 	
-	int largeSize = Globals.winSize / 22; // 1000/22 = 45
-	int medSize = Globals.winSize / 38;   // 1000/32 = 35
-	int smallSize = Globals.winSize / 40; // 1000/50 = 25
+	int largeSize = Globals.mapSize / 22; // 1000/22 = 45
+	int medSize = Globals.mapSize / 38;   // 1000/32 = 35
+	int smallSize = Globals.mapSize / 40; // 1000/50 = 25
 	
 	public Planet(Integer locX, Integer locY, String sz, String ty) {
 		super(locX, locY);
@@ -126,7 +126,7 @@ public class Planet extends Satellite implements MouseListener {
 	private void planetSetup(String sz, String ty) {
 		setType(ty);
 		Random ran = new Random();
-		int i = ran.nextInt(Globals.winSize/100);
+		int i = ran.nextInt(Globals.mapSize/100);
 		if (sz.equals("s")) { // small
 			setSz(i + smallSize);
 			costWater = 2;
