@@ -1,132 +1,125 @@
+/*   ServerController.java
+ *    11/11/2016
+ *  		Controls the server end of the game. 
+ * 				1. Connects to 2 clients
+ * 				2. Sets up the game: setup()
+ * 					a. firstContact(): Contacts each player with player information and number
+ * 					b. startup(): creates the map and sends the currentState to each client
+ * 					c. claimStation(): Allows each client to claim a station
+ * 				3. Begins the game: turn()
+ * 					a. Continually communicates with both clients and sends the currentState
+ * 					b. read(): read the currentSocket's message, validating it and changing the currentState
+ * 					c. first checks for gameEnd() each time
+ * 				4. Game End: win()
+ * 					a. Sends the winning state information and closes the game
+ */
+
+/* IMPORTS */
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 public class ServerController {
 	
+	// Socket variables
 	static ServerSocket server;
 	static Socket player1;
 	static Socket player2;
 	static DataOutputStream out;
 	static DataInputStream in;
 	private static String input = "";
-	private static String currentState = "";
-	private Boolean valid = true;
+	
+	// Gameplay objects
 	private Player p1 = new Player(this);
 	private Player p2 = new Player(this);
+	private List<Satellite> satellites = new ArrayList<Satellite>();
+	private List<String> planetNames = new ArrayList<String>();  
 	
+	// Player information
 	private String currentPlayer = "P0";
 	private Socket currentSocket;
 	private Player currPlayerObj;
 	private Socket opponentSocket;
 	private String winner = "P0";
 
-	private List<Satellite> satellites = new ArrayList<Satellite>();
-	private List<String> planetNames = new ArrayList<String>();  
+	// Current state and validity
+	private static String currentState = "";
+	private Boolean valid = true;
+	
 	
 	public ServerController() {
 	}
 	
+	
 	/* SERVER - CLIENT methods */
 	
-	private void error() {
+	private void error(IOException e) { // unknown error
 		System.out.println("FAILED");
+		e.printStackTrace();
 		System.exit(1);
 	}
 	
-	private void error(String s) {
-		System.out.println(s);
+	private void error(IOException e, String s) { // error message s
+		System.out.println("Error: " + s);
 		System.exit(1);
 	}
 	
 	public  void getMessage(Socket socket) {
-		// input from socket goes to variable input
-		System.out.println("getting something from socket");
-		try {
-			in = new DataInputStream(socket.getInputStream());
-		} catch (IOException e) {
-			error();
-		}
-		System.out.println("over heree");
-		try {
-			input = in.readUTF();
-			System.out.println("not here");
-		} catch (IOException e) {
-			error();
-		}
+		/* input from socket goes to variable input */
+		try { in = new DataInputStream(socket.getInputStream()); } 
+		catch (IOException e) { error(e); }
+		try { input = in.readUTF(); } 
+		catch (IOException e) {	error(e); }
 		System.out.println("Receiving information from Socket " + socket.getInetAddress() + "...  " + input);
 	}
 	
 	public void sendMessage(Socket socket)  {
-		// sends out currentState to socket
-
-		try {
-			out = new DataOutputStream(socket.getOutputStream());
-		} catch (IOException e) {
-			error("Unable to contact client");
-		}
-		try {
-			out.writeUTF(currentState);
-		} catch (IOException e) {
-			error("Unable to send message");
-		}
+		/* sends out currentState to socket */
+		try { out = new DataOutputStream(socket.getOutputStream()); }
+		catch (IOException e) {	error(e, "Lost connection to client " + socket.getInetAddress()); }
+		try { out.writeUTF(currentState); } 
+		catch (IOException e) { error(e, "Unable to send message to client " + socket.getInetAddress()); }
 		System.out.println("Sent message to Socket " + socket.getInetAddress() + ": \n" + currentState);
 	}
 	
 	public void connectToClients() {
-		// Create server and connect to two clients.
+		/* Create server and connect to two clients */
 		
 		// Create server
 		System.out.println("Starting server...");
-		try {
-			server = new ServerSocket(7777);
-		} catch (IOException e) {
-			error();
-		}
+		try { server = new ServerSocket(7777); }
+		catch (IOException e) { error(e, "Unable to start server"); }
 		System.out.println("Server started.");
 		
 		// Connect to Player 1
-		try {
-			player1 = server.accept();
-		} catch (IOException e) {
-			//e.printStackTrace();
-			error("Could not connect to Player 1");
-		}
-		System.out.println("Successful connection from: " + player1.getInetAddress());
+		try { player1 = server.accept(); }
+		catch (IOException e) { error(e, "Could not connect to Player 1"); }
+		System.out.println("Successful connection from P1: " + player1.getInetAddress());
 		
 		// Connect to Player 2
-		try {
-			player2 = server.accept();
-		} catch (IOException e) {
-			//e.printStackTrace();
-			error("Could not connect to Player 2");
-		} 
-		System.out.println("Successful connection from: " + player2.getInetAddress());	
-		
+		try { player2 = server.accept(); } 
+		catch (IOException e) { error(e, "Could not connect to Player 2"); } 
+		System.out.println("Successful connection from P2: " + player2.getInetAddress());	
 	}
 
+	
 	/* Basic Gameplay methods */
 	
 	private void switchCurrPlayer() {
-		// switch current player variables
-		if (currentPlayer.equals("P1")) {
+		/* switch current player variables */
+		if (currentPlayer.equals("P1")) { // switch to P2
 			currentPlayer = "P2";
 			currentSocket = player2;
 			currPlayerObj = p2;
 			opponentSocket = player1;
 			}
-		else {
+		else { // switch to P1
 			currentPlayer = "P1";
 			currentSocket = player1;
 			currPlayerObj = p1;
@@ -140,7 +133,8 @@ public class ServerController {
 			if ((sat.getNum()).equals(str))
 				return (Station) sat;
 		}
-		return null;
+		error(null, "Station " + str + " does not exist.");
+		return null; // error: did not find the station
 	}
 	
 	public Satellite getSat(String str) {
@@ -149,42 +143,43 @@ public class ServerController {
 			if (sat.getNum().equals(str))
 				return sat;
 		}
+		// didn't find it
+		error(null, "Satellite " + str + " does not exist.");
 		return null;
 	}
 	
 	public int updatePlayer(String s[], int i, int p) {
-		// update info on given player from the state array
-		if (s[p].equals("P1")) {
+		/* update info on given player from the state array */
+		if (s[p].equals("P1")) { // update player 1
 			i = p1.update(s, i);
 		}
-		else {
+		else { // update player 2
 			i = p2.update(s, i);
 		}
-		return i;
+		return i; // new index of s array
 	}
 	
 	public void read() {
-		// default reading of game state
+		/* default reading of game state (currentState)*/
+		//TODO: validate input
+		
 		// input into currentState
 		String s[] = input.split(Globals.delim);
 		
-		// s[0] = state
-		// s[1] = currentPlayer
-		// s[2] = player
+		// s[0] = state,  s[1] = currentPlayer, s[2] = player
 		switch (s[0]) {
 		case "MESSAGE": {
-			System.out.println("GOT A MESSAGE");
+			//System.out.println("GOT A MESSAGE");
 			currentState = input;
 			return;
 		}
 		case "NOCHANGE": {
-			System.out.println("NO CHANGE");
+			//System.out.println("NO CHANGE");
 			if (currentState.equals(""))
-				getCurrentState("NOCHANGE");
+				setCurrentState("NOCHANGE");
 			return;
 		}
 		default: {
-			System.out.println(s[0] + ": default");
 			int i = updatePlayer(s, 2, 3);
 			i = updatePlayer(s, i, i+1);
 			int numOfSat = Integer.parseInt(s[i++]);
@@ -193,17 +188,16 @@ public class ServerController {
 			}	
 			if (! s[0].equals("claim end"))
 				switchCurrPlayer();
-			getCurrentState("TURN");
+			setCurrentState("TURN");
 			return;
-		
 		}
-		}
+		}// end switch
 	}	
 	
-	public void getCurrentState(String state) {
-		// set currentState to be the current state of the game
+	public void setCurrentState(String state) {
+		/* set currentState according to given state*/
 		
-		// works for turns
+		// works for turns ONLY
 		ArrayList<String> aList = new ArrayList<String>();
 		aList.add(state);
 		aList.add(currentPlayer);
@@ -213,33 +207,19 @@ public class ServerController {
 		for (Satellite s : satellites) {
 			aList.add(s.printState());
 		}
-		
 		currentState = Globals.addDelims(aList);
 	}
 	
 	public void validate() {
-		// validate input, if invalid will need to eventually re-ask current socket
+		// TODO: validate input, if invalid will need to eventually re-ask current socket
 		valid = true;
 	}
 	
 	
 	/* GAMEPLAY methods */
 	
-	
-	/* first contact */
-	public void firstContact() {
-		/* first contact with one client, getting only player info */
-		
-		currentState = "firstContact" + Globals.delim + currentPlayer;
-		sendMessage(currentSocket);
-		getMessage(currentSocket);
-		// update current player information
-		String[] s = input.split(Globals.delim);
-		updatePlayer(s, 2, 1);
-	}
-	
 	public void createMap() {
-		// create the map with randomization of all stations and planets
+		/* create the map with randomization of all stations and planets */
 		
 		int maxPlanetsPerSector = 6;
 		
@@ -339,7 +319,6 @@ public class ServerController {
 				satellites.add(p);
 				posIndex++;
 			}
-			
 			
 			// Fill in the rest of the sector
 			int remaining = maxPlanetsPerSector - posIndex; //after the previous for loop, posIndex = number of planets created around the station
@@ -448,11 +427,20 @@ public class ServerController {
 			}
 		}
 		
+		// Add 2 spaceships, one for each player, but with no other data (to be updated by player)
+		Satellite ship = new Spaceship(p1, "s" + Integer.toString(key++));
+		Satellite ship2 = new Spaceship(p2, "s" + Integer.toString(key++));
+		satellites.add(ship);
+		satellites.add(ship2);
+		
+		// set names for planets
+		for (Satellite sat: satellites)
+			sat.setName(chooseName());
 	}
 	
 	public String chooseName() {
 		// choose a random name for a planet
-		
+		// TODO: make this better
 		if (planetNames.size() == 0) {
 			planetNames.add("Phobos");
 			planetNames.add("Gaspra");
@@ -485,41 +473,34 @@ public class ServerController {
 		return p;
 	}
 	
+	
+	/* GAMEPLAY states */
+	
+	/* first contact */
+	public void firstContact() {
+		/* first contact with one client, getting only player info */
+		currentState = "firstContact" + Globals.delim + currentPlayer;
+		sendMessage(currentSocket);
+		getMessage(currentSocket);
+		// update current player information
+		String[] s = input.split(Globals.delim);
+		updatePlayer(s, 2, 1);
+	}
+	
 	public void startup() {
-		// creation and setup message to clients
+		/* creation and setup message to clients */
 		
 		createMap();
-		ArrayList<String> aList = new ArrayList<String>();
-		aList.add("start up");
-		aList.add(currentPlayer);
-		aList.add(p1.printState());
-		aList.add(p2.printState());
-		aList.add(Integer.toString(satellites.size()));
-		for (Satellite s : satellites) {
-			if (! s.getType().equals("S"))
-				s.setName(chooseName());// name them
-			aList.add(s.printState());
-		}
 		
-		currentState = Globals.addDelims(aList);
+		setCurrentState("start up"); //TODO: does the state have to be "start up"?
 		sendMessage(currentSocket);
 		switchCurrPlayer();
 		sendMessage(currentSocket);
 	}
 	
 	public void claimStation() {
-		// send the "claimStation" state to the currentPlayer
-		ArrayList<String> aList = new ArrayList<String>();
-		aList.add("claim station");
-		aList.add(currentPlayer);
-		aList.add(p1.printState());
-		aList.add(p2.printState());
-		aList.add(Integer.toString(satellites.size()));
-		for (Satellite s : satellites) {
-			aList.add(s.printState());
-		}
-		
-		currentState = Globals.addDelims(aList);
+		/* send the "claimStation" state to the currentPlayer */
+		setCurrentState("claim station"); //TODO: standardize state names
 		
 		sendMessage(currentSocket);
 		getMessage(currentSocket);
@@ -527,39 +508,39 @@ public class ServerController {
 	}
 	
 	public void setUp() {
-		// all set up until both players have chosen a base station
+		/* all set up until both players have chosen a base station */
+		
 		switchCurrPlayer();
 		firstContact();
 
 		switchCurrPlayer();
 		firstContact();
 		
-		switchCurrPlayer();
-		
+		switchCurrPlayer(); // back to player 1
 		startup();
 		
 		switchCurrPlayer();
 		claimStation();
 		switchCurrPlayer();
-		claimStation();
+		claimStation(); // keep on player 2
 	}
 	
 	public Boolean gameEnd() {
-		// has the game ended?
+		/* return true if there is a game end (win) state */
 		if (Globals.playerWin(p1)) {
 			winner = p1.getNum();
 			return true;
-
 		}
 		else if (Globals.playerWin(p2)) {
 			winner = p2.getNum();
 			return true;
 		}
+		// TODO: tie?
 		return false;
 	} 
 	
 	public void win() {
-		// when the condition "win" has been reached
+		/* when the condition "win" has been reached */
 		
 		ArrayList<String> aList = new ArrayList<String>();
 		aList.add("WIN");
@@ -580,18 +561,14 @@ public class ServerController {
 	}
 	
 	public void turn() {
-		System.out.println("entering turn");
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		/* One turn of the game */
+		// wait before contacting a client socket
+		try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
 		
 		if (gameEnd()) { // look for winner
 			win();
 			System.exit(0);
 		}
-		
 		
 		sendMessage(currentSocket);
 		sendMessage(opponentSocket);
@@ -602,19 +579,20 @@ public class ServerController {
 		getMessage(currentSocket);
 		read();
 		turn();
+		
+		//TODO: keep chat open after win
 	}
 
+	
+	
 	public static void main(String[] args) {
 
 		ServerController server = new ServerController();
 		server.connectToClients();
 		server.setUp();
-		System.out.println("HERE");
 		server.turn();
 		
 		System.out.println("END");
 	}
-
-
 
 }

@@ -133,7 +133,6 @@ public class Station extends Satellite implements MouseListener {
 		setupResources('G', gasGenerated);
 		setupResources('M', mineralGenerated);
 		setupResources('W', waterGenerated);
-		
 	}
 	
 	@Override
@@ -158,7 +157,6 @@ public class Station extends Satellite implements MouseListener {
 	private void setupResources(char res, int generate) {
 		int resourceProduced = 0;
 		switch (generate) {
-		
 		case 1: {
 			resourceProduced = 2;
 			break;}
@@ -175,7 +173,7 @@ public class Station extends Satellite implements MouseListener {
 			resourceProduced = 6;
 			break;
 		}
-		}
+		} // end switch
 		if (res == 'G') {
 			outputGas = resourceProduced;
 		}
@@ -231,7 +229,6 @@ public class Station extends Satellite implements MouseListener {
 	private void deselect() {
 		switchColors();
 		control.removeAoI();
-		control.printToHoverArea();
 		repaint();
 	}
 	
@@ -260,7 +257,7 @@ public class Station extends Satellite implements MouseListener {
 			return type + "s" + type + "s";
 		default:
 			return "";
-		}
+		} // end switch
 		
 	} 
 	
@@ -418,6 +415,7 @@ public class Station extends Satellite implements MouseListener {
 
 	@Override
 	public void mouseExited(MouseEvent arg0) {
+		deselect();
 	}
 
 	@Override

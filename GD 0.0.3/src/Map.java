@@ -43,7 +43,7 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 		}
 		
 		hoverBox.setFont(Globals.f);
-		hoverBox.setPreferredSize(new Dimension(100, 50));
+		hoverBox.setPreferredSize(new Dimension(200, 50));
 		//hoverBox.setVisible(false);
 		hoverBox.setForeground(Color.WHITE);
 		hoverBox.setBackground(Color.LIGHT_GRAY);

@@ -43,7 +43,7 @@ public class InfoPanel extends JPanel{
 	private OurButton b0;
 	private OurButton b1;
 	
-	private Boolean bool = true;
+	private int selectPhase = 0;
 	
 	int B0 = 0;
 	int B1 = 1;
@@ -164,12 +164,16 @@ public class InfoPanel extends JPanel{
 			}
 		else if (command == B1) {
 			//printToInstructionArea("I guess you're done.");
-			if (bool) {
-				bool = false;
+			if (selectPhase == 0) {
+				selectPhase++;
 				control.infoPanel2.getSelectPanel().mainPhase();
 			}
+			else if (selectPhase == 1){
+				selectPhase++;
+				control.infoPanel2.getSelectPanel().spaceshipPhase();
+			}
 			else {
-				bool = true;
+				selectPhase = 0;
 				control.infoPanel2.getSelectPanel().claimPhase();
 			}
 		}

@@ -186,6 +186,17 @@ public class SelectPanel extends JPanel{
 		noButtons();
 	}
 	
+	public void spaceshipPhase() {
+		phase = "Spaceship";
+		selectedSatellite = null;
+		printToSelectText(defaultSelectText);
+		mainButton.setText("Wait and get more fuel");
+		mainButton.enable();
+		
+		noButtons();
+		selectSatellite(control.getPlayer().getBase());
+	}
+	
 	public void waitPhase() {
 		phase = "Wait";
 		selectedSatellite = null;
@@ -227,9 +238,38 @@ public class SelectPanel extends JPanel{
 		else button2.disable();
 	}
 	
+	private void spaceshipButtons(Boolean b1, Boolean b2, Boolean b3, Boolean b4) {
+		button1.setText("Move");
+		if (b1) button1.enable();
+		else button1.disable();
+		button2.setText("Help the sat");
+		if (b2)	button2.enable();
+		else button2.disable();
+		button3.setText("Steal from sat");
+		if (b3) button3.enable(); else button3.disable();
+		button4.setText("Sabotage sat");
+		if (b4) button4.enable(); else button4.disable();
+	}
+	
+	private void spaceshipButtonsForCurrSat(Spaceship ship) {
+		Satellite shipSat = ship.getCurrSat();
+		// if it's owned by player and currently being orbited
+		if (shipSat.getOwner().equals(ship.getOwner())) {
+			spaceshipButtons(false, true, false, false);
+		}
+		// if currSat is not owned at all
+		else if (shipSat.getOwner().equals("0")) {
+			spaceshipButtons(false, false, true, false);
+		}
+		// if currSat is owned by opponent
+		else if (shipSat.getOwner().equals(control.getOpponent().getNum())) {
+			spaceshipButtons(false, false, true, true);
+		}
+	}
+	
 	public void selectSatellite(Satellite sat) {
 		// depending on what is selected(and the phase), the buttons change
-		
+		//TODO: this whole thing should be simplified
 		System.out.println("selectedSatellite  " + control.getStatus());
 		selectedSatellite = sat;
 		noButtons();
@@ -248,9 +288,10 @@ public class SelectPanel extends JPanel{
 					}
 				return;	
 			}
+	
 			else if (! sat.getType().equals("O")) {
 				// planet, print something
-				printToSelectText(((Planet) sat).info());
+				printToSelectText(sat.info());
 			}
 			break;
 		} // end claim 
@@ -267,7 +308,7 @@ public class SelectPanel extends JPanel{
 				return;
 			}
 			else {
-				// planet/sun, print something
+				// planet/sun/spaceship, print something
 				printToSelectText(sat.info());
 			}
 			break;
@@ -288,6 +329,17 @@ public class SelectPanel extends JPanel{
 					stationButtons(false, false);
 				}
 				return;
+			}
+			else if (sat.getType().equals("SS")) { // SPACESHIP
+				Spaceship ship = (Spaceship) sat;
+				if (ship.getController() == control.getPlayer()) {
+					printToSelectText(ship.info());
+					spaceshipButtons(false, false, false, false);
+				}
+				else { // opponent's ship
+					printToSelectText("This ship is owned by " + control.getOpponent().getName() + ". Let's hope it's not planning anything nefarious.");
+					spaceshipButtons(false, false, false ,false);
+				}
 			}
 			else if (! sat.getType().equals("O")) {
 				// planet, print something
@@ -314,6 +366,41 @@ public class SelectPanel extends JPanel{
 			}
 			break;
 		}
+		case "Spaceship": {
+			if (sat.getType().equals("SS")) {
+				Spaceship ship = (Spaceship) sat;
+				if (ship.getController() == control.getPlayer()) {
+					printToSelectText(ship.info() + "\n What do you want to do?");
+					spaceshipButtons(false, false, false, false);
+					spaceshipButtonsForCurrSat(ship);
+				}
+				else { // opponent's ship
+					printToSelectText(ship.getController().getName() + "'s spaceship. What is it planning?? Better keep an eye.");
+					spaceshipButtons(false, false, false, false);
+				}
+			} // end type spaceship
+			else { // not a spaceship, only do something if it is within range
+				printToSelectText(sat.info());
+				Spaceship ship = control.getPlayer().getSpaceship();
+				if (ship.getController() == control.getPlayer()) {
+					// it's the current player
+					if (ship.getCurrSat() == sat) {
+						// it's the same sat
+						spaceshipButtonsForCurrSat(ship);
+					}
+					else if (ship.withinRange(sat)) { // you can move there
+						spaceshipButtons(true, false, false, false);
+					}
+					else {
+						// not close enough
+						printToSelectText("The satellite " + sat.getName() + " is too far away for your spaceship.");
+						spaceshipButtons(false, false, false, false);
+					}
+				}
+				else spaceshipButtons(false, false, false, false);
+			} // end not spaceship clicked
+			break;
+		} // end case spaceship
 		default: {
 			printToSelectText(sat.info());
 		}
@@ -346,9 +433,9 @@ public class SelectPanel extends JPanel{
 		case "Main": {
 			if (command == MAIN) {
 				control.getPlayer().addEventChance(0.25);
-				control.setStatus("collectResources");
 				printToSelectText("Skipping turn.");
 				control.printToPlayerArea();
+				endTurn = true;
 			} // end button main
 			if (command == B1) {
 				// upgrade
@@ -384,9 +471,50 @@ public class SelectPanel extends JPanel{
 			} // end b2
 			break;
 		} // end case main
+		case "Spaceship": {
+			Spaceship ship = control.getPlayer().getSpaceship();
+			if (command == MAIN) {
+				control.setStatus("End Turn"); //TODO: I don't think this is how it needs to end, combine with that if statement in clientcontroller can jump straight to spaceshipphase
+				printToSelectText("Collecting fuel");
+				control.getPlayer().getSpaceship().waiting();
+			} // end button main
+			else if (command == B1) { // move
+				if (ship.getFuel() < ship.costFuel())
+					printToSelectText("Your spaceship can't make it that far. Perhaps it might be better to collect some fuel.");
+				else {
+					ship.move(selectedSatellite);
+					control.setStatus("End Turn");
+				}
+			} // end b1
+			else if (command == B2) { // help
+				if (selectedSatellite.getType().equals("S")) {
+					// TODO: how does a spaceship help a satellite
+				}
+				else { // TODO: how does a spaceship help a planet
+					
+				}
+			} // end b2
+			else if (command == B3) { // steal
+				if (selectedSatellite.getType().equals("S")) {
+					// TODO: how does a spaceship steal from a satellite
+				}
+				else { // TODO: how does a spacehsip steal from a planet
+					
+				}
+			} // end b3
+			else { // command == B4 // sabotage
+				if (selectedSatellite.getType().equals("S")) {
+					//TODO: how does a spaceship sabotage a station
+				}
+				else { //TODO: how does a spaceship sabotage a planet
+					
+				}
+			} // end b4
+			break;
+		} // end case spaceship
 		} // end switch
 		
-		if (endTurn) control.setStatus("endTurn");
+		if (endTurn) control.setStatus("endMain");
 	}
 
 
@@ -421,6 +549,39 @@ public class SelectPanel extends JPanel{
 			}
 			else { // B4
 				
+			}
+			break;
+		}
+		case "Spaceship": {
+			if (buttonNum == MAIN) {
+				printToSelectText("The spaceship collects 1 fuel."); // This should never be called
+			}
+			else if (buttonNum == B1) { // move
+				printToSelectText("Click on a satellite within the spaceship's range to move to that satellite. Costs 2 fuel");
+			}
+			else if (buttonNum == B2) { // help
+				if (selectedSatellite.getType().equals("S")) {
+					printToSelectText("Help this station. Produces more resources this turn.");
+				}
+				else {
+					printToSelectText("Help this planet. Produces more resources this turn.");
+				}
+			}
+			else if (buttonNum == B3) { // steal
+				if (selectedSatellite.getType().equals("S")) {
+					printToSelectText("Steal from this station's production this turn.");
+				}
+				else {
+					printToSelectText("Steal from this planet's production.");
+				}
+			}
+			else { // B4 // sabotage
+				if (selectedSatellite.getType().equals("S")) {
+					printToSelectText("Sabotage this station. Will cause a permanent problem until fixed.");
+				}
+				else {
+					printToSelectText("Sabotage this planet. Will cause a permanent problem until fixed.");
+				}
 			}
 			break;
 		}

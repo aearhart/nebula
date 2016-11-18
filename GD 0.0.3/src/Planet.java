@@ -163,10 +163,9 @@ public class Planet extends Satellite implements MouseListener {
 	
 	public Boolean planetWithinAoI() {
 		/* check to see if planet is within the current player's AoI */
-		for (Station sat: control.getPlayer().getStations()) {
-			if (control.withinDistance(sat, (Satellite)(this))) {
-				return true;
-			}
+		Station sat = control.getPlayer().getBase();
+		if (control.withinDistance(sat, (Satellite)(this))) {
+			return true;
 		}
 		return false;
 	}

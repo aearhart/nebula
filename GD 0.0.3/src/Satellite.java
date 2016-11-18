@@ -106,14 +106,10 @@ public class Satellite extends JComponent {
 		if (control == null)
 			return; // don't need to set owner variable
 		else if ((own).equals(control.getPlayer().getNum())) { // equals current player
-			owner = control.getPlayer();
-			ownerNum = owner.getNum();
-			setOwnerInfo();
+			setOwner(control.getPlayer());
 		}
 		else if (! own.equals("0")) { // equals opponent
-			owner = control.getOpponent();
-			ownerNum = owner.getNum();
-			setOwnerInfo(); 
+			setOwner(control.getOpponent());
 		}
 		else // isn't owned, it's free!
 			return;
@@ -134,6 +130,9 @@ public class Satellite extends JComponent {
 		if (t.equals("S")) { // it's a station
 			owner.addStation(this);
 			this.setColors(owner.getColor(), this.getBorderCol(), this.getSelectCol());
+		}
+		else if (t.equals("SS")) { // it's a spaceship
+			owner.setSpaceship(this);
 		}
 		else { // it's a planet
 			if (owner == control.getPlayer()) owner.addPlanet();
@@ -205,6 +204,10 @@ public class Satellite extends JComponent {
 	}
 	
 	/* basic get/set/add methods */
+	
+	public String getOwner() {
+		return ownerNum;
+	}
 	
 	public Integer getLocX() {
 		return x;
