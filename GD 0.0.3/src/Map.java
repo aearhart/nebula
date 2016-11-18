@@ -107,10 +107,10 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 				g.setColor(sectorCols[sector-1]);
 				g.drawOval(i, j, 1, 1);
 			}
-		}
+		}*/
 		//g.drawOval(800, 10, 10, 10);
 		//g.drawOval(700, 50, 200, 3);
-		*/
+		
 	}
 
 	@Override

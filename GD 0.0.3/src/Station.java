@@ -30,10 +30,15 @@ public class Station extends Satellite implements MouseListener {
 	protected int waterStart;
 	
 	private String planetsToCreate = "";
-	private char[] positionsPossible = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?'};//'A', 'B', 'C', 'D', 'E', 'F'};
+	private char[] positionsPossible = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?',
+										'@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'};
 	private String positions = "";
-	double [] planetXs = {0, .382683, .707107, .92388, 1, .92388, .707107, .382683, 0, -.382683, -.707107, -.92388, -1, -.92388, -.707107, -.382683};
-	double [] planetYs = {1, .92388, .707107, .382683, 0, -.382683, -.707107, -.92388, -1, -.92388, -.707107, -.382683, 0, .382683, .707107, .92388};
+						
+	double [] planetXs = {0, .382683, .707107, .92388, 1, .92388, .707107, .382683, 0, -.382683, -.707107, -.92388, -1, -.92388, -.707107, -.382683,        // Radius = 1.0
+						  0, .278152, .494975, .642364, .7, .642364, .494975, .278152, 0, -.278152, -.494975, -.642364, -.7, -.642364, -.494975, -.278152}; // Radius = 0.7
+						
+	double [] planetYs = {1, .92388, .707107, .382683, 0, -.382683, -.707107, -.92388, -1, -.92388, -.707107, -.382683, 0, .382683, .707107, .92388,        // Radius = 1.0
+						  .7, .642364, .494975, .278152, 0, -.278152, -.494975, -.642364, -.7, -.642364, -.494975, -.278152, 0, .278152, .494975, .642364}; // Radius = 0.7
 	private boolean isMalfunctioning = false;
 	
 	public Station(Integer locX, Integer locY, Integer sz, String n) {
@@ -239,20 +244,20 @@ public class Station extends Satellite implements MouseListener {
 		case(1): // 1 s planet
 			return type + "s";
 		case(2): // 1 m planet or 2 s planets
-			if (r == 0)
-				return type + "m";
+			//if (r == 0)
+			return type + "m";
 			//else
 			//	return type + "s" + type + "s";
 		case(3): // 1 l planet or 1 s planet and 1 m planet
-			if (r == 0)
+			if (r > 0)
 				return type + "l";
 			else
 				return type + "s" + type + "s";
 		case(4): // 2 m planets or 1 s planet and 1 l planet
-			if (r == 0)
-				return type + "m" + type + "s";
-			else
-				return type + "s" + type + "l";
+			//if (r > 0)
+			//	return type + "m" + type + "s";
+			//else
+			return type + "s" + type + "s";
 		default:
 			return "";
 		}
@@ -269,10 +274,11 @@ public class Station extends Satellite implements MouseListener {
 		
 		int numPlanets = planetsToCreate.length()/2;
 		Random rand = new Random();
-		for (int i = 0; i < numPlanets; i++) {
-			int p = rand.nextInt(16);
+		for (int i = 0; i < numPlanets;) {
+			int p = rand.nextInt(32);
 			if (positionsPossible[p] != '.') {
 				positions += Character.toString(positionsPossible[p]);
+				//Find nearby positions (wrapping around)
 				int j = p-1;
 				int k = p+1;
 				if (p == 0) {
@@ -281,12 +287,31 @@ public class Station extends Satellite implements MouseListener {
 				else if (p == 15) {
 					k = 0;
 				}
+				else if (p == 16) {
+					j = 31;
+				}
+				else if (p == 31) {
+					k = 16;
+				}
+				
+				// Rule out nearby positions
 				positionsPossible[j] = '.';
 				positionsPossible[p] = '.';
 				positionsPossible[k] = '.';
+				if (p < 16) {
+					positionsPossible[j+16] = '.';
+					positionsPossible[p+16] = '.';
+					positionsPossible[k+16] = '.';
+				}
+				else {
+					positionsPossible[j-16] = '.';
+					positionsPossible[p-16] = '.';
+					positionsPossible[k-16] = '.';
+				}
+				
+				// Chose another position
+				i++;
 			}
-			else
-				i--;
 		}
 		System.out.print("PositionsPossible = ");
 		for (int i = 0; i < 16; i++)
@@ -348,27 +373,35 @@ public class Station extends Satellite implements MouseListener {
 		return endTurn;
 	}
 	
-	public void placePlanet(Satellite p, int planetPos) {
+	public void placePlanet(Satellite p, int posIndex) {
 		// change x/y coordinates to place planet correctly w/in AoI
 		  
 		Random rand = new Random();
 		
-		int planetSize = p.getSz();
-		int r = rand.nextInt(planetSize/3);
-		int posOrneg = rand.nextInt(3);
-		int addX = 0;
-		int addY = 0;
-		if (posOrneg == 0) addX -= planetSize;
-		else if (posOrneg == 1) addX += planetSize;
-		r = rand.nextInt(3);
-		if (posOrneg == 0) addY += planetSize;
-		else if (posOrneg == 1) addY -= planetSize;
+		// Initial planet position
+		int planetPos;
+		if (posIndex < 16)	// Outer circle
+			planetPos = positions.charAt(posIndex) - '0';
+		else				// Inner circle
+			planetPos = positions.charAt(posIndex) - '@' + 16;
+		int planetX = (int) (planetXs[planetPos]*AreaOfInfluence) + x;
+		int planetY = (int) (planetYs[planetPos]*AreaOfInfluence) + y;
 		
-		int AoISector = (positions.charAt(planetPos) - '0');
-		int planetX = (int)(planetXs[AoISector]*AreaOfInfluence) + x;
-		p.placeX(planetX + addX);
-		int planetY = (int)(planetYs[AoISector]*AreaOfInfluence) + y;
-		p.placeY(planetY + addY);
+		// Calculating max movement
+		double root2 = Math.pow(2, .5);
+		int maxDelta = (int) ((double) p.getSz()/root2) - 1;
+		
+		// Placing x randomly
+		int delta = rand.nextInt(maxDelta);
+		int sign = rand.nextInt(2);
+		if (sign == 0) sign--;
+		p.placeX(planetX + delta*sign);
+		
+		// Placing y randomly
+		delta = rand.nextInt(maxDelta);
+		sign = rand.nextInt(2);
+		if (sign == 0) sign--;
+		p.placeY(planetY + delta*sign);
 	}
 	
 	/* MOUSE events */

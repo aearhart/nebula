@@ -762,7 +762,7 @@ public class ClientController {
 		control.connectToServer();	
 		
 		control.playerTab();
-		System.out.println("PLAYER!!!!!!!" + control.getPlayer().getName());
+		System.out.println("PLAYER!!!!!!! " + control.getPlayer().getName());
 		if (! control.getStatus().equals("test")) {
 
 			control.firstContact();

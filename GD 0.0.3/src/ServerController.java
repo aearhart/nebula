@@ -241,60 +241,214 @@ public class ServerController {
 	public void createMap() {
 		// create the map with randomization of all stations and planets
 		
+		int maxPlanetsPerSector = 6;
+		
 		Satellite s0 = new Sun();
 		satellites.add(s0);
 		int key = 1;
 		
 		Random ran = new Random();
-		int ws = Globals.winSize;
-		// location of satellites
-		double[] xs = {.261843*ws, .500*ws, .738157*ws, .738157*ws, .500*ws, .261843*ws};
-		double[] ys = {.3625*ws, .225*ws, .3625*ws, .6375*ws, .775*ws, .6375*ws};
-
-		List<Integer> sectors = new ArrayList<Integer>();
-		sectors.add(0); sectors.add(1); sectors.add(2); sectors.add(3); sectors.add(4); sectors.add(5);
 		
-		// number of satellites = 4
-		for (int i = 0; i < 4; i++) {
-			// BASE STATION
+		int ws = Globals.winSize;
+		
+		int lPlanetChance = 15;
+		int mPlanetChance = 35;
+		// int sPlanetChance = 50;
+		
+		// List of the 6 sectors
+		List<Integer> sectors = new ArrayList<Integer>();
+		for (int i = 0; i < 6; i++)
+			sectors.add(i);
+		
+		// location of satellites
+		/*// Radius = 275 
+		double[] stationX = {.261843*ws, .500*ws, .738157*ws, .738157*ws, .500*ws, .261843*ws};
+		double[] stationY = {.3625*ws, .225*ws, .3625*ws, .6375*ws, .775*ws, .6375*ws}; */
+		// Radius = 250 
+		double[] stationX = {.283494*ws, .500*ws, .716506*ws, .716506*ws, .500*ws, .283494*ws};
+		double[] stationY = {.375*ws, .250*ws, .375*ws, .625*ws, .750*ws, .625*ws};
+
+		
+		// location of other planets
+		// Radius = 425
+		double[] fillPlanetX = {.079359*ws, .091673*ws, .109993*ws, .131939*ws, .163228*ws, .19948*ws,  .240752*ws,
+								.331122*ws, .382126*ws, .439286*ws, .500*ws,    .560714*ws, .617874*ws, .668878*ws,
+								.759248*ws, .80052*ws,  .836772*ws, .868061*ws, .890007*ws, .908327*ws, .920641*ws,
+								.920641*ws, .908327*ws, .890007*ws, .868061*ws, .836772*ws, .80052*ws,  .759248*ws,
+								.668878*ws, .617874*ws, .560714*ws, .500*ws,    .439286*ws, .382126*ws, .331122*ws,
+								.240752*ws, .19948*ws,  .163228*ws, .131939*ws, .109993*ws, .091673*ws, .079359*ws};
+		double[] fillPlanetY = {.439286*ws, .382126*ws, .331122*ws, .2875*ws,   .240752*ws, .19948*ws,  .163228*ws,
+								.109993*ws, .091673*ws, .079359*ws, .075*ws,    .079359*ws, .091673*ws, .109993*ws,
+								.163228*ws, .19948*ws,  .240752*ws, .2875*ws,   .331122*ws, .382126*ws, .439286*ws,
+								.560714*ws, .617874*ws, .668878*ws, .7125*ws,   .759248*ws, .80052*ws,  .836772*ws,
+								.890007*ws, .908327*ws, .920641*ws, .925*ws,    .920641*ws, .908327*ws, .890007*ws,
+								.836772*ws, .80052*ws,  .759248*ws, .7125*ws,   .668878*ws, .617874*ws, .560714*ws};
+
+		
+		// locations of planets in sectors without stations
+		int numPositions = 9;
+						    // Line =      2           6           2           6           3           5           2           4           6
+		                  // Radius =     150         150         250         250         325         325         400         400         400
+		double[] emptySectorPlanetX = {.355885*ws, .393934*ws, .259808*ws, .323223*ws, .201760*ws, .242468*ws, .115692*ws, .153590*ws, .217157*ws,
+									   .458397*ws, .541603*ws, .430662*ws, .569338*ws, .453571*ws, .546429*ws, .389060*ws, .500000*ws, .610940*ws,
+									   .606066*ws, .644115*ws, .676777*ws, .740192*ws, .757532*ws, .798240*ws, .782843*ws, .846410*ws, .884308*ws,
+									   .644115*ws, .606066*ws, .740192*ws, .676777*ws, .798240*ws, .757532*ws, .884308*ws, .846410*ws, .782843*ws,
+									   .541603*ws, .458397*ws, .569338*ws, .430662*ws, .546429*ws, .453571*ws, .610940*ws, .500000*ws, .389060*ws,
+									   .393934*ws, .355885*ws, .323223*ws, .259808*ws, .242468*ws, .201760*ws, .217157*ws, .153590*ws, .115692*ws};
+		double[] emptySectorPlanetY = {.458397*ws, .393934*ws, .430662*ws, .323223*ws, .370858*ws, .301752*ws, .389060*ws, .300000*ws, .217157*ws,
+				 				 	   .355885*ws, .355885*ws, .259808*ws, .259808*ws, .178333*ws, .178333*ws, .115692*ws, .100000*ws, .115692*ws,
+				 				 	   .393934*ws, .458397*ws, .323223*ws, .430662*ws, .301752*ws, .370858*ws, .217157*ws, .300000*ws, .389060*ws,
+				 				 	   .541603*ws, .606066*ws, .569338*ws, .676777*ws, .629142*ws, .698248*ws, .610940*ws, .700000*ws, .782843*ws,
+				 				 	   .644115*ws, .644115*ws, .740192*ws, .740192*ws, .821667*ws, .821667*ws, .884308*ws, .900000*ws, .884308*ws,
+				 				 	   .606066*ws, .541603*ws, .676777*ws, .569338*ws, .698248*ws, .629142*ws, .782843*ws, .700000*ws, .610940*ws};
+		
+
+		// initialize planet p as a satellite
+		Satellite p;
+		
+		// Fill 4 of the sectors with stations and then add the planets
+		for (int i = 0; i < 4; i++) { // number of satellites = 4
 			int r = ran.nextInt(sectors.size()); // 6 sectors
-			int sect = sectors.get(r);
-			sectors.remove(r);
+			int sect = sectors.remove(r);
 			
 			// choose between two types
 			r = ran.nextInt(2);
+			r = 1; // FORCING SLOW START
 			Satellite s;
 			if (r == 0) { // default
-					s = new DefaultStation((int)xs[sect], (int)ys[sect], 30, "s" + Integer.toString(key++));
-					s.setName("Default");
+				s = new DefaultStation((int)stationX[sect], (int)stationY[sect], 30, "s" + Integer.toString(key++));
+				s.setName("Default");
 			}
 			else { // slow_default
-				s = new Default2Station((int)xs[sect], (int)ys[sect], 30, "s" + Integer.toString(key++));
+				s = new Default2Station((int)stationX[sect], (int)stationY[sect], 30, "s" + Integer.toString(key++));
 				s.setName("Default2 (slow start)");
 			}
 			satellites.add(s);
 			
-	
+			// Create the planets around the station
 			String plans = ((Station) s).getPlanetsToCreate();
-			int pos = 0;
+			int posIndex = 0;
 			for (int j = 0; j < plans.length(); j+=2) {
-				Satellite p;
-				if (plans.charAt(j) == 'G') {
-					p = new GasPlanet(0, 0, plans.substring(j+1, j+2), "s" + Integer.toString(key++));
+				// initialize planet p as a satellite
+				switch (plans.charAt(j)) {
+				case 'G': {p = new GasPlanet(0, 0, plans.substring(j+1, j+2), "s" + Integer.toString(key++)); break;}
+				case 'M': {p = new MineralPlanet(0, 0, plans.substring(j+1, j+2), "s" + Integer.toString(key++)); break;}
+    /*case 'W'*/default: {p = new WaterPlanet(0, 0, plans.substring(j+1, j+2), "s" + Integer.toString(key++)); break;}
 				}
-				else if (plans.charAt(j) == 'M') {
-					p = new MineralPlanet(0, 0, plans.substring(j+1, j+2), "s" + Integer.toString(key++));
-				}
-				else {
-					p = new WaterPlanet(0, 0, plans.substring(j+1, j+2), "s" + Integer.toString(key++));
-				}
-				((Station)(s)).placePlanet(p, pos);
+				((Station)(s)).placePlanet(p, posIndex);
 				satellites.add(p);
-				pos++;
-					
+				posIndex++;
 			}
+			
+			
+			// Fill in the rest of the sector
+			int remaining = maxPlanetsPerSector - posIndex; //after the previous for loop, posIndex = number of planets created around the station
+			
+			int fillPlanetMaxDelta = 20; // TODO Calculate a better maxDelta
+			
+			int[] positionsPossible = {0, 1, 2, 3, 4, 5, 6}; // 7 possible positions
+			for (int j = 0; j < remaining;) { 
+				r = ran.nextInt(7);
+				if (positionsPossible[r] != -1) { // if that position hasn't been eliminated
+					// eliminate the position and it's neighbors
+					if (r > 0)
+						positionsPossible[r-1] = -1;
+					positionsPossible[r] = -1;
+					if (r < 6)
+						positionsPossible[r+1] = -1;
+				
+					// x coordinate
+					int planetX = (int) fillPlanetX[sect*7+r];
+					int delta = ran.nextInt(fillPlanetMaxDelta);
+					int sign = ran.nextInt(2);
+					if (sign == 0) sign--;
+					planetX += delta*sign;
+					
+					// y coordinate
+					int planetY = (int) fillPlanetY[sect*7+r];
+					delta = ran.nextInt(fillPlanetMaxDelta);
+					sign = ran.nextInt(2);
+					if (sign == 0) sign--;
+					planetY += delta*sign;
+					
+					// size
+					String size = "";
+					int randomSize = ran.nextInt(100);
+					if (randomSize <= lPlanetChance) size = "l";      
+					else if (randomSize <= (mPlanetChance + lPlanetChance)) size = "m";
+					else size = "s";
+					
+					
+					// TODO Make this intelligently choose a planet type
+					// TODO Also randomize the placement
+					int type = ran.nextInt(3); // 3 types of planets
+					switch (type) {
+					case 0: {p = new GasPlanet(planetX, planetY, size, "s" + Integer.toString(key++)); break;}
+					case 1: {p = new MineralPlanet(planetX, planetY, size,  "s" + Integer.toString(key++)); break;}
+		  /*case 2*/default: {p = new WaterPlanet(planetX, planetY, size, "s" + Integer.toString(key++)); break;}
+					}
+					//System.out.println("FILLPLANET: " + p.getLocX() + ", " + p.getLocY());
+					satellites.add(p);
+					
+					j++; // added another planet
+				}
+			}
+			
 			//System.out.println("Station in sector " + sect + " has " + pos + " planets");	
 		}
+		
+		
+		// Populate the other sectors
+		int emptySectorMaxDelta = 40; // TODO Calculate a better maxDelta
+		for (int i = 0; i < 2; i++) { // 6 sectors - 4 stations leaves 2 empty sectors
+			// sector
+			int sect = sectors.get(i);
+			//System.out.println("FILLING IN EMPTY SECTOR " + sect);
+			
+			// possible positions
+			List<Integer> positions = new ArrayList<Integer>();
+			for (int j = 0; j < numPositions; j++)
+				positions.add(j); 
+			
+			// place planets
+			for (int j = 0; j < maxPlanetsPerSector; j++) {
+				// position
+				int r = ran.nextInt(positions.size());
+				int pos = positions.remove(r);
+				
+				// x coordinate
+				int planetX = (int) emptySectorPlanetX[sect*numPositions+pos];
+				int delta = ran.nextInt(emptySectorMaxDelta);
+				int sign = ran.nextInt(2);
+				if (sign == 0) sign--;
+				planetX += delta*sign;
+				
+				// y coordinate
+				int planetY = (int) emptySectorPlanetY[sect*numPositions+pos];
+				delta = ran.nextInt(emptySectorMaxDelta);
+				sign = ran.nextInt(2);
+				if (sign == 0) sign--;
+				planetY += delta*sign;
+				
+				// size
+				String size = "";
+				int randomSize = ran.nextInt(100);
+				if (randomSize <= lPlanetChance) size = "l";      
+				else if (randomSize <= (mPlanetChance + lPlanetChance)) size = "m";
+				else size = "s";
+				
+				// TODO Make this intelligently choose a planet type
+				int type = ran.nextInt(3); // 3 types of planets
+				switch (type) {
+				case 0: {p = new GasPlanet(planetX, planetY, size, "s" + Integer.toString(key++)); break;}
+				case 1: {p = new MineralPlanet(planetX, planetY, size, "s" + Integer.toString(key++)); break;}
+	  /*case 2*/default: {p = new WaterPlanet(planetX, planetY, size, "s" + Integer.toString(key++)); break;}
+				}
+				System.out.println("ADDING PLANET IN SECTOR " + sect + " IN POSITION " + pos);
+				satellites.add(p);
+			}
+		}
+		
 	}
 	
 	public String chooseName() {
