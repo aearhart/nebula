@@ -51,6 +51,8 @@ public class Satellite extends JComponent {
 	
 	protected BufferedImage image = null;
 	public String imageName = " ";
+
+	private Boolean isMalfunctioning = false;
 	
 	public Satellite(Integer locX, Integer locY) {
 		x = locX;
@@ -309,5 +311,10 @@ public class Satellite extends JComponent {
 
 	public String info() {
 		return "It's the sun. You can feel its blazing heat just looking at it.";
+	}
+
+	public Boolean isMalfunctioning() {
+		// TODO Auto-generated method stub
+		return isMalfunctioning ;
 	}
 }

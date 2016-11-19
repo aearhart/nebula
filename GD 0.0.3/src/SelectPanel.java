@@ -251,19 +251,63 @@ public class SelectPanel extends JPanel{
 		if (b4) button4.enable(); else button4.disable();
 	}
 	
-	private void spaceshipButtonsForCurrSat(Spaceship ship) {
+	private void spaceshipButtonsForStation(Boolean b1, Boolean b2, Boolean b3, Boolean b4) {
+		button1.setText("Move");
+		if (b1) button1.enable();
+		else button1.disable();
+		button2.setText("Fix");
+		if (b2)	button2.enable();
+		else button2.disable();
+		button3.setText("Refuel");
+		if (b3) button3.enable(); else button3.disable();
+		button4.setText("Upgrade");
+		if (b4) button4.enable(); else button4.disable();
+	}
+	
+	private void spaceshipButtonsForSun() {
+		noButtons();
+		button1.setText("Move");
+		button1.enable();
+	}
+	
+	private void spaceshipButtonsForOwnedPlanet(Boolean b1, Boolean b2, Boolean b3) {
+		button1.setText("Move");
+		if (b1) button1.enable();
+		else button1.disable();
+		button2.setText("Fix");
+		if (b2) button2.enable(); else button2.disable();
+		button3.setText("Boost production");
+		if (b3) button3.enable(); else button3.disable();
+	}
+	
+	private void spaceshipButtonsForUnownedPlanet(Boolean b1, Boolean b2) {
+		button1.setText("Move");
+		if (b1) button1.enable();
+		else button1.disable();
+		button2.setText("Collect resources");
+		if (b2) button2.enable(); else button2.disable();
+	}
+	
+	private void spaceshipButtonsForEnemyPlanet(Boolean b1, Boolean b2) {
+		button1.setText("Move");
+		if (b1) button1.enable();
+		else button1.disable();
+		button2.setText("Sabotage");
+		if (b2) button2.enable(); else button2.disable();
+	}
+	
+	private void spaceshipButtonsForCurrPlanet(Spaceship ship) {
 		Satellite shipSat = ship.getCurrSat();
-		// if it's owned by player and currently being orbited
 		if (shipSat.getOwner().equals(ship.getOwner())) {
-			spaceshipButtons(false, true, false, false);
+			spaceshipButtonsForOwnedPlanet(false, shipSat.isMalfunctioning(), true);
 		}
 		// if currSat is not owned at all
 		else if (shipSat.getOwner().equals("0")) {
-			spaceshipButtons(false, false, true, false);
+			spaceshipButtonsForUnownedPlanet(false, true);
 		}
 		// if currSat is owned by opponent
-		else if (shipSat.getOwner().equals(control.getOpponent().getNum())) {
-			spaceshipButtons(false, false, true, true);
+		else { //if (shipSat.getOwner().equals(control.getOpponent().getNum())) {
+			spaceshipButtonsForEnemyPlanet(false, ! shipSat.isMalfunctioning());
 		}
 	}
 	
@@ -372,33 +416,47 @@ public class SelectPanel extends JPanel{
 				if (ship.getController() == control.getPlayer()) {
 					printToSelectText(ship.info() + "\n What do you want to do?");
 					spaceshipButtons(false, false, false, false);
-					spaceshipButtonsForCurrSat(ship);
 				}
 				else { // opponent's ship
 					printToSelectText(ship.getController().getName() + "'s spaceship. What is it planning?? Better keep an eye.");
 					spaceshipButtons(false, false, false, false);
 				}
 			} // end type spaceship
-			else { // not a spaceship, only do something if it is within range
+			else if (sat.getType().equals("S")) { // station
+				// move 	fix		refuel		upgrade
+				Station spaceStation = (Station)sat;
+				if (sat.getOwner().equals(control.clientPlayerNum)) {
+					Boolean move = false;
+					if (control.getPlayer().getSpaceship().withinRange(sat)) move = true;
+					if (control.getPlayer().getSpaceship().getCurrSat() == sat) move = false;
+					spaceshipButtonsForStation(move, spaceStation.isMalfunctioning(), control.getPlayer().getSpaceship().needFuel(), true);
+					// TODO(-): do we want buttons to be not true if it is not currently available due to resource limitations etc. or true and then when clicked on give warning
+				}
+				else { // opponent station
+					spaceshipButtonsForStation(false, false, false, false);
+					printToSelectText("You cannot occupy the enemy's station.");
+				}
+			} // end type station
+			else if (sat.getType().equals("O")) { // the sun has been selected
+				spaceshipButtonsForSun();
+			} // end type sun
+			else { // planet
 				printToSelectText(sat.info());
 				Spaceship ship = control.getPlayer().getSpaceship();
-				if (ship.getController() == control.getPlayer()) {
-					// it's the current player
-					if (ship.getCurrSat() == sat) {
-						// it's the same sat
-						spaceshipButtonsForCurrSat(ship);
-					}
-					else if (ship.withinRange(sat)) { // you can move there
-						spaceshipButtons(true, false, false, false);
-					}
-					else {
-						// not close enough
-						printToSelectText("The satellite " + sat.getName() + " is too far away for your spaceship.");
-						spaceshipButtons(false, false, false, false);
-					}
+				if (ship.getCurrSat() == sat) {
+					// it's the same sat
+					spaceshipButtonsForCurrPlanet(ship);
 				}
-				else spaceshipButtons(false, false, false, false);
-			} // end not spaceship clicked
+				else if (sat.getOwner().equals(control.clientPlayerNum)) {
+					spaceshipButtonsForOwnedPlanet(ship.withinRange(sat), sat.isMalfunctioning(), false);
+				}
+				else if (sat.getOwner().equals(control.getOpponent().getNum())) {
+					spaceshipButtonsForEnemyPlanet(ship.withinRange(sat), false);
+				}
+				else { // unowned TODO(-): how's the name "neutral" planet?
+					spaceshipButtonsForUnownedPlanet(ship.withinRange(sat), false);
+				}
+			} // end type planet
 			break;
 		} // end case spaceship
 		default: {
