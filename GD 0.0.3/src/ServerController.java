@@ -323,7 +323,7 @@ public class ServerController {
 			// Fill in the rest of the sector
 			int remaining = maxPlanetsPerSector - posIndex; //after the previous for loop, posIndex = number of planets created around the station
 			
-			int fillPlanetMaxDelta = 20; // TODO Calculate a better maxDelta
+			int fillPlanetMaxDelta = 20; // FIXME Calculate a better maxDelta
 			
 			int[] positionsPossible = {0, 1, 2, 3, 4, 5, 6}; // 7 possible positions
 			for (int j = 0; j < remaining;) { 
@@ -526,7 +526,7 @@ public class ServerController {
 		switchCurrPlayer();
 		claimStation(); // keep on player 2
 		
-		// TODO Remove unclaimed stations
+		// TODO Remove unclaimed stations // get an update in between player 2's claim and main phase
 	}
 	
 	public Boolean gameEnd() {

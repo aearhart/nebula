@@ -53,7 +53,7 @@ public class Station extends Satellite implements MouseListener {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
-		//TODO ADD Image?
+
 		
 		
 		

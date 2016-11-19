@@ -147,8 +147,7 @@ public class ClientController {
 				turn = true;
 				updateSatObjects(s);
 				// begin turn
-				setStatus("collectResources");
-				collectResources(); //TODO: collect resources should be somewhere else, rearrange order
+				setStatus("Upgrade");
 				event();
 				printToInstructionArea("Click on a planet or space station to upgrade.");
 			}
@@ -336,12 +335,12 @@ public class ClientController {
 	
 	public void collectResources() {
 		/* current player collects resources in AoI */
-		//TODO: take care of overlapping instances: or if planet has been upgraded... CONFLICT!
-	
+		//TODO: take care of overlapping instances (split, etc.)
+		//TODO: move collectResources to serverController, occurs after both players' turn
+
 		String str = "";
 		// for each station
 		str += "\nResources collected:";
-		//for (Station stat: player.getStations()) { //TODO: will player ever have more than one station?
 		Station stat = player.getBase();
 		str += stat.collectResources(player);
 		for (Satellite sat: satellites) {
@@ -350,7 +349,6 @@ public class ClientController {
 			}
 		}
 		printToPlayerArea(player.info() + str);
-		setStatus("Upgrade"); // TODO: will eventually have to change this in reordering collectResources phase
 	}
 	
 	public void upgradeTime() { //TODO: change name to mainPhase() or something
@@ -681,6 +679,7 @@ public class ClientController {
 			sendMessage();
 		}
 		else if (turn && status.equals("End Turn")) {
+			collectResources(); //TODO: ? collect resources should be somewhere else, rearrange order
 			getCurrentState("TURN");
 			sendMessage();
 			turn = false;

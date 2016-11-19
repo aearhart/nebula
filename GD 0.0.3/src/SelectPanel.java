@@ -495,7 +495,7 @@ public class SelectPanel extends JPanel{
 				}
 			} // end b2
 			else if (command == B3) { // steal
-				if (selectedSatellite.getType().equals("S")) {
+				if (selectedSatellite.getType().equals("S")) { 
 					// TODO: how does a spaceship steal from a satellite
 				}
 				else { // TODO: how does a spacehsip steal from a planet
