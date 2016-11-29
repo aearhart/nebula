@@ -6,13 +6,19 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -39,7 +45,8 @@ public class InfoPanel extends JPanel{
 	private char [] chars;
 	
 	private JTextArea instructionArea;
-	private JTextArea playerArea;
+//	private JTextArea playerArea;
+	private PlayerArea playerArea;
 	private OurButton b0;
 	private OurButton b1;
 	
@@ -60,7 +67,7 @@ public class InfoPanel extends JPanel{
 		
 		// PANEL 1
 		instructionArea = new JTextArea();
-		instructionArea.setPreferredSize(new Dimension(100, 300));
+		instructionArea.setPreferredSize(new Dimension(300, 450));
 		instructionArea.setFont(Globals.f);
 		instructionArea.setLineWrap(true);
 		instructionArea.setWrapStyleWord(true);
@@ -78,7 +85,9 @@ public class InfoPanel extends JPanel{
 		c.gridx = 0; c.gridy = 0;
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1.0; c.weighty = 1.0;
-		c.gridheight = 1; c.gridwidth = 2;
+		c.gridheight = 1; c.gridwidth = 3;
+		c.ipadx = 300; c.ipady = 475;
+		c.insets = new Insets(5,5,5,5);
 		this.add(instructionScrollPane, c);
 		
 		
@@ -87,25 +96,56 @@ public class InfoPanel extends JPanel{
 		b0.setText("Test1");
 		b0.setPreferredSize(new Dimension(b0.getWidth() + 1, b0.getHeight() + 1));
 		
-		c.anchor = GridBagConstraints.NORTHWEST;
+		c.anchor = GridBagConstraints.CENTER;
 		c.gridx = 0; c.gridy = 1;
-		c.gridheight = 1; c.gridwidth = 1; 
-		c.weightx = 1.0; c.weighty = 0.0;
-		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridwidth = 1; c.gridheight = 1; 
+		c.weightx = 0.0; c.weighty = 0.0;
+		c.fill = GridBagConstraints.BOTH;
+		c.ipadx = b0.getWidth()+1; c.ipady = b0.getHeight()+1;
+		c.insets = new Insets(5,15,5,5);
 		this.add(b0, c);
+		
+		// filler
+		JPanel fill = new JPanel();
+		fill.setPreferredSize(new Dimension(0,0));
+		fill.setOpaque(false);
+		c.gridx = 1; c.gridy = 1;
+		c.gridwidth = 1; c.gridheight = 1; 
+		c.weightx = 0.0; c.weighty = 0.0;
+		c.fill = GridBagConstraints.BOTH;
+		c.ipadx = 0; c.ipady = 0;
+		c.insets = new Insets(0,0,0,0);
+		this.add(fill,  c);
 		
 		// BUTTON 2
 		b1 = new OurButton(this, B1, KeyStroke.getKeyStroke('s'));
 		b1.setText("Test2");
 		b1.setPreferredSize(new Dimension(b1.getWidth() + 1, b1.getHeight() + 1));
 		
-		c.anchor = GridBagConstraints.NORTHWEST;
-		c.gridx = 1; c.gridy = 1;
-		c.gridheight = 1; c.gridwidth = 1; 
-		c.weightx = 1.0; c.weighty = 0.0;
-		c.fill = GridBagConstraints.HORIZONTAL;this.add(b1, c);
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridx = 2; c.gridy = 1;
+		c.gridwidth = 1; c.gridheight = 1; 
+		c.weightx = 0.0; c.weighty = 0.0;
+		c.fill = GridBagConstraints.BOTH;
+		c.ipadx = b1.getWidth()+1; c.ipady = b1.getHeight()+1;
+		c.insets = new Insets(5,5,5,15);
+		this.add(b1, c);
 		
-		// PANEL 2
+		
+		// newPlayerArea
+		playerArea = new PlayerArea(control);
+		
+		//c.anchor = GridBagConstraints.NORTHWEST;
+		c.ipadx = 300; c.ipady = 475;
+		c.gridx = 0; c.gridy = 3;
+		c.gridheight = 1; c.gridwidth = 3;
+		c.weightx = 1.0; c.weighty = 0.8;
+		c.fill = GridBagConstraints.BOTH;
+		c.insets = new Insets(5,5,5,5);
+		this.add(playerArea, c);
+		
+		/*
+		// PANEL 2 (playerArea)
 		playerArea = new JTextArea();
 		playerArea.setPreferredSize(new Dimension(100, 300));
 		playerArea.setFont(Globals.f);
@@ -123,6 +163,7 @@ public class InfoPanel extends JPanel{
 		c.weightx = 1.0; c.weighty = 1.0;
 		c.fill = GridBagConstraints.BOTH;
 		this.add(playerArea, c);
+		*/
 		
 		// key bindings
 		b0.getInputMap(Globals.IFW).put(b0.getKey(), "keyB0");
@@ -153,8 +194,9 @@ public class InfoPanel extends JPanel{
 	}
 	
 	public void printToPlayerArea(String s){
+		playerArea.update(s);
 		//playerArea.setText(padRight(s, 280));
-		playerArea.setText("Player Information:\n\n" + s);
+//		playerArea.setText("Player Information:\n\n" + s);
 	}
 	
 	

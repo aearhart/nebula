@@ -86,20 +86,23 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		
+		// Background image
 		g.drawImage(bg, 0, 0, Globals.mapSize, Globals.mapSize, null);
-		//other
-		
+
+		// Area of Influence circle
 		g.setColor(control.AoIc);
 		g.drawOval(control.AoIx, control.AoIy, control.AoIs, control.AoIs);
 		
-		
+		/*
+		// Drawing the grid lines
 		g.setColor(Color.BLACK);
 		for(int i = 0; i < 11; i++)
 			for(int j = 0; j < 11; j++)
 				g.drawRect(i*100, j*100, 100, 100);
-
+       */
 		
-		/* PRINT SECTOR COLORS
+		/* 
+		// Highlight sectors with different colors
 		Color[] sectorCols = {Color.BLUE, Color.GREEN, Color.RED, Color.YELLOW, Color.ORANGE, Color.MAGENTA};
 		for (int i = 0; i < 1000; i+=10) {
 			for (int j = 0; j < 1000; j+=5) {
@@ -108,8 +111,6 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 				g.drawOval(i, j, 1, 1);
 			}
 		}*/
-		//g.drawOval(800, 10, 10, 10);
-		//g.drawOval(700, 50, 200, 3);
 		
 	}
 

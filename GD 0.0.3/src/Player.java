@@ -108,13 +108,14 @@ public class Player {
 		return num;
 	}
 	
-	public String info() {
+	public String info() { /*
 		String str = name;
 		str += ":\nResources: w  g  m\n";
 		str += "          " + water + "   " + gas + "   " + mineral;
 		str += "\nStations owned: " + numStations;
 		str += "\nPlanets owned: " + numPlanets;
-		return str;
+		return str;*/
+		return "";
 	}
 	
 
@@ -186,6 +187,14 @@ public class Player {
 		this.water -= water;
 	}
 
+	public String getWaterString() {
+		String s = Integer.toString(water);
+		for (int i = s.length(); i < 4; i++) {
+			s += " ";
+		}
+		return s;
+	}
+	
 	public int getMineral() {
 		return mineral;
 	}
@@ -198,6 +207,14 @@ public class Player {
 		this.mineral -= mineral;
 	}
 	
+	public String getMineralString() {
+		String s = Integer.toString(mineral);
+		for (int i = s.length(); i < 6; i++) {
+			s += " ";
+		}
+		return s;
+	}
+	
 	public int getGas(){
 		return gas;
 	}
@@ -208,6 +225,14 @@ public class Player {
 	
 	public void subGas(int gas) {
 		this.gas -= gas;
+	}
+	
+	public String getGasString() {
+		String s = Integer.toString(gas);
+		for (int i = s.length(); i < 6; i++) {
+			s += " ";
+		}
+		return s;
 	}
 	
 	public Spaceship getSpaceship() {

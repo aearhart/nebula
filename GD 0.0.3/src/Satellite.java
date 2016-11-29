@@ -314,7 +314,6 @@ public class Satellite extends JComponent {
 	}
 
 	public Boolean isMalfunctioning() {
-		// TODO Auto-generated method stub
 		return isMalfunctioning ;
 	}
 }

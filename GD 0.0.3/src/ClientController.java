@@ -750,7 +750,7 @@ public class ClientController {
 			sat.setName(sat.num + " water planet");
 			sat.setBounds(sat.getLocX(), sat.getLocY(), sat.getBoundSize(), sat.getBoundSize());
 		}
-		Station sat = new DefaultStation(this, 780, 690, 50, "s5");
+		Station sat = new DefaultStation(this, 780, 690, 30, "s5");
 		Spaceship testShip = new Spaceship(this, clientPlayerNum, "s6");
 		map.add(sat, 5);
 		map.add(testShip,3);
@@ -775,10 +775,11 @@ public class ClientController {
 		else {
 			testing  = true;
 			createComponents();
-			getMap().hoverBoxOn("This is just a test");
+			map.clear();
+			//getMap().hoverBoxOn("This is just a test");
 			//control.getMap().clear();
 			testMap();
-			getMap().hover("This is just a test.");
+			//getMap().hover("This is just a test.");
 		}
 	}
 	

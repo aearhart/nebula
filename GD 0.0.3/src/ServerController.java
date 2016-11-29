@@ -323,12 +323,13 @@ public class ServerController {
 			// Fill in the rest of the sector
 			int remaining = maxPlanetsPerSector - posIndex; //after the previous for loop, posIndex = number of planets created around the station
 			
-			int fillPlanetMaxDelta = 20; // FIXME Calculate a better maxDelta
+			int fillPlanetMaxDelta = 20; // TODO Calculate a better maxDelta
 			
 			int[] positionsPossible = {0, 1, 2, 3, 4, 5, 6}; // 7 possible positions
 			for (int j = 0; j < remaining;) { 
 				r = ran.nextInt(7);
-				if (positionsPossible[r] != -1) { // if that position hasn't been eliminated
+				if (positionsPossible[r] != -1) { 
+					// if that position hasn't been eliminated
 					// eliminate the position and it's neighbors
 					if (r > 0)
 						positionsPossible[r-1] = -1;
