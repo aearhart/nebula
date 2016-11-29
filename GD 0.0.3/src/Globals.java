@@ -37,7 +37,7 @@ public class Globals {
 		return result;
 		
 	}
-	
+	 
 	public static Boolean playerWin(Player p) { 
 		// return whether or not player p has own
 		
