@@ -35,7 +35,7 @@ public class Globals {
 			result += delim + s.get(i);
 		}
 		return result;
-		
+		 
 	}
 	 
 	public static Boolean playerWin(Player p) { 
