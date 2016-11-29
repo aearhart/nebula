@@ -38,7 +38,7 @@ public class Globals {
 		
 	}
 	
-	public static Boolean playerWin(Player p) {
+	public static Boolean playerWin(Player p) { 
 		// return whether or not player p has own
 		
 		/* win conditions:
