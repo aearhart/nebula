@@ -31,10 +31,18 @@ public class InfoPanel2 extends JPanel implements ActionListener {
 	public ChatBox chatBox;
 	public Satellite selectedSatellite = null;
 	
+	// for determining size of objects
+	private int width = 300;
+	private int height = 1000;
+	
 	public InfoPanel2(ClientController clientController) {
 		control = clientController;
+		if (Globals.winSizeSet) {
+			width = Globals.mapSize/3;
+			height = Globals.mapSize;
+		}
 		
-		this.setPreferredSize(new Dimension (300,1000));
+		this.setPreferredSize(new Dimension (width, height)); // 300, 1000
 		
 		this.setLayout(new GridBagLayout());
 		this.setBackground(new Color(0, 0, 0, 0));

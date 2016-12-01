@@ -44,9 +44,18 @@ public class ChatBox extends JPanel implements ActionListener{
 	private String currentHistory = "";
 	public String message = "";
 	
+	private int width = 100;
+	private int height = 300;
+	
 	public ChatBox(ClientController clientController) {
 		control = clientController;
-		this.setPreferredSize(new Dimension (100, 300));
+		
+		if (Globals.winSizeSet) {
+			width = Globals.mapSize / 10;
+			height = Globals.mapSize / 3;
+		}
+		
+		this.setPreferredSize(new Dimension (width, height)); //100, 300
 		this.setLayout(new BorderLayout());
 		
 		JLabel title = new JLabel("Chat History");
@@ -61,7 +70,7 @@ public class ChatBox extends JPanel implements ActionListener{
 		chatHistory.setFont(Globals.f);
 		chatHistory.setText("Chat not currently available");
 		JScrollPane chatScrollPane = new JScrollPane(chatHistory);
-		chatScrollPane.setPreferredSize(new Dimension(100, 300));
+		chatScrollPane.setPreferredSize(new Dimension(width, height)); //100, 300
 	
 		
 		// input line

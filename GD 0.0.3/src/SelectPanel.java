@@ -38,11 +38,23 @@ public class SelectPanel extends JPanel{
 	int B2 = 2;
 	int B3 = 3;
 	int B4 = 4;
-	 
+	
+	private int width = 300;
+	private int height = 500;
+	private int selectTextWidth = 100;
+	private int selectTextHeight = 400;
+	
 	public SelectPanel(ClientController clientController) {
 		control = clientController;
 		
-		this.setPreferredSize(new Dimension(300, 500));
+		if (Globals.winSizeSet) {
+			width = Globals.mapSize/3;
+			height = Globals.mapSize/2;
+			selectTextWidth = Globals.mapSize/10;
+			selectTextWidth = Globals.mapSize/2 -100;
+		}
+		
+		this.setPreferredSize(new Dimension(width, height)); //300, 500
 		
 		this.setLayout(new GridBagLayout()); 
 		this.setBackground(new Color(0, 128, 128, 255));
@@ -52,7 +64,7 @@ public class SelectPanel extends JPanel{
 		
 		// select text area
 		selectText = new JTextArea(20, 3);
-		selectText.setBounds(0, 0, 100, 400);
+		selectText.setBounds(0, 0, selectTextWidth, selectTextHeight); // 100, 400
 		selectText.setFont(Globals.f);
 		selectText.setForeground(Globals.textColor);
 		selectText.setLineWrap(true);

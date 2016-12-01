@@ -37,16 +37,26 @@ public class PlayerArea extends JPanel {
 	
 	private Font f = new Font("Consolas", Font.PLAIN, 20);
 	
+	private int width = 300;
+	private int height = 450;
+	private int smallerHeight = 400;
+	
 	public PlayerArea(ClientController ctrl) {
 		super(new GridBagLayout());
 
+		if (Globals.winSizeSet) {
+			width = Globals.mapSize / 3;
+			height = Globals.mapSize / 2 - 50;
+			smallerHeight = Globals.mapSize / 2 - 100;
+		}
+		
 		GridBagConstraints c = new GridBagConstraints();
 		
 		control = ctrl;
 		player = control.getPlayer();
 		
 		this.setOpaque(false);
-		this.setPreferredSize(new Dimension(300, 450));
+		this.setPreferredSize(new Dimension(width, height));
 		
 		try {
 			gasIcon = ImageIO.read(getClass().getResource("gas_resource.png"));
@@ -136,7 +146,7 @@ public class PlayerArea extends JPanel {
 				
 		// other
 		otherField = new JTextArea();
-		otherField.setPreferredSize(new Dimension(300, 400));
+		otherField.setPreferredSize(new Dimension(width, smallerHeight));
 		otherField.setFont(Globals.f);
 		otherField.setLineWrap(true);
 		otherField.setWrapStyleWord(true);

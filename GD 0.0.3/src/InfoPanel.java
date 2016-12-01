@@ -55,10 +55,19 @@ public class InfoPanel extends JPanel{
 	int B0 = 0;
 	int B1 = 1;
 	
+	private int width = 300;
+	private int height = 1000;
+	
 	public InfoPanel(ClientController clientController) {
 		control = clientController;
+		
+		if (Globals.winSizeSet) {
+			width = Globals.mapSize/3;
+			height = Globals.mapSize;
+		}
+		
 		playerText = "Hello " + control.getPlayer().getName() + ", you can find your stats here.";
-		this.setPreferredSize(new Dimension (300,1000));
+		this.setPreferredSize(new Dimension (width, height)); //300, 1000
 		this.setOpaque(false);
 		//this.setLayout(new GridLayout(3, 1, 0, 5));
 		this.setLayout(new GridBagLayout());
@@ -67,7 +76,7 @@ public class InfoPanel extends JPanel{
 		
 		// PANEL 1
 		instructionArea = new JTextArea();
-		instructionArea.setPreferredSize(new Dimension(300, 450));
+		instructionArea.setPreferredSize(new Dimension(width, height - 50)); // 300, 450
 		instructionArea.setFont(Globals.f);
 		instructionArea.setLineWrap(true);
 		instructionArea.setWrapStyleWord(true);
@@ -86,11 +95,11 @@ public class InfoPanel extends JPanel{
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1.0; c.weighty = 1.0;
 		c.gridheight = 1; c.gridwidth = 3;
-		c.ipadx = 300; c.ipady = 475;
+		c.ipadx = width; c.ipady = height-15; //300 , 475;
 		c.insets = new Insets(5,5,5,5);
 		this.add(instructionScrollPane, c);
 		
-		
+		/*
 		// BUTTON 1
 		b0 = new OurButton(this, B0, KeyStroke.getKeyStroke('a'));
 		b0.setText("Test1");
@@ -130,13 +139,13 @@ public class InfoPanel extends JPanel{
 		c.ipadx = b1.getWidth()+1; c.ipady = b1.getHeight()+1;
 		c.insets = new Insets(5,5,5,15);
 		this.add(b1, c);
-		
+		*/
 		
 		// newPlayerArea
 		playerArea = new PlayerArea(control);
 		
 		//c.anchor = GridBagConstraints.NORTHWEST;
-		c.ipadx = 300; c.ipady = 475;
+		c.ipadx = width; c.ipady = height - 15; // 300, 475
 		c.gridx = 0; c.gridy = 3;
 		c.gridheight = 1; c.gridwidth = 3;
 		c.weightx = 1.0; c.weighty = 0.8;
@@ -163,7 +172,7 @@ public class InfoPanel extends JPanel{
 		c.weightx = 1.0; c.weighty = 1.0;
 		c.fill = GridBagConstraints.BOTH;
 		this.add(playerArea, c);
-		*/
+		
 		
 		// key bindings
 		b0.getInputMap(Globals.IFW).put(b0.getKey(), "keyB0");
@@ -181,7 +190,7 @@ public class InfoPanel extends JPanel{
 				b1.action();
 			}};
 		b1.getActionMap().put("keyB1", keyB1);
-		
+		*/
 	}
 	
 	public static String padRight(String s, int n) {

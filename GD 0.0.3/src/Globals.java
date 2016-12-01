@@ -17,7 +17,11 @@ public class Globals {
 	public static final int IFW  = JComponent.WHEN_IN_FOCUSED_WINDOW;
 	
 	public static Color backgroundColor = new Color(31, 106, 119, 127);
+	
+	public static Boolean winSizeSet = false;
+	
 	public static void setWinSize() {
+		winSizeSet = true;
 		// set mapSize according to size of monitor
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth();
