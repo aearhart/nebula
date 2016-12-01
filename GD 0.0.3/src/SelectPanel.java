@@ -311,6 +311,11 @@ public class SelectPanel extends JPanel{
 		}
 	}
 	
+	private Boolean spaceshipCanMove(Spaceship ship, Satellite selectedSat) {
+		
+		return !(ship.getCurrSat() == selectedSat) && ship.withinRange(selectedSat) && !(control.getOpponent().getSpaceship().getCurrSat() == selectedSat);
+	}
+	
 	public void selectSatellite(Satellite sat) {
 		// depending on what is selected(and the phase), the buttons change
 		//TODO: this whole thing should be simplified
@@ -426,10 +431,7 @@ public class SelectPanel extends JPanel{
 				// move 	fix		refuel		upgrade
 				Station spaceStation = (Station)sat;
 				if (sat.getOwner().equals(control.clientPlayerNum)) {
-					Boolean move = false;
-					if (control.getPlayer().getSpaceship().withinRange(sat)) move = true;
-					if (control.getPlayer().getSpaceship().getCurrSat() == sat) move = false;
-					spaceshipButtonsForStation(move, spaceStation.isMalfunctioning(), control.getPlayer().getSpaceship().needFuel(), true);
+					spaceshipButtonsForStation(spaceshipCanMove(control.getPlayer().getSpaceship(), sat), spaceStation.isMalfunctioning(), control.getPlayer().getSpaceship().needFuel(), true);
 					// TODO(-): do we want buttons to be not true if it is not currently available due to resource limitations etc. or true and then when clicked on give warning
 				}
 				else { // opponent station
@@ -448,13 +450,13 @@ public class SelectPanel extends JPanel{
 					spaceshipButtonsForCurrPlanet(ship);
 				}
 				else if (sat.getOwner().equals(control.clientPlayerNum)) {
-					spaceshipButtonsForOwnedPlanet(ship.withinRange(sat), sat.isMalfunctioning(), false);
+					spaceshipButtonsForOwnedPlanet(spaceshipCanMove(ship, sat), sat.isMalfunctioning(), false);
 				}
 				else if (sat.getOwner().equals(control.getOpponent().getNum())) {
-					spaceshipButtonsForEnemyPlanet(ship.withinRange(sat), false);
+					spaceshipButtonsForEnemyPlanet(spaceshipCanMove(ship, sat), false);
 				}
 				else { // unowned TODO(-): how's the name "neutral" planet?
-					spaceshipButtonsForUnownedPlanet(ship.withinRange(sat), false);
+					spaceshipButtonsForUnownedPlanet(spaceshipCanMove(ship, sat), false);
 				}
 			} // end type planet
 			break;

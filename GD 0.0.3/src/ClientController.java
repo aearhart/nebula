@@ -146,10 +146,8 @@ public class ClientController {
 			if (s[1].equals(clientPlayerNum)) { // does current turn match client
 				turn = true;
 				updateSatObjects(s);
-				// begin turn
-				setStatus("Upgrade");
-				event();
-				printToInstructionArea("Click on a planet or space station to upgrade.");
+				setStatus("BEGIN_TURN");
+						
 			}
 			else { // turn does not match client, it is opponent's turn
 				turn = false;
@@ -335,20 +333,21 @@ public class ClientController {
 	
 	public void collectResources() {
 		/* current player collects resources in AoI */
-		//TODO: take care of overlapping instances (split, etc.)
-		//TODO: move collectResources to serverController, occurs after both players' turn
 
-		String str = "";
+		int initGas = player.getGas();
+		int initMineral = player.getMineral();
+		int initWater = player.getWater();
+		// TODO: splitting -- if unowned planet in both AoIs, split resources
 		// for each station
-		str += "\nResources collected:";
 		Station stat = player.getBase();
-		str += stat.collectResources(player);
+		stat.collectResources(player);
 		for (Satellite sat: satellites) {
-			if (!(sat instanceof Sun) && !(sat instanceof Spaceship) && withinDistance(stat, sat)) {
-				str += sat.collectResources(player);
+			if (!(sat instanceof Sun) && !(sat instanceof Spaceship) && withinDistance(stat, sat) && !(sat.getPlayer() == opponent)){
+				sat.collectResources(player);
 			}
 		}
-		printToPlayerArea(player.info() + str);
+		
+		printToPlayerArea("Resources collected:\n " + (player.getGas()-initGas) + "g " + (player.getMineral()-initMineral) + "m " + (player.getWater()-initWater) + "w\n");
 	}
 	
 	public void upgradeTime() { //TODO: change name to mainPhase() or something
@@ -669,20 +668,27 @@ public class ClientController {
 		System.out.println("TURN MESSAGE: " + "msg:" + (!getChatbox().message.equals("")) + 
 				" endTurn: " + turn +  " " + (! status.equals("Upgrade")) + " other: " + status);
 		// check to see if switch to spaceship mode TODO: I don't like how this is being done here
-		if (turn && status.equals("endMain")) { // end of upgrade phase, change to spaceship phase
+		if (turn && status.equals("BEGIN_TURN")) {
+			collectResources();
+			// begin turn
+			setStatus("Upgrade");
+			//event();
+			printToInstructionArea("Click on a planet or space station to upgrade.");
+		}
+		else if (turn && status.equals("endMain")) { // end of upgrade phase, change to spaceship phase
 			setStatus("Spaceship_Phase");
 			printToInstructionArea("What do you want to do with your spaceship?");
 		}
+		else if (turn && status.equals("End Turn")) {
+			getCurrentState("TURN");
+			sendMessage();
+			turn = false;
+		}
+		
 		if (chatEnabled && (! getChatbox().message.equals(""))) {
 			currentState = "MESSAGE@@" + clientPlayerNum + "@@" + getChatbox().message; 
 			getChatbox().emptyMessage();
 			sendMessage();
-		}
-		else if (turn && status.equals("End Turn")) {
-			collectResources(); //TODO: ? collect resources should be somewhere else, rearrange order
-			getCurrentState("TURN");
-			sendMessage();
-			turn = false;
 		}
 		else if (status.equals("WIN")) {
 			// do nothing

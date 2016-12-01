@@ -211,6 +211,10 @@ public class Satellite extends JComponent {
 		return ownerNum;
 	}
 	
+	public Player getPlayer() {
+		return owner;
+	}
+	
 	public Integer getLocX() {
 		return x;
 	}
