@@ -93,13 +93,14 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 		g.setColor(control.AoIc);
 		g.drawOval(control.AoIx, control.AoIy, control.AoIs, control.AoIs);
 		
-		/*
+		
+		int size = 10;
 		// Drawing the grid lines
 		g.setColor(Color.BLACK);
-		for(int i = 0; i < 11; i++)
-			for(int j = 0; j < 11; j++)
-				g.drawRect(i*100, j*100, 100, 100);
-       */
+		for(int i = 0; i < Globals.mapSize/size + 1; i++)
+			for(int j = 0; j < Globals.mapSize/size + 1; j++)
+				g.drawRect(i*size, j*size, size, size);
+
 		
 		/* 
 		// Highlight sectors with different colors
@@ -110,7 +111,7 @@ public class Map extends JLayeredPane implements MouseListener, MouseMotionListe
 				g.setColor(sectorCols[sector-1]);
 				g.drawOval(i, j, 1, 1);
 			}
-		}*/
+		}       */
 		
 	}
 

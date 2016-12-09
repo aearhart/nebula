@@ -31,6 +31,11 @@ public class Globals {
 		System.out.println(".......................WINSIZE = " + mapSize);
 	}
 	
+	public static void setWinSize(int x) {
+		winSizeSet = true;
+		mapSize = x;
+	}
+	
 	public static String addDelims(ArrayList<String> s) {
 		if (s.size() == 0)
 			return "";

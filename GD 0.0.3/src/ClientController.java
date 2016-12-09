@@ -794,7 +794,7 @@ public class ClientController {
 	public static void main(String[] args) {
 
 		ClientController control = new ClientController();
-		Globals.setWinSize();
+		Globals.setWinSize(2000);
 		control.welcome();
 		
 	}
