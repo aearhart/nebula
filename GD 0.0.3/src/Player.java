@@ -23,6 +23,8 @@ public class Player {
 	public int G = 0;
 	public int B = 0;
 	public String num = "P1";
+	public int victoryPoints = 0;
+	
 	
 	public double eventChance = Globals.baseEventChance;
 	
@@ -57,7 +59,7 @@ public class Player {
 		aList.add(Integer.toString(gas));
 		aList.add(Integer.toString(water));
 		aList.add(Integer.toString(mineral));
-		
+		aList.add(Integer.toString(victoryPoints));
 		return Globals.addDelims(aList);
 	}
 	
@@ -83,7 +85,7 @@ public class Player {
 		gas = Integer.parseInt(ary[i++]);
 		water = Integer.parseInt(ary[i++]);
 		mineral = Integer.parseInt(ary[i++]);
-		
+		victoryPoints = Integer.parseInt(ary[i++]);
 		return i;
 	}
 	
@@ -139,7 +141,7 @@ public class Player {
 	public void addPlanet() {
 		
 		numPlanets++;
-		
+		addVictoryPoint(); // FIXME: victory point for every planet owned
 		System.out.println("Player " + name + " added a planet. They now have " + numPlanets + " planets.");
 	}
 
@@ -241,6 +243,16 @@ public class Player {
 	
 	public void setSpaceship(Satellite ship) {
 		spaceship = (Spaceship)ship;
+	}
+	
+	public int getVictoryPoints() {
+		return victoryPoints;
+	}
+	
+	public void addVictoryPoint() {
+		victoryPoints++;
+		// update text
+		control.getInfoPanel().update();
 	}
 	
 	public void addEventChance(double d) {

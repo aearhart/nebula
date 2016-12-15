@@ -208,6 +208,9 @@ public class InfoPanel extends JPanel{
 //		playerArea.setText("Player Information:\n\n" + s);
 	}
 	
+	public void update() {
+		playerArea.update();
+	}
 	
 	public void clicked(int command) {
 		if (command == B0) {

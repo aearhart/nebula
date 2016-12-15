@@ -431,6 +431,10 @@ public class ClientController {
 		else if (status.equals("Spaceship_Phase")) infoPanel2.getSelectPanel().spaceshipPhase();
 	}
 	
+	public InfoPanel getInfoPanel() {
+		return infoPanel;
+	}
+	
 	public ChatBox getChatbox() {
 		return infoPanel2.getChatbox();
 	}
@@ -445,6 +449,10 @@ public class ClientController {
 	
 	public Window getWindow() {
 		return window;
+	}
+	
+	public int numOfVisitablePlanets() {
+		return satellites.size() - 7;// sun, two spaceships, four stations
 	}
 	
 	public Map getMap() {
@@ -794,7 +802,7 @@ public class ClientController {
 	public static void main(String[] args) {
 
 		ClientController control = new ClientController();
-		Globals.setWinSize(2000);
+		//Globals.setWinSize(2000);
 		control.welcome();
 		
 	}

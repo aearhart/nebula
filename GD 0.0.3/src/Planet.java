@@ -201,6 +201,10 @@ public class Planet extends Satellite implements MouseListener {
 				endTurn = true;
 				control.printToHoverArea(info());
 				control.printToPlayerArea();
+				if (level == maxLevel) {
+					// FIXME: victory point for max upgraded planet
+					owner.addVictoryPoint();
+				}
 			}
 			else { // couldn't afford it
 				control.printToHoverArea("You uh don't have enough resources to build on this planet.");

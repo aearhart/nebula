@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
@@ -25,6 +26,8 @@ public class Spaceship extends Satellite implements MouseListener {
 	private BufferedImage image = null;
 	private int size = 20;
 	private Boolean drawOutline = false;
+	
+	private List<Satellite> visitedSatellites = new ArrayList<Satellite>();
 	
 	public Spaceship(Player p, String k) {
 		super(0, 0);
@@ -127,8 +130,35 @@ public class Spaceship extends Satellite implements MouseListener {
 		// ASSUMED THAT WITHIN RANGE AND THAT YOU HAVE ENOUGH FUEL
 		currFuel -= costFuel;
 		setCurrSat(dest);
+		if (notVisitedYet(dest)) {
+			visitedSatellite(dest); // FIXME: victory point for all planets visited
+		}
+		setFuel(10);
 	}
 
+	private Boolean notVisitedYet(Satellite dest) {
+		// return true if spaceship has not visited satellite dest yet
+		if (visitedSatellites.contains(dest))  {
+			control.printToPlayerArea("contains satellite " + dest.getNum());
+			return false;
+		}
+		return true;
+	}
+	
+	private void visitedSatellite(Satellite dest) {
+		// add satellite to list of visited Satellites
+		visitedSatellites.add(dest);
+		// check if visited all satellites, if so then add victory point, this will only happen once
+		if (visitedSatellites.size() == control.numOfVisitablePlanets()) {
+			owner.addVictoryPoint();
+		}
+		control.getInfoPanel().update();
+	}
+	
+	public int getNumPlanetsVisited() {
+		return visitedSatellites.size();
+	}
+	
 	protected void setImage(String i) {
 		try {                
 			image = ImageIO.read(getClass().getResource(i)); } 

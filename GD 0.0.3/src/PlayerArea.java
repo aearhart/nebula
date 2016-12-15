@@ -31,8 +31,10 @@ public class PlayerArea extends JPanel {
 	private JLabel mineralText;
 	private JLabel waterLabel;
 	private JLabel waterText;
+	private JLabel victoryText;
 	private JTextArea otherField;
-
+	private JLabel testField;
+	
 	private int iconSize = 25;
 	
 	private Font f = new Font("Consolas", Font.PLAIN, 20);
@@ -143,7 +145,22 @@ public class PlayerArea extends JPanel {
 		c.ipadx = 50; c.ipady = 30;
 		c.insets = new Insets(0,2,0,2);
 		this.add(waterText, c);
-				
+		
+		// victory points
+		
+		victoryText = new JLabel();
+		victoryText.setOpaque(false);
+		victoryText.setFont(f);
+		victoryText.setForeground(Globals.textColor);
+		victoryText.setVerticalTextPosition(JLabel.TOP);
+		victoryText.setText("VP = " + player.getVictoryPoints());
+		
+		c.gridx = 1; c.gridy = 2;
+		c.ipadx = 50; c.ipady = 30;
+		c.insets = new Insets(0,2,0,2);
+		this.add(victoryText, c);
+		
+		
 		// other
 		otherField = new JTextArea();
 		otherField.setPreferredSize(new Dimension(width, smallerHeight));
@@ -160,18 +177,41 @@ public class PlayerArea extends JPanel {
 		
 		c.ipady = 0;
 		c.anchor = GridBagConstraints.SOUTH;
-		c.gridx = 0; c.gridy = 2;
+		c.gridx = 0; c.gridy = 3;
 		c.gridwidth = 6; c.gridheight = 1;
 		c.fill = GridBagConstraints.BOTH;
 		c.weightx = 1.0; c.weighty = 0.9;
 		this.add(otherField, c);
+		
+		// test field
+		testField = new JLabel();
+		testField.setOpaque(false);
+		testField.setFont(f);
+		testField.setForeground(Globals.textColor);
+		testField.setVerticalTextPosition(JLabel.TOP);
+		//testField.setText();
+		
+		c.gridx = 0; c.gridy = 4;
+		c.ipadx = 50; c.ipady = 30;
+		c.insets = new Insets(0,2,0,2);
+		this.add(testField, c);
+	}
+	
+	public void update() {
+		gasText.setText(Integer.toString(player.getGas()));
+		mineralText.setText(Integer.toString(player.getMineral()));
+		waterText.setText(Integer.toString(player.getWater()));
+		victoryText.setText("VP = " + player.getVictoryPoints());
+		testField.setText("  pv = " + player.getSpaceship().getNumPlanetsVisited() + "  tp = " + control.numOfVisitablePlanets());
+		//otherField.setText(s);
 	}
 	
 	public void update(String s) {
 		gasText.setText(Integer.toString(player.getGas()));
 		mineralText.setText(Integer.toString(player.getMineral()));
 		waterText.setText(Integer.toString(player.getWater()));
-		
+		victoryText.setText("VP = " + player.getVictoryPoints());
+		testField.setText("  pv = " + player.getSpaceship().getNumPlanetsVisited() + "  tp = " + control.numOfVisitablePlanets());
 		otherField.setText(s);
 	}
 
